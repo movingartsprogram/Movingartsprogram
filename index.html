@@ -171,11 +171,12 @@ body{
   border:1px solid #111;padding:3px 6px;background:#3a3a3a;border-radius:2px;
 }
 .wa-toggle.on{color:#7CFC00;border-color:#7CFC00;}
-.wa-support-row{display:flex;justify-content:center;margin-top:8px;}
+.wa-support-row{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;}
 .wa-toggle.wa-support-btn{
   cursor:pointer;color:#ff2fb0;border-color:#ff2fb0;
   animation:wa-subscribe-blink 1.3s steps(1,end) infinite;
 }
+.wa-toggle.wa-nav-btn{cursor:pointer;}
 
 .wa-playlist{margin-top:6px;background:#000;border:1px solid #111;}
 .wa-pl-title{
@@ -325,7 +326,9 @@ body{
         <div class="wa-btn" onclick="showPage('home')" title="Home">⌂</div>
       </div>
       <div class="wa-support-row">
+        <span class="wa-toggle on wa-nav-btn" onclick="showPage('about')">About Us</span>
         <span class="wa-toggle on wa-support-btn" onclick="showPage('money')">Support the Music</span>
+        <span class="wa-toggle on wa-nav-btn" onclick="showPage('boss')">The Boss Den</span>
       </div>
     </div>
   </div>
@@ -412,6 +415,48 @@ body{
         <a class="cta" onclick="showPage('money')">SUPPORT THIS SERIES</a>
       </div>
 
+      <div class="page" id="page-boss">
+        <h2 class="page-title">THE BOSS DEN</h2>
+        <p class="page-kicker">Elvis Lobo aka "The Boss"</p>
+        <p>Moving Arts Program is incredibly proud to have collaborated with the magician himself, Elvis Lobo.</p>
+        <p>A true Goan legend and cultural icon, it's fair to say that Elvis gave us the fuel to continue promoting music as selflessly and honestly as he lives it.</p>
+        <p>For decades, Elvis has been the beating heart of the Goan music scene, effortlessly blending genres and casting a spell on anyone who watches him play. He doesn't just perform; he creates a community through sound.</p>
+        <p>While we feel incredibly lucky to have shared the stage with him for countless magical gigs, many of those unforgettable nights live on only in our memories. However, a few of these legendary moments were captured on film.</p>
+        <p>Explore the magic below:</p>
+
+        <div class="wa-playlist">
+          <div class="wa-pl-title">ELVIS LOBO — LIVE AT MAP</div>
+          <ul class="wa-pl-list" id="bossPlaylist">
+            <li class="active" data-video="caYwXm5Rvwk">01. The Dark Knight Sessions</li>
+            <li data-video="u1aKt3anCXo">02. Going Down (Jeff Beck Improvisation)</li>
+            <li data-video="CUMDop6xo2I">03. The Limited Edition Promo</li>
+            <li data-video="F2bAsne_GqI">04. This Is Jazz Part 1 — Silva Heritage</li>
+            <li data-video="POBsfozeKFQ">05. This Is Jazz Part 2 — Silva Heritage</li>
+            <li data-video="eyu928pd124">06. The Classics: Duet w/ Tatiyana Pt 1 — Saltamontes</li>
+            <li data-video="uM-UgW_8Xrw">07. The Classics: Duet w/ Tatiyana Pt 2 — Saltamontes</li>
+            <li data-video="tsmKt7yXSAU">08. Birthday Bash Part 1 — Guru Bar</li>
+            <li data-video="bXlf6LWi-aA">09. Birthday Bash Part 2 — Guru Bar</li>
+            <li data-video="cKVD4ls2Qic">10. Solo with Nylon — Unaccompanied at Saltamontes</li>
+            <li data-video="1yQ4YYLpLRA">11. The Classics w/ Karim, Tatiyana, Cliffy & Alex Yurushkin Pt 1</li>
+            <li data-video="c9TjLTc5KcA">12. The Classics w/ Karim, Tatiyana, Cliffy & Alex Yurushkin Pt 2</li>
+            <li data-video="U8jOlOFzcyc">13. Awake the Dead Sessions Part 1</li>
+            <li data-video="Db7UhRLFh6U">14. Awake the Dead Sessions Part 2</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="page" id="page-about">
+        <h2 class="page-title">ABOUT US</h2>
+        <p class="page-kicker">We do it to keep the scene alive and thriving.</p>
+        <p>Moving Arts Program is a pro-bono music platform founded by filmmaker Prashant Kumar alongside a small network of dedicated, like-minded individuals.</p>
+        <p>We take immense pride in curating, promoting, and organizing live music that breaks the mold—focusing on unique, non-commercial, and original sounds that standard venues often overlook. Since our inception, we have hosted over 100 gigs across both North and South Goa, bringing together incredible independent artists from all corners of the globe. While our stage welcomes international talent, our most frequent and definitive collaborator remains Goa's own guitar god, Elvis Lobo.</p>
+        <p>We do it entirely to keep the independent music scene alive and thriving.</p>
+        <h3>ABOUT THE FOUNDER</h3>
+        <p>Prashant is a filmmaker, advertising veteran, a serial entrepreneur and passionate music promoter. Having directed hundreds of ads and documentaries, part of many start ups. He made his feature film debut with Mithai—a Telugu dark comedy tribute to The Big Lebowski. In true Lebowski fashion, the film tanked theatrically across 24 countries, only to later achieve a massive cult following in the digital space garnering more than 10 million views after being taken off from Amazon Prime.</p>
+        <p>Following this "commercial debacle," Prashant relocated to Goa in 2019, pivoting to his first true love: music.</p>
+        <p>A music connoisseur at heart who has been promoting gigs and independent artists since 2003, Prashant launched his Goa music promotion initiative in 2021. For him, this isn't a career—it's a passion project.</p>
+      </div>
+
       <div class="page" id="page-money">
         <h2 class="page-title">SUPPORT THE MUSIC</h2>
         <p class="page-kicker">MAP runs pro bono. Here's how you keep it alive.</p>
@@ -433,7 +478,7 @@ body{
     </div>
   </div>
 
-  <div class="wa-playlist">
+  <div class="wa-playlist" id="siteNavPlaylist">
     <div class="wa-pl-title">PLAYLIST</div>
     <ul class="wa-pl-list" id="waPlaylist">
       <li data-page="dead">01. Grateful Dead Tribute Festival</li>
@@ -601,7 +646,7 @@ function togglePlay(btn){
   }
 }
 
-const order = ["home","dead","classics","unaccompanied","rock","outcasts","money"];
+const order = ["home","dead","classics","unaccompanied","rock","outcasts","boss","about","money"];
 const titles = {
   home:"HOME — SOUND. ART. SPIRIT.",
   unaccompanied:"03. UNACCOMPANIED",
@@ -609,7 +654,9 @@ const titles = {
   dead:"01. GRATEFUL DEAD TRIBUTE FESTIVAL",
   rock:"04. ROCK REVIVAL FESTIVAL",
   outcasts:"05. THE OUTCASTS",
-  money:"SUPPORT THE MUSIC"
+  money:"SUPPORT THE MUSIC",
+  boss:"01. THE DARK KNIGHT SESSIONS",
+  about:"ABOUT US"
 };
 let current = "home";
 
@@ -641,9 +688,10 @@ const eventVideos = {
   classics: "eyu928pd124",
   dead: "o2dRvRXOrGo",
   rock: "5zVbsD7idto",
-  outcasts: "FfwFTIyKxK0"
+  outcasts: "FfwFTIyKxK0",
+  boss: "caYwXm5Rvwk"
 };
-const CORE_VIDEO_PAGES = ["unaccompanied","classics","dead","rock","outcasts"];
+const CORE_VIDEO_PAGES = ["unaccompanied","classics","dead","rock","outcasts","boss"];
 let mediaMode = "video";
 let milkdropRAF = null;
 
@@ -756,6 +804,9 @@ function showPage(id){
   if(activeLi) activeLi.classList.add("active");
   document.getElementById("waTrackTitle").textContent = titles[id];
 
+  const siteNavPlaylist = document.getElementById("siteNavPlaylist");
+  if(siteNavPlaylist) siteNavPlaylist.style.display = (id === "boss" || id === "about") ? "none" : "block";
+
   const topRow = document.querySelector(".wa-top-row");
   const mediaArea = document.getElementById("waMediaArea");
 
@@ -787,6 +838,19 @@ function showPage(id){
 document.querySelectorAll("#waPlaylist li").forEach(li=>{
   li.addEventListener("click", ()=>showPage(li.dataset.page));
 });
+
+function playBossTrack(li){
+  eventVideos.boss = li.dataset.video;
+  document.querySelectorAll("#bossPlaylist li").forEach(x=>x.classList.remove("active"));
+  li.classList.add("active");
+  document.getElementById("waTrackTitle").textContent = li.textContent;
+  loadEventMedia("boss");
+  setMediaMode("video");
+}
+document.querySelectorAll("#bossPlaylist li").forEach(li=>{
+  li.addEventListener("click", ()=>playBossTrack(li));
+});
+
 function nextPage(){
   if(CORE_VIDEO_PAGES.includes(current)){
     videoCommand("nextVideo");
