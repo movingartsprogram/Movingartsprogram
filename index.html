@@ -54,9 +54,9 @@ body{
 }
 .wa-media-btn.active{background:#7CFC00;color:#000;}
 .wa-media-video,.wa-media-canvas{
-  position:absolute;top:0;left:0;width:100%;height:100%;display:none;
+  position:absolute;top:0;left:0;width:100%;height:100%;
 }
-.wa-media-video.show,.wa-media-canvas.show{display:block;}
+.wa-media-canvas{background:#000;}
 .wa-media-video iframe{width:100%;height:100%;border:0;display:block;}
 .wa-media-placeholder{
   position:absolute;inset:0;display:none;align-items:center;justify-content:center;
@@ -205,7 +205,7 @@ body{
   color:#c8ffc8;font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;
   padding:2px 4px;
 }
-.wa-content-body{padding:16px;min-height:260px;}
+.wa-content-body{padding:16px;}
 
 .page{display:none;}
 .page.active{display:block;}
@@ -659,17 +659,22 @@ function setMediaMode(mode){
   mediaMode = mode;
   document.getElementById("waModeVideoBtn").classList.toggle("active", mode === "video");
   document.getElementById("waModeVisBtn").classList.toggle("active", mode === "milkdrop");
-  document.getElementById("waMediaVideo").classList.toggle("show", mode === "video");
-  document.getElementById("waMilkdropCanvas").classList.toggle("show", mode === "milkdrop");
-  document.getElementById("waMuteBtn").style.display = mode === "video" ? "block" : "none";
+  document.getElementById("waMuteBtn").style.display = "block";
+  const videoEl = document.getElementById("waMediaVideo");
+  const canvasEl = document.getElementById("waMilkdropCanvas");
   const iframe = document.getElementById("waYoutubeFrame");
   if(mode === "video"){
+    videoEl.style.zIndex = "2";
+    canvasEl.style.zIndex = "1";
     stopMilkdrop();
-    if(iframe.dataset.pendingSrc) iframe.src = iframe.dataset.pendingSrc;
   } else {
-    iframe.src = ""; // stop any playing video while the visualizer is up
+    videoEl.style.zIndex = "1";
+    canvasEl.style.zIndex = "2";
     startMilkdrop();
   }
+  // Note: we never clear iframe.src here anymore — the video (and its audio)
+  // keeps playing underneath even when MilkDrop is the visible layer.
+  if(iframe.dataset.pendingSrc && !iframe.src) iframe.src = iframe.dataset.pendingSrc;
 }
 
 function toggleMute(){
@@ -695,7 +700,7 @@ function loadEventMedia(id){
       src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1&mute=1&rel=0&enablejsapi=1";
     }
     iframe.dataset.pendingSrc = src;
-    if(mediaMode === "video") iframe.src = src;
+    iframe.src = src;
     iframe.style.display = "block";
     placeholder.style.display = "none";
   } else {
