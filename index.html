@@ -4,14 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moving Arts Program — Winamp</title>
+<title>Moving Arts Program — Live Music, Goa</title>
 <meta name="description" content="Moving Arts Program — a pro-bono live music platform in Goa. Five series, one movement: Grateful Dead Tribute, The Classics, Unaccompanied, Rock Revival, The Outcasts.">
 <meta name="theme-color" content="#0a1f0a">
 <meta property="og:title" content="Moving Arts Program — Sound. Art. Spirit.">
 <meta property="og:description" content="Pro-bono live music in Goa. Five series. One movement. No compromise.">
 <meta property="og:type" content="website">
-<!-- og:image needs a hosted https URL (WhatsApp/FB can't read inline images). Add when the site has a domain:
-<meta property="og:image" content="https://YOUR-DOMAIN/map-og.jpg"> -->
+<meta property="og:image" content="https://YOUR-DOMAIN/map-og.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a1f0a'/%3E%3Cpath d='M5 3.5v9l7-4.5z' fill='%237CFC00'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,7 +75,7 @@ body::after{
   display:flex;align-items:center;justify-content:space-between;
   padding:2px 4px;
 }
-.wa-titlebar h1{margin:0;font:inherit;letter-spacing:.5px;}
+.wa-titlebar h1{margin:0;font:inherit;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .wa-titlebar .wa-btns{display:flex;gap:2px;}
 .wa-titlebar .wa-btns button{
   width:14px;height:12px;background:linear-gradient(#4a4a54,#2e2e36);
@@ -398,8 +397,8 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 .card{background:#0a0a0a;border:1px solid var(--phos);padding:8px;text-align:center;font-family:'VT323',monospace;font-size:14px;color:#d8e8d8;}
 .card .sw{height:70px;border:1px dashed var(--phos);margin-bottom:6px;display:flex;align-items:center;justify-content:center;color:#5a5;font-size:10px;letter-spacing:1px;}
 .donate{background:#0a0a0a;border:1px solid var(--phos);padding:14px;text-align:center;font-family:'VT323',monospace;color:#d8e8d8;font-size:16px;}
-.wa-embed-wrap{padding:8px;background:#000;position:relative;}
-.wa-embed-wrap iframe{display:block;border:0;border-radius:8px;width:100%;aspect-ratio:16/9;height:auto;}
+.wa-embed-wrap{padding:8px;background:#000;}
+.wa-embed-wrap iframe{display:block;border:0;border-radius:8px;}
 .upi-qr{width:170px;height:170px;display:block;margin:12px auto;border-radius:4px;background:#fff;padding:6px;}
 .upi-id{
   font-family:'VT323',monospace;font-size:15px;letter-spacing:.5px;color:var(--phos);
@@ -424,7 +423,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
 
   <div class="wa-main" id="waMain">
     <div class="wa-titlebar">
-      <h1>WINAMP — MOVING ARTS PROGRAM</h1>
+      <h1>MOVING ARTS PROGRAM — LIVE MUSIC, GOA</h1>
       <div class="wa-btns">
         <button type="button" id="tbShade" aria-label="Shade mode" title="Shade mode" aria-pressed="false">_</button>
         <button type="button" id="tbDouble" aria-label="Double size" title="Double size" aria-pressed="false">□</button>
@@ -643,14 +642,10 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
         <div class="wa-playlist">
           <div class="wa-pl-title">NOW SPINNING — THIS PAGE'S THEME SONG</div>
           <div class="wa-embed-wrap">
-            <div class="wa-media-toggle">
-              <button type="button" class="wa-media-btn" id="themeSongMuteBtn" onclick="toggleThemeSongMute()">🔇 MUTE</button>
-            </div>
-            <iframe id="themeSongFrame" src=""
-              loading="lazy" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              title="With a Little Help from My Friends — The Beatles, via YouTube"></iframe>
+            <iframe src="https://open.spotify.com/embed/track/2RnPATK99oGOZygnD2GTO6?utm_source=generator&theme=0"
+              width="100%" height="152" frameborder="0" loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              title="With a Little Help from My Friends — The Beatles, via Spotify"></iframe>
           </div>
         </div>
         <span class="blink-pink">Music needs connoisseurs, not consumers, to stay alive.</span>
@@ -983,30 +978,6 @@ function loadEventMedia(id){
   }
 }
 
-/* Support-the-Music theme song: separate from the CORE_VIDEO_PAGES iframe
-   above, so it can autoplay (muted) on its own page without disturbing the
-   main video system. Src is set fresh each time the page is shown, and
-   cleared on the way out so it doesn't keep running unseen. */
-const THEME_SONG_VIDEO = "0C58ttB2-Qg";
-let themeSongMuted = true;
-function loadThemeSong(){
-  const iframe = document.getElementById("themeSongFrame");
-  if(!iframe) return;
-  themeSongMuted = true;
-  const btn = document.getElementById("themeSongMuteBtn");
-  if(btn) btn.textContent = "🔇 MUTE";
-  iframe.src = "https://www.youtube-nocookie.com/embed/" + THEME_SONG_VIDEO + "?autoplay=1&mute=1&rel=0&playsinline=1&enablejsapi=1";
-}
-function toggleThemeSongMute(){
-  themeSongMuted = !themeSongMuted;
-  const iframe = document.getElementById("themeSongFrame");
-  if(iframe && iframe.contentWindow){
-    iframe.contentWindow.postMessage(JSON.stringify({event:"command", func: themeSongMuted ? "mute" : "unMute", args:[]}), "*");
-  }
-  const btn = document.getElementById("themeSongMuteBtn");
-  if(btn) btn.textContent = themeSongMuted ? "🔇 MUTE" : "🔊 UNMUTE";
-}
-
 /* MilkDrop v2 — the classic trick: each frame the canvas is redrawn onto
    itself slightly zoomed and rotated (feedback), so the hue-cycling
    waveforms smear into psychedelic tunnels instead of floating blobs. */
@@ -1136,12 +1107,6 @@ function showPage(id){
     document.getElementById("waYoutubeFrame").dataset.pendingSrc = "";
     stopMilkdrop();
     setPlayGlyph(marqueePlaying);
-  }
-  if(id === "money"){
-    loadThemeSong();
-  } else {
-    const themeFrame = document.getElementById("themeSongFrame");
-    if(themeFrame) themeFrame.src = "";
   }
   current = id;
   syncSeek(id);
