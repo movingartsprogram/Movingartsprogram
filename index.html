@@ -659,6 +659,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
             <li data-video="Db7UhRLFh6U" tabindex="0"><span class="pl-name">14. Awake the Dead Sessions Part 2</span></li>
           </ul>
         </div>
+        <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
       </div>
 
       <div class="page" id="page-about">
@@ -671,6 +672,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
         <p>Prashant is a filmmaker, advertising veteran, a serial entrepreneur and passionate music promoter. He has directed hundreds of ads and documentaries and been part of many start-ups. He made his feature film debut with Mithai—a Telugu dark comedy tribute to The Big Lebowski. In true Lebowski fashion, the film tanked theatrically across 24 countries, only to later achieve a massive cult following in the digital space garnering more than 10 million views after being taken off from Amazon Prime.</p>
         <p>Following this "commercial debacle," Prashant relocated to Goa in 2019, pivoting to his first true love: music.</p>
         <p>A music connoisseur at heart who has been promoting gigs and independent artists since 2003, Prashant launched his Goa music promotion initiative in 2021. For him, this isn't a career—it's a passion project.</p>
+        <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
       </div>
 
       <div class="page" id="page-money">
@@ -704,6 +706,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
           <div style="font-size:12px;color:#8fae8f;margin-top:4px;">Scan with any UPI app · tap the ID to copy</div>
           <a class="cta" href="upi://pay?pa=zimbo77-7@okhdfcbank&pn=MAP%20support&cu=INR&tn=Support%20MAP">DONATE NOW — PAY VIA UPI</a>
         </div>
+        <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
       </div>
 
     </div>
@@ -948,22 +951,31 @@ const UNACCOMPANIED_PLAYLIST_ID = "PL2J3aeo6eT_AQuyCCaUtK5wOt94z7KTgQ";
 let ytApiReady = false;
 let unaccompaniedPlayer = null;
 let unaccompaniedPlaylistIds = [];
+let unaccompaniedPolling = false;
 window.onYouTubeIframeAPIReady = function(){
   ytApiReady = true;
   if(current === "unaccompanied") ensureUnaccompaniedPlayer();
 };
 function ensureUnaccompaniedPlayer(){
-  if(unaccompaniedPlayer || !ytApiReady || typeof YT === "undefined") return;
+  if(unaccompaniedPlayer || !ytApiReady || typeof YT === "undefined" || !YT.Player) return;
   unaccompaniedPlayer = new YT.Player("waUnaccompaniedFrame", {
-    playerVars: {
-      listType: "playlist",
-      list: UNACCOMPANIED_PLAYLIST_ID,
-      autoplay: 1, mute: 1, playsinline: 1, rel: 0, enablejsapi: 1
-    },
+    playerVars: { autoplay: 1, mute: 1, playsinline: 1, rel: 0, enablejsapi: 1 },
     events: {
-      onReady: function(){ pollUnaccompaniedPlaylist(0); },
+      onReady: function(e){
+        // Explicitly cueing the playlist (rather than only passing list/
+        // listType at construction) is the more reliable way to get
+        // getPlaylist() to actually return data afterwards.
+        try{ e.target.cuePlaylist({ listType: "playlist", list: UNACCOMPANIED_PLAYLIST_ID, index: 0 }); }catch(err){}
+        try{ e.target.playVideo(); }catch(err){}
+        pollUnaccompaniedPlaylist(0);
+        startUnaccompaniedFallbackTimer();
+      },
       onStateChange: function(e){
         if(!unaccompaniedPlayer) return;
+        // getPlaylist() can be empty right after cueing and only becomes
+        // reliable once a state change has actually fired — so re-check
+        // on every state change until we have it.
+        if(!unaccompaniedPlaylistIds.length) pollUnaccompaniedPlaylist(0);
         if(e.data === YT.PlayerState.PLAYING){
           setPlayGlyph(true);
           try{ highlightUnaccompaniedTrack(unaccompaniedPlayer.getPlaylistIndex()); }catch(err){}
@@ -975,15 +987,32 @@ function ensureUnaccompaniedPlayer(){
   });
 }
 function pollUnaccompaniedPlaylist(attempt){
-  if(!unaccompaniedPlayer) return;
+  if(!unaccompaniedPlayer || unaccompaniedPlaylistIds.length) return;
+  if(attempt === 0){
+    if(unaccompaniedPolling) return;
+    unaccompaniedPolling = true;
+  }
   let ids = [];
   try{ ids = unaccompaniedPlayer.getPlaylist() || []; }catch(err){}
   if(ids.length){
+    unaccompaniedPolling = false;
     unaccompaniedPlaylistIds = ids;
     renderUnaccompaniedPlaylist(ids);
-  } else if(attempt < 12){
-    setTimeout(()=>pollUnaccompaniedPlaylist(attempt+1), 400);
+  } else if(attempt < 20){
+    setTimeout(()=>pollUnaccompaniedPlaylist(attempt+1), 500);
+  } else {
+    unaccompaniedPolling = false;
   }
+}
+function startUnaccompaniedFallbackTimer(){
+  setTimeout(()=>{
+    if(unaccompaniedPlaylistIds.length) return; // it loaded fine, nothing to do
+    const ul = document.getElementById("unaccompaniedPlaylist");
+    if(!ul) return;
+    ul.innerHTML = '<li style="cursor:default;"><a class="pl-name" href="https://www.youtube.com/playlist?list='
+      + UNACCOMPANIED_PLAYLIST_ID
+      + '" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">Couldn\'t load the track list here — open the playlist on YouTube ↗</a></li>';
+  }, 11000);
 }
 function fetchYoutubeTitle(id){
   const url = "https://www.youtube.com/oembed?url=" + encodeURIComponent("https://www.youtube.com/watch?v=" + id) + "&format=json";
