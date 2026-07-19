@@ -310,8 +310,6 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 /* …the 14 long Elvis titles get the readable terminal face */
 #bossPlaylist li{font-family:'VT323',monospace;font-size:15px;padding:4px 6px;}
 #bossPlaylist li.active .pl-name::before{content:'► ';}
-#unaccompaniedPlaylist li{font-family:'VT323',monospace;font-size:15px;padding:4px 6px;}
-#unaccompaniedPlaylist li.active .pl-name::before{content:'► ';}
 
 /* ---------- content window ---------- */
 .wa-content-window{margin-top:6px;background:linear-gradient(180deg,var(--lcd) 0%, var(--lcd-deep) 100%);border:1px solid #000;
@@ -475,10 +473,6 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               referrerpolicy="strict-origin-when-cross-origin"
               allowfullscreen></iframe>
-            <iframe id="waUnaccompaniedFrame" title="Unaccompanied playlist player" style="display:none;"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen></iframe>
             <div class="wa-media-placeholder" id="waVideoPlaceholder">Video coming soon</div>
           </div>
           <canvas class="wa-media-canvas" id="waMilkdropCanvas"></canvas>
@@ -549,12 +543,6 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
         <p>Top quarterly performers join MAP's Soloist Summit. Every six months, standout artists receive dedicated management and global album releases.</p>
         <h3>APPLY &amp; THE PROMISE</h3>
         <p>Open to any soloist who can hold a stage for 90 minutes with original music. MAP operates pro bono: artists are paid, and all support is 100% free.</p>
-        <div class="wa-playlist">
-          <div class="wa-pl-title">UNACCOMPANIED — PICK A SONG</div>
-          <ul class="wa-pl-list" id="unaccompaniedPlaylist">
-            <li>Loading playlist…</li>
-          </ul>
-        </div>
         <a class="blink-pink" href="mailto:movingartsp@gmail.com?subject=Ideas%20for%20Unaccompanied">Write to us, help us improve, we welcome ideas and feedbacks</a>
         <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
       </div>
@@ -727,7 +715,6 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
 
 <noscript><style>.page{display:block !important;}.wa-media-area{display:none !important;}</style></noscript>
 
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const spec = document.getElementById('waSpectrum');
@@ -940,127 +927,6 @@ function ytStartListening(){
   try{ iframe.contentWindow.postMessage(JSON.stringify({event:'listening', id:'mapPlayer'}), '*'); }catch(err){}
 }
 
-/* ---------- Unaccompanied: real playlist, pick-a-song ----------
-   Rather than one long auto-playing playlist embed, Unaccompanied gets
-   its own dedicated YT.Player bound to a second iframe. Once it's ready
-   we ask it for the playlist's actual video IDs (getPlaylist()) and look
-   up each title via YouTube's public oEmbed endpoint (no API key needed,
-   works straight from the browser), then render a clickable track list
-   in the LCD/content area — same pattern as the Boss Den tracklist. */
-const UNACCOMPANIED_PLAYLIST_ID = "PL2J3aeo6eT_AQuyCCaUtK5wOt94z7KTgQ";
-let ytApiReady = false;
-let unaccompaniedPlayer = null;
-let unaccompaniedPlaylistIds = [];
-let unaccompaniedPolling = false;
-window.onYouTubeIframeAPIReady = function(){
-  ytApiReady = true;
-  if(current === "unaccompanied") ensureUnaccompaniedPlayer();
-};
-function ensureUnaccompaniedPlayer(){
-  if(unaccompaniedPlayer || !ytApiReady || typeof YT === "undefined" || !YT.Player) return;
-  unaccompaniedPlayer = new YT.Player("waUnaccompaniedFrame", {
-    playerVars: { autoplay: 1, mute: 1, playsinline: 1, rel: 0, enablejsapi: 1 },
-    events: {
-      onReady: function(e){
-        // Explicitly cueing the playlist (rather than only passing list/
-        // listType at construction) is the more reliable way to get
-        // getPlaylist() to actually return data afterwards.
-        try{ e.target.cuePlaylist({ listType: "playlist", list: UNACCOMPANIED_PLAYLIST_ID, index: 0 }); }catch(err){}
-        try{ e.target.playVideo(); }catch(err){}
-        pollUnaccompaniedPlaylist(0);
-        startUnaccompaniedFallbackTimer();
-      },
-      onStateChange: function(e){
-        if(!unaccompaniedPlayer) return;
-        // getPlaylist() can be empty right after cueing and only becomes
-        // reliable once a state change has actually fired — so re-check
-        // on every state change until we have it.
-        if(!unaccompaniedPlaylistIds.length) pollUnaccompaniedPlaylist(0);
-        if(e.data === YT.PlayerState.PLAYING){
-          setPlayGlyph(true);
-          try{ highlightUnaccompaniedTrack(unaccompaniedPlayer.getPlaylistIndex()); }catch(err){}
-        } else if(e.data === YT.PlayerState.PAUSED){
-          setPlayGlyph(false);
-        }
-      }
-    }
-  });
-}
-function pollUnaccompaniedPlaylist(attempt){
-  if(!unaccompaniedPlayer || unaccompaniedPlaylistIds.length) return;
-  if(attempt === 0){
-    if(unaccompaniedPolling) return;
-    unaccompaniedPolling = true;
-  }
-  let ids = [];
-  try{ ids = unaccompaniedPlayer.getPlaylist() || []; }catch(err){}
-  if(ids.length){
-    unaccompaniedPolling = false;
-    unaccompaniedPlaylistIds = ids;
-    renderUnaccompaniedPlaylist(ids);
-  } else if(attempt < 20){
-    setTimeout(()=>pollUnaccompaniedPlaylist(attempt+1), 500);
-  } else {
-    unaccompaniedPolling = false;
-  }
-}
-function startUnaccompaniedFallbackTimer(){
-  setTimeout(()=>{
-    if(unaccompaniedPlaylistIds.length) return; // it loaded fine, nothing to do
-    const ul = document.getElementById("unaccompaniedPlaylist");
-    if(!ul) return;
-    ul.innerHTML = '<li style="cursor:default;"><a class="pl-name" href="https://www.youtube.com/playlist?list='
-      + UNACCOMPANIED_PLAYLIST_ID
-      + '" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">Couldn\'t load the track list here — open the playlist on YouTube ↗</a></li>';
-  }, 11000);
-}
-function fetchYoutubeTitle(id){
-  const url = "https://www.youtube.com/oembed?url=" + encodeURIComponent("https://www.youtube.com/watch?v=" + id) + "&format=json";
-  return fetch(url).then(r => r.ok ? r.json() : null).then(data => data && data.title).catch(()=>null);
-}
-function renderUnaccompaniedPlaylist(ids){
-  const ul = document.getElementById("unaccompaniedPlaylist");
-  if(!ul) return;
-  ul.innerHTML = "";
-  ids.forEach((id, i) => {
-    const num = String(i+1).padStart(2,"0");
-    const li = document.createElement("li");
-    li.tabIndex = 0;
-    li.dataset.index = i;
-    li.innerHTML = '<span class="pl-name">' + num + ". Loading…" + "</span>";
-    li.addEventListener("click", ()=> playUnaccompaniedTrack(i));
-    li.addEventListener("keydown", e=>{
-      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); li.click(); }
-    });
-    ul.appendChild(li);
-    fetchYoutubeTitle(id).then(title => {
-      const nameEl = li.querySelector(".pl-name");
-      if(nameEl) nameEl.textContent = num + ". " + (title || ("Track " + num));
-      if(li.classList.contains("active")) document.getElementById("waTrackTitle").textContent = nameEl.textContent;
-    });
-  });
-}
-function playUnaccompaniedTrack(index){
-  if(!unaccompaniedPlayer) return;
-  try{ unaccompaniedPlayer.playVideoAt(index); }catch(err){}
-  highlightUnaccompaniedTrack(index);
-  setPlayGlyph(true);
-}
-function highlightUnaccompaniedTrack(index){
-  const ul = document.getElementById("unaccompaniedPlaylist");
-  if(!ul) return;
-  Array.from(ul.children).forEach((li,i) => li.classList.toggle("active", i === index));
-  const activeLi = ul.children[index];
-  const nameEl = activeLi && activeLi.querySelector(".pl-name");
-  if(nameEl) document.getElementById("waTrackTitle").textContent = nameEl.textContent;
-}
-function stepUnaccompaniedTrack(dir){
-  if(!unaccompaniedPlayer || !unaccompaniedPlaylistIds.length) return;
-  let idx = 0;
-  try{ idx = unaccompaniedPlayer.getPlaylistIndex(); }catch(err){}
-  const total = unaccompaniedPlaylistIds.length;
-  playUnaccompaniedTrack((idx + dir + total) % total);
-}
 let milkdropRAF = null;
 let videoMuted = true;
 
@@ -1075,11 +941,6 @@ function videoCommand(func, args){
 
 function togglePlay(btn){
   const playing = btn.textContent !== '►';
-  if(current === 'unaccompanied'){
-    if(unaccompaniedPlayer){ try{ playing ? unaccompaniedPlayer.pauseVideo() : unaccompaniedPlayer.playVideo(); }catch(err){} }
-    setPlayGlyph(!playing);
-    return;
-  }
   if(CORE_VIDEO_PAGES.includes(current)){
     videoCommand(playing ? "pauseVideo" : "playVideo");
     setPlayGlyph(!playing);
@@ -1090,11 +951,6 @@ function togglePlay(btn){
 }
 
 function stopTransport(){
-  if(current === 'unaccompanied'){
-    if(unaccompaniedPlayer){ try{ unaccompaniedPlayer.pauseVideo(); unaccompaniedPlayer.seekTo(0,true); }catch(err){} }
-    setPlayGlyph(false);
-    return;
-  }
   if(CORE_VIDEO_PAGES.includes(current)){
     videoCommand("pauseVideo");
     videoCommand("seekTo",[0,true]);
@@ -1127,31 +983,12 @@ function setMediaMode(mode){
 
 function toggleMute(){
   videoMuted = !videoMuted;
-  if(current === 'unaccompanied' && unaccompaniedPlayer){
-    try{ videoMuted ? unaccompaniedPlayer.mute() : unaccompaniedPlayer.unMute(); }catch(err){}
-  } else {
-    videoCommand(videoMuted ? "mute" : "unMute");
-  }
+  videoCommand(videoMuted ? "mute" : "unMute");
   document.getElementById("waMuteBtn").textContent = videoMuted ? "🔇 MUTE" : "🔊 UNMUTE";
 }
 
 function setVideoVolume(value){
   const vol = Number(value);
-  if(current === 'unaccompanied' && unaccompaniedPlayer){
-    try{
-      unaccompaniedPlayer.setVolume(vol);
-      if(vol > 0 && videoMuted){
-        videoMuted = false;
-        unaccompaniedPlayer.unMute();
-        document.getElementById("waMuteBtn").textContent = "🔊 UNMUTE";
-      } else if(vol === 0 && !videoMuted){
-        videoMuted = true;
-        unaccompaniedPlayer.mute();
-        document.getElementById("waMuteBtn").textContent = "🔇 MUTE";
-      }
-    }catch(err){}
-    return;
-  }
   videoCommand("setVolume",[vol]);
   if(vol > 0 && videoMuted){
     videoMuted = false;
@@ -1168,30 +1005,12 @@ document.getElementById("waVolumeSlider").addEventListener("input", function(){
 });
 
 function loadEventMedia(id){
+  const videoId = eventVideos[id];
   const iframe = document.getElementById("waYoutubeFrame");
-  const uaFrame = document.getElementById("waUnaccompaniedFrame");
   const placeholder = document.getElementById("waVideoPlaceholder");
   videoMuted = true;
   document.getElementById("waMuteBtn").textContent = "🔇 MUTE";
   ytState = { playerState: -1, currentTime: 0 };
-
-  if(id === "unaccompanied"){
-    iframe.style.display = "none";
-    iframe.src = "";
-    iframe.dataset.pendingSrc = "";
-    placeholder.style.display = "none";
-    uaFrame.style.display = "block";
-    ensureUnaccompaniedPlayer();
-    if(unaccompaniedPlayer){ try{ unaccompaniedPlayer.playVideo(); }catch(err){} }
-    return;
-  }
-
-  // leaving (or never on) Unaccompanied — make sure its player is paused and hidden
-  uaFrame.style.display = "none";
-  if(unaccompaniedPlayer){ try{ unaccompaniedPlayer.pauseVideo(); }catch(err){} }
-  iframe.style.display = "block";
-
-  const videoId = eventVideos[id];
   if(videoId){
     let src;
     const params = "autoplay=1&mute=1&rel=0&playsinline=1&enablejsapi=1";
@@ -1364,9 +1183,6 @@ function showPage(id){
     mediaArea.style.display = "none";
     document.getElementById("waYoutubeFrame").src = "";
     document.getElementById("waYoutubeFrame").dataset.pendingSrc = "";
-    const uaFrame = document.getElementById("waUnaccompaniedFrame");
-    if(uaFrame) uaFrame.style.display = "none";
-    if(unaccompaniedPlayer){ try{ unaccompaniedPlayer.pauseVideo(); }catch(err){} }
     stopMilkdrop();
     setPlayGlyph(marqueePlaying);
   }
@@ -1402,12 +1218,10 @@ function stepBossTrack(dir){
    matching the playlist on screen. */
 function nextPage(forcePage){
   if(current === 'boss' && !forcePage){ stepBossTrack(1); return; }
-  if(current === 'unaccompanied' && !forcePage){ stepUnaccompaniedTrack(1); return; }
   showPage(order[(order.indexOf(current)+1) % order.length]);
 }
 function prevPage(forcePage){
   if(current === 'boss' && !forcePage){ stepBossTrack(-1); return; }
-  if(current === 'unaccompanied' && !forcePage){ stepUnaccompaniedTrack(-1); return; }
   showPage(order[(order.indexOf(current)-1+order.length) % order.length]);
 }
 
