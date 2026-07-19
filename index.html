@@ -177,13 +177,6 @@ body::after{
   display:none;position:relative;margin-left:-9px;width:calc(100% + 9px);aspect-ratio:16/9;
   background:#000;overflow:hidden;
 }
-/* Unaccompanied is a playlist, not a single video — YouTube's own player
-   only draws its playlist/song list inside the embed when the iframe has
-   room beyond the video itself, so this page gets a taller box instead of
-   a strict 16:9 crop, leaving space below the video for that native list. */
-.wa-media-area.wa-media-area--playlist{
-  aspect-ratio:unset;height:520px;
-}
 .wa-media-toggle{position:absolute;top:4px;right:4px;z-index:10;display:flex;gap:4px;}
 .wa-media-btn{
   font-family:'Press Start 2P',monospace;font-size:7px;color:var(--phos);
@@ -317,6 +310,8 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 /* …the 14 long Elvis titles get the readable terminal face */
 #bossPlaylist li{font-family:'VT323',monospace;font-size:15px;padding:4px 6px;}
 #bossPlaylist li.active .pl-name::before{content:'► ';}
+#unaccompaniedPlaylist li{font-family:'VT323',monospace;font-size:15px;padding:4px 6px;}
+#unaccompaniedPlaylist li.active .pl-name::before{content:'► ';}
 
 /* ---------- content window ---------- */
 .wa-content-window{margin-top:6px;background:linear-gradient(180deg,var(--lcd) 0%, var(--lcd-deep) 100%);border:1px solid #000;
@@ -550,6 +545,18 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
         <p>Top quarterly performers join MAP's Soloist Summit. Every six months, standout artists receive dedicated management and global album releases.</p>
         <h3>APPLY &amp; THE PROMISE</h3>
         <p>Open to any soloist who can hold a stage for 90 minutes with original music. MAP operates pro bono: artists are paid, and all support is 100% free.</p>
+        <div class="wa-playlist">
+          <div class="wa-pl-title">UNACCOMPANIED — PICK A SONG</div>
+          <ul class="wa-pl-list" id="unaccompaniedPlaylist">
+            <li class="active" data-video="cKVD4ls2Qic" tabindex="0"><span class="pl-name">01. Elvis Lobo — Unaccompanied</span></li>
+            <li data-video="vxvy8Ed8C3U" tabindex="0"><span class="pl-name">02. Blinston — Unaccompanied</span></li>
+            <li data-video="cgZLmV2XRVg" tabindex="0"><span class="pl-name">03. Shayne — Unaccompanied</span></li>
+            <li data-video="d2kJ2XJGAvo" tabindex="0"><span class="pl-name">04. Anirban — Unaccompanied</span></li>
+            <li data-video="SENxinvf71w" tabindex="0"><span class="pl-name">05. Sanchal Malhar — Unaccompanied</span></li>
+            <li data-video="tlgWgGQVJ8E" tabindex="0"><span class="pl-name">06. Valerie Desilva — Unaccompanied</span></li>
+            <li data-video="yLMQBKLRZds" tabindex="0"><span class="pl-name">07. Kalyani — Unaccompanied</span></li>
+          </ul>
+        </div>
         <a class="blink-pink" href="mailto:movingartsp@gmail.com?subject=Ideas%20for%20Unaccompanied">Write to us, help us improve, we welcome ideas and feedbacks</a>
         <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
       </div>
@@ -902,7 +909,7 @@ let current = "home";
 
 // YouTube video IDs for each event page. A null shows "video coming soon".
 const eventVideos = {
-  unaccompanied: "playlist:PL2J3aeo6eT_AQuyCCaUtK5wOt94z7KTgQ",
+  unaccompanied: "cKVD4ls2Qic",
   classics: "jpVhJgOQQUA",
   dead: "o2dRvRXOrGo",
   rock: "5zVbsD7idto",
@@ -1166,6 +1173,9 @@ function showPage(id){
   if(id === "boss"){
     const activeTrack = document.querySelector('#bossPlaylist li.active .pl-name');
     document.getElementById("waTrackTitle").textContent = activeTrack ? activeTrack.textContent : titles.boss;
+  } else if(id === "unaccompanied"){
+    const activeTrack = document.querySelector('#unaccompaniedPlaylist li.active .pl-name');
+    document.getElementById("waTrackTitle").textContent = activeTrack ? activeTrack.textContent : titles.unaccompanied;
   } else {
     document.getElementById("waTrackTitle").textContent = titles[id];
   }
@@ -1182,14 +1192,12 @@ function showPage(id){
   if(CORE_VIDEO_PAGES.includes(id)){
     topRow.style.display = "none";
     mediaArea.style.display = "block";
-    mediaArea.classList.toggle("wa-media-area--playlist", id === "unaccompanied");
     loadEventMedia(id);
     setMediaMode("video");
     setPlayGlyph(true); // videos autoplay (muted)
   } else {
     topRow.style.display = "flex";
     mediaArea.style.display = "none";
-    mediaArea.classList.remove("wa-media-area--playlist");
     document.getElementById("waYoutubeFrame").src = "";
     document.getElementById("waYoutubeFrame").dataset.pendingSrc = "";
     stopMilkdrop();
@@ -1222,15 +1230,37 @@ function stepBossTrack(dir){
   playBossTrack(bossLis[next]);
 }
 
+/* ---------- Unaccompanied tracklist ---------- */
+const unaccompaniedLis = Array.from(document.querySelectorAll("#unaccompaniedPlaylist li"));
+function playUnaccompaniedTrack(li){
+  eventVideos.unaccompanied = li.dataset.video;
+  unaccompaniedLis.forEach(x=>x.classList.remove("active"));
+  li.classList.add("active");
+  document.getElementById("waTrackTitle").textContent = li.querySelector('.pl-name').textContent;
+  loadEventMedia("unaccompanied");
+  setMediaMode("video");
+  setPlayGlyph(true);
+}
+unaccompaniedLis.forEach(li=>{
+  li.addEventListener("click", ()=>playUnaccompaniedTrack(li));
+});
+function stepUnaccompaniedTrack(dir){
+  const idx = unaccompaniedLis.findIndex(li=>li.classList.contains('active'));
+  const next = (idx + dir + unaccompaniedLis.length) % unaccompaniedLis.length;
+  playUnaccompaniedTrack(unaccompaniedLis[next]);
+}
+
 /* ◄◄ / ►► always move you through the site — pages are the tracks.
-   On the Boss Den they step through the Elvis tracklist instead,
-   matching the playlist on screen. */
+   On the Boss Den and Unaccompanied they step through that page's
+   tracklist instead, matching the playlist on screen. */
 function nextPage(forcePage){
   if(current === 'boss' && !forcePage){ stepBossTrack(1); return; }
+  if(current === 'unaccompanied' && !forcePage){ stepUnaccompaniedTrack(1); return; }
   showPage(order[(order.indexOf(current)+1) % order.length]);
 }
 function prevPage(forcePage){
   if(current === 'boss' && !forcePage){ stepBossTrack(-1); return; }
+  if(current === 'unaccompanied' && !forcePage){ stepUnaccompaniedTrack(-1); return; }
   showPage(order[(order.indexOf(current)-1+order.length) % order.length]);
 }
 
