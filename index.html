@@ -177,6 +177,13 @@ body::after{
   display:none;position:relative;margin-left:-9px;width:calc(100% + 9px);aspect-ratio:16/9;
   background:#000;overflow:hidden;
 }
+/* Unaccompanied is a playlist, not a single video — YouTube's own player
+   only draws its playlist/song list inside the embed when the iframe has
+   room beyond the video itself, so this page gets a taller box instead of
+   a strict 16:9 crop, leaving space below the video for that native list. */
+.wa-media-area.wa-media-area--playlist{
+  aspect-ratio:unset;height:520px;
+}
 .wa-media-toggle{position:absolute;top:4px;right:4px;z-index:10;display:flex;gap:4px;}
 .wa-media-btn{
   font-family:'Press Start 2P',monospace;font-size:7px;color:var(--phos);
@@ -1175,12 +1182,14 @@ function showPage(id){
   if(CORE_VIDEO_PAGES.includes(id)){
     topRow.style.display = "none";
     mediaArea.style.display = "block";
+    mediaArea.classList.toggle("wa-media-area--playlist", id === "unaccompanied");
     loadEventMedia(id);
     setMediaMode("video");
     setPlayGlyph(true); // videos autoplay (muted)
   } else {
     topRow.style.display = "flex";
     mediaArea.style.display = "none";
+    mediaArea.classList.remove("wa-media-area--playlist");
     document.getElementById("waYoutubeFrame").src = "";
     document.getElementById("waYoutubeFrame").dataset.pendingSrc = "";
     stopMilkdrop();
