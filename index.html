@@ -177,6 +177,12 @@ body::after{
   display:none;position:relative;margin-left:-9px;width:calc(100% + 9px);aspect-ratio:16/9;
   background:#000;overflow:hidden;
 }
+/* Vinyl Resurrection's clip is a YouTube Short (portrait 9:16) — cropping
+   it into a landscape 16:9 box would pillarbox it with black bars on
+   both sides, so this page's box matches the video's own orientation. */
+.wa-media-area.wa-media-area--portrait{
+  aspect-ratio:9/16;max-width:360px;margin-left:auto;margin-right:auto;
+}
 .wa-media-toggle{position:absolute;top:4px;right:4px;z-index:10;display:flex;gap:4px;}
 .wa-media-btn{
   font-family:'Press Start 2P',monospace;font-size:7px;color:var(--phos);
@@ -914,7 +920,7 @@ const eventVideos = {
   dead: "o2dRvRXOrGo",
   rock: "5zVbsD7idto",
   outcasts: "FfwFTIyKxK0",
-  vinyl: null,
+  vinyl: "BClXgjHc8a4",
   boss: "caYwXm5Rvwk"
 };
 const CORE_VIDEO_PAGES = ["unaccompanied","classics","dead","rock","outcasts","vinyl","boss"];
@@ -1192,12 +1198,14 @@ function showPage(id){
   if(CORE_VIDEO_PAGES.includes(id)){
     topRow.style.display = "none";
     mediaArea.style.display = "block";
+    mediaArea.classList.toggle("wa-media-area--portrait", id === "vinyl");
     loadEventMedia(id);
     setMediaMode("video");
     setPlayGlyph(true); // videos autoplay (muted)
   } else {
     topRow.style.display = "flex";
     mediaArea.style.display = "none";
+    mediaArea.classList.remove("wa-media-area--portrait");
     document.getElementById("waYoutubeFrame").src = "";
     document.getElementById("waYoutubeFrame").dataset.pendingSrc = "";
     stopMilkdrop();
