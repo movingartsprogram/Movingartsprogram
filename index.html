@@ -486,7 +486,21 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 
 /* ---------- end-of-page home button (same glyph/size as transport row) ---------- */
 .page-home-end{margin-top:16px;text-align:center;}
-.page-home-end .wa-btn{display:inline-flex;}
+.page-home-end .wa-btn{
+  display:inline-flex;color:var(--mag);
+  text-shadow:0 0 6px rgba(255,47,176,.95);
+  animation:wa-pink-glow 2.6s ease-in-out infinite;
+}
+@keyframes wa-pink-glow{
+  0%,100%{box-shadow:0 6px 10px rgba(0,0,0,.45),
+             inset 0 3px 4px rgba(255,255,255,.26),
+             inset 0 -5px 7px rgba(0,0,0,.55),
+             0 0 12px rgba(255,47,176,.85), 0 0 26px rgba(255,47,176,.4);}
+  50%{box-shadow:0 6px 10px rgba(0,0,0,.45),
+             inset 0 3px 4px rgba(255,255,255,.26),
+             inset 0 -5px 7px rgba(0,0,0,.55),
+             0 0 5px rgba(255,47,176,.4);}
+}
 
 /* ---------- poster inlay (surfacing the series art) ---------- */
 .poster{float:right;width:112px;margin:2px 0 8px 12px;position:relative;}
@@ -538,6 +552,29 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
   .pacman-icon{display:none;}
 }
 </style>
+
+<!-- ═══ GOOGLE ANALYTICS 4 ══════════════════════════════════════════
+     SETUP (one time):
+       1. analytics.google.com  →  Admin  →  Create Property ("MAP")
+       2. Add a Web data stream for the site's domain
+       3. Copy the Measurement ID  (looks like  G-AB12CD34EF)
+       4. Paste it on the MAP_GA_ID line below — the ONLY edit needed.
+     Until a real ID is pasted, nothing loads and nothing is sent. -->
+<script>
+window.MAP_GA_ID = "G-XXXXXXXXXX";  /* ← paste your GA4 Measurement ID here */
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+(function(){
+  if(!/^G-[A-Z0-9]{6,}$/.test(window.MAP_GA_ID) || window.MAP_GA_ID === "G-XXXXXXXXXX") return;
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + window.MAP_GA_ID;
+  document.head.appendChild(s);
+  gtag("js", new Date());
+  gtag("config", window.MAP_GA_ID, {send_page_view:false, transport_type:"beacon"});
+})();
+function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(e){} }
+</script>
 </head>
 <body>
 
@@ -1106,6 +1143,7 @@ function setMediaMode(mode){
 function toggleMute(){
   videoMuted = !videoMuted;
   videoCommand(videoMuted ? "mute" : "unMute");
+  mapTrack("video_mute_toggle", {state: videoMuted ? "muted" : "unmuted", map_page: current});
   document.getElementById("waMuteBtn").textContent = videoMuted ? "🔇 MUTE" : "🔊 UNMUTE";
 }
 
@@ -1126,16 +1164,17 @@ document.getElementById("waVolumeSlider").addEventListener("input", function(){
   setVideoVolume(this.value);
 });
 
-function loadEventMedia(id){
+function loadEventMedia(id, unmuted){
   const videoId = eventVideos[id];
   const iframe = document.getElementById("waYoutubeFrame");
   const placeholder = document.getElementById("waVideoPlaceholder");
-  videoMuted = true;
-  document.getElementById("waMuteBtn").textContent = "🔇 MUTE";
+  videoMuted = !unmuted;
+  document.getElementById("waMuteBtn").textContent = videoMuted ? "🔇 MUTE" : "🔊 UNMUTE";
   ytState = { playerState: -1, currentTime: 0 };
+  mapTrack("video_load", {map_page: id, video_id: String(videoId || "none"), sound_on: !videoMuted});
   if(videoId){
     let src;
-    const params = "autoplay=1&mute=1&rel=0&playsinline=1&enablejsapi=1";
+    const params = "autoplay=1&mute=" + (videoMuted ? 1 : 0) + "&rel=0&playsinline=1&enablejsapi=1";
     if(videoId.startsWith("playlist:")){
       const listId = videoId.slice("playlist:".length);
       src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + listId + "&" + params;
@@ -1313,6 +1352,8 @@ function showPage(id){
     stopMilkdrop();
     setPlayGlyph(marqueePlaying);
   }
+  mapScrollMax = 0;
+  mapTrack("page_view", {page_title: (titles[id] || id), page_location: location.origin + location.pathname + "#" + id, page_path: "/#" + id, map_page: id});
   current = id;
   syncSeek(id);
 }
@@ -1327,7 +1368,8 @@ function playBossTrack(li){
   bossLis.forEach(x=>x.classList.remove("active"));
   li.classList.add("active");
   document.getElementById("waTrackTitle").textContent = li.querySelector('.pl-name').textContent;
-  loadEventMedia("boss");
+  mapTrack("song_play", {series: "boss_den", song: li.querySelector('.pl-name').textContent.trim(), video_id: li.dataset.video});
+  loadEventMedia("boss", true);   /* user picked a song — play with sound */
   setMediaMode("video");
   setPlayGlyph(true);
 }
@@ -1347,7 +1389,8 @@ function playUnaccompaniedTrack(li){
   unaccompaniedLis.forEach(x=>x.classList.remove("active"));
   li.classList.add("active");
   document.getElementById("waTrackTitle").textContent = li.querySelector('.pl-name').textContent;
-  loadEventMedia("unaccompanied");
+  mapTrack("song_play", {series: "unaccompanied", song: li.querySelector('.pl-name').textContent.trim(), video_id: li.dataset.video});
+  loadEventMedia("unaccompanied", true);   /* user picked a song — play with sound */
   setMediaMode("video");
   setPlayGlyph(true);
 }
@@ -1583,6 +1626,59 @@ document.addEventListener('keydown', e=>{
     flashTimer = setTimeout(()=>{ titleEl.textContent = prev; flashTimer = null; }, 2400);
   });
 })();
+
+/* ---------- deep analytics: one delegated listener covers the whole UI ---------- */
+var mapScrollMax = 0;
+document.addEventListener("click", function(e){
+  const el = e.target.closest("a, button, .wa-pl-list li, .poster img, #pacHeading");
+  if(!el) return;
+  const txt = (el.textContent || "").trim().slice(0, 60);
+  if(el.matches(".wa-chip")){
+    mapTrack("social_click", {platform: el.title || txt, link_url: el.href || "", map_page: current});
+  } else if(el.matches(".cta")){
+    mapTrack("cta_click", {label: txt, link_url: el.href || "", map_page: current});
+  } else if(el.matches(".upi-id")){
+    mapTrack("donate_upi_copy", {map_page: current});
+  } else if(el.matches(".poster img")){
+    mapTrack("poster_zoom", {map_page: current});
+  } else if(el.matches(".page-home-end .wa-btn")){
+    mapTrack("home_button", {from_page: current});
+  } else if(el.matches(".wa-transport .wa-btn")){
+    mapTrack("transport", {control: el.getAttribute("aria-label") || txt, map_page: current});
+  } else if(el.matches(".wa-media-btn")){
+    mapTrack("media_button", {label: txt, map_page: current});
+  } else if(el.matches(".wa-toggle")){
+    mapTrack("panel_button", {label: el.title || txt, link_url: el.href || "", map_page: current});
+  } else if(el.matches(".wa-titlebar button")){
+    mapTrack("titlebar", {control: el.getAttribute("aria-label") || txt});
+  } else if(el.matches("#waPlaylist li")){
+    mapTrack("nav_playlist", {target_page: el.dataset.page});
+  } else if(el.matches("#pacHeading")){
+    mapTrack("pacman_easteregg", {map_page: current});
+  } else if(el.matches("a[href^='mailto:']")){
+    mapTrack("email_click", {link_url: el.href, map_page: current});
+  } else if(el.tagName === "A" && el.href){
+    mapTrack("outbound_click", {link_url: el.href, label: txt, map_page: current});
+  }
+}, true);
+
+/* engagement depth: how far people read each page */
+window.addEventListener("scroll", function(){
+  const doc = document.documentElement;
+  const pct = Math.round((doc.scrollTop + window.innerHeight) / doc.scrollHeight * 100);
+  [25,50,75,90].forEach(function(m){
+    if(pct >= m && mapScrollMax < m){ mapScrollMax = m; mapTrack("scroll_depth", {percent: m, map_page: current}); }
+  });
+}, {passive:true});
+
+/* engaged-time heartbeat: a tick every 30s while the tab is visible, capped at 10 min */
+var mapTicks = 0;
+var mapTicker = setInterval(function(){
+  if(document.visibilityState !== "visible") return;
+  mapTicks++;
+  mapTrack("heartbeat_30s", {ticks: mapTicks, map_page: current});
+  if(mapTicks >= 20) clearInterval(mapTicker);
+}, 30000);
 
 /* boot */
 showPage('home');
