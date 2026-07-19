@@ -147,8 +147,12 @@ body::after{
   animation:wa-hard-blink 1.3s steps(1,end) infinite;
 }
 @keyframes wa-hard-blink{
-  0%,49%{opacity:1;box-shadow:0 0 5px rgba(255,47,176,.9),0 0 2px rgba(255,47,176,1) inset;}
-  50%,100%{opacity:.45;box-shadow:none;}
+  0%,49%{
+    opacity:1;
+    text-shadow:0 0 8px rgba(255,47,176,.9);
+    box-shadow:0 0 6px rgba(255,47,176,.9), 0 0 18px rgba(255,47,176,.45), 0 0 2px rgba(255,47,176,1) inset;
+  }
+  50%,100%{opacity:.5;text-shadow:none;box-shadow:none;}
 }
 
 /* ---------- dot-matrix marquee ---------- */
@@ -253,6 +257,18 @@ input[type=range].wa-vol::-moz-range-thumb{
   0%,100%{opacity:1;box-shadow:0 0 6px rgba(124,252,0,.55);}
   50%{opacity:.72;box-shadow:none;}
 }
+.wa-toggle.wa-boss-glow{
+  color:var(--phos);border-color:var(--phos);
+  animation:wa-boss-blink 1.3s steps(1,end) infinite;
+}
+@keyframes wa-boss-blink{
+  0%,49%{
+    opacity:1;
+    text-shadow:0 0 8px rgba(124,252,0,.9);
+    box-shadow:0 0 6px rgba(124,252,0,.9), 0 0 18px rgba(124,252,0,.45), 0 0 2px rgba(124,252,0,1) inset;
+  }
+  50%,100%{opacity:.5;text-shadow:none;box-shadow:none;}
+}
 
 /* soft pulse replaces hard blink on secondary text (blink discipline) */
 @keyframes wa-pulse{0%,100%{opacity:1;}50%{opacity:.55;}}
@@ -315,7 +331,21 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 /* ---------- home hero ---------- */
 .hero-grid{display:flex;gap:10px;align-items:center;flex-wrap:nowrap;}
 .hero-logo-wrap{flex:0 0 auto;width:22vw;max-width:120px;min-width:60px;align-self:stretch;display:flex;flex-direction:column;align-items:center;}
-.hero-logo-wrap img{width:100%;height:auto;display:block;}
+.hero-logo-wrap img{
+  width:100%;height:auto;display:block;transform-origin:center;
+  filter:drop-shadow(0 0 3px rgba(255,255,255,.25)) drop-shadow(0 0 10px rgba(124,252,0,.25));
+  animation:mapLogoBreathe 4s ease-in-out infinite;
+}
+@keyframes mapLogoBreathe{
+  0%,100%{
+    transform:scale(1);
+    filter:drop-shadow(0 0 3px rgba(255,255,255,.25)) drop-shadow(0 0 10px rgba(124,252,0,.25));
+  }
+  50%{
+    transform:scale(1.035);
+    filter:drop-shadow(0 0 9px rgba(255,255,255,.55)) drop-shadow(0 0 24px rgba(124,252,0,.55));
+  }
+}
 .hero-divider{flex:0 0 auto;width:3px;align-self:stretch;background:var(--mag);min-height:70px;margin-right:4px;}
 .hero-copy{min-width:0;flex:1 1 auto;position:relative;}
 .hero-copy h2{
@@ -461,7 +491,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:1px dashed
       <div class="wa-sliders">
         <div class="wa-slider-group"><label for="waVolumeSlider">VOL</label><input type="range" class="wa-vol" id="waVolumeSlider" min="0" max="100" value="75"></div>
         <button type="button" class="wa-toggle on" onclick="showPage('about')">About Us</button>
-        <button type="button" class="wa-toggle on wa-green-btn" onclick="showPage('boss')">The Boss Den</button>
+        <button type="button" class="wa-toggle on wa-boss-glow" onclick="showPage('boss')">The Boss Den</button>
       </div>
 
       <div class="wa-support-row">
