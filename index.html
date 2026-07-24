@@ -592,6 +592,138 @@ function gtag(){dataLayer.push(arguments);}
 })();
 function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(e){} }
 </script>
+
+<!-- ============================================================
+     STRUCTURED DATA  (for Google + AI answer engines like
+     ChatGPT/Gemini/Perplexity to understand and cite MAP)
+     Block 1: who MAP is (Organization)
+     Block 2: what MAP runs — one MusicEvent per series
+
+     TO DO whenever a specific edition gets a locked-in date:
+       add a line like  "startDate": "2026-08-15T20:00+05:30"
+       (IST) inside that series' block below. That single line
+       is what unlocks Google's actual event-card rich result,
+       not just the general listing. The Grateful Dead Tribute
+       block already has one filled in as a working example,
+       since "every Feb 14" is a fixed, known date.
+     ============================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://movingartsprogram.com/#organization",
+      "name": "Moving Arts Program",
+      "alternateName": "MAP",
+      "url": "https://movingartsprogram.com/",
+      "logo": "https://movingartsprogram.com/map-og.jpg",
+      "image": "https://movingartsprogram.com/map-og.jpg",
+      "description": "Moving Arts Program is a pro-bono live music platform based in Goa, India, founded by filmmaker Prashant Kumar. It curates and produces six recurring concert series across North and South Goa, spotlighting original, independent, and non-commercial music.",
+      "founder": { "@type": "Person", "name": "Prashant Kumar" },
+      "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" },
+      "areaServed": { "@type": "AdministrativeArea", "name": "Goa, India" },
+      "email": "movingartsp@gmail.com",
+      "sameAs": [
+        "https://www.instagram.com/movingartsprogramgoa",
+        "https://www.facebook.com/movingartsprogramgoa/",
+        "https://youtube.com/@movingartsprogramgoa"
+      ]
+    },
+    {
+      "@type": "MusicEvent",
+      "name": "Grateful Dead Tribute Festival",
+      "url": "https://movingartsprogram.com/#page-dead",
+      "description": "India's premier Grateful Dead tribute festival, held every February 14th in Goa. Live open-jam performances from Goa-based and touring bands celebrating the Dead's music and legacy.",
+      "startDate": "2027-02-14",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": { "@type": "Place", "name": "Goa, India",
+        "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" } },
+      "organizer": { "@id": "https://movingartsprogram.com/#organization" },
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "MusicEvent",
+      "name": "The Classics",
+      "url": "https://movingartsprogram.com/#page-classics",
+      "description": "MAP's monthly tribute series bringing a true master musician to an intimate Goa stage — no support acts, no spectacle, just exceptional live musicianship.",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": { "@type": "Place", "name": "Goa, India",
+        "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" } },
+      "organizer": { "@id": "https://movingartsprogram.com/#organization" },
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "MusicEvent",
+      "name": "Unaccompanied",
+      "url": "https://movingartsprogram.com/#page-unaccompanied",
+      "description": "MAP's platform for solo, 100% original, uninterrupted 90-minute sets — no backing tracks, no covers. Held every second and fourth Sunday at two premium Goa venues.",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": { "@type": "Place", "name": "Goa, India",
+        "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" } },
+      "organizer": { "@id": "https://movingartsprogram.com/#organization" },
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "MusicEvent",
+      "name": "Rock Revival Festival",
+      "url": "https://movingartsprogram.com/#page-rock",
+      "description": "MAP's hard rock, classic rock, and metal celebration, held every three to four months — three or more bands sharing one loud night in Goa.",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": { "@type": "Place", "name": "Goa, India",
+        "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" } },
+      "organizer": { "@id": "https://movingartsprogram.com/#organization" },
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "MusicEvent",
+      "name": "The Outcasts",
+      "url": "https://movingartsprogram.com/#page-outcasts",
+      "description": "MAP's twice-yearly platform for genre-defying, boundary-dissolving live music in Goa.",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": { "@type": "Place", "name": "Goa, India",
+        "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" } },
+      "organizer": { "@id": "https://movingartsprogram.com/#organization" },
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "MusicEvent",
+      "name": "Vinyl Resurrection with Bobby",
+      "url": "https://movingartsprogram.com/#page-vinyl",
+      "description": "Theme-based vinyl listening sessions in Goa hosted by longtime collector Bobby — deep dives into vinyl culture, trivia, and community, including sessions pairing live musicians with the decks.",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": { "@type": "Place", "name": "Goa, India",
+        "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" } },
+      "organizer": { "@id": "https://movingartsprogram.com/#organization" },
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "Service",
+      "name": "Customised Private Gigs",
+      "serviceType": "Custom private live music booking",
+      "url": "https://movingartsprogram.com/#page-privategigs",
+      "description": "Moving Arts Program can be booked to curate and produce a customised private live music gig in Goa — weddings, birthdays, anniversaries, corporate nights. Message MAP directly on WhatsApp to discuss your event.",
+      "provider": { "@id": "https://movingartsprogram.com/#organization" },
+      "areaServed": { "@type": "AdministrativeArea", "name": "Goa, India" }
+    },
+    {
+      "@type": "MusicGroup",
+      "name": "Elvis Lobo",
+      "alternateName": "The Boss",
+      "url": "https://movingartsprogram.com/elvis-lobo/",
+      "description": "Elvis Lobo, known as \"The Boss,\" is a Goan guitarist and cultural icon celebrated for effortlessly blending genres live. He is Moving Arts Program's most frequent and definitive collaborator, featured across dozens of live performances filmed at The Boss Den.",
+      "genre": ["Blues", "Jazz", "Rock"],
+      "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -665,7 +797,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       </div>
 
       <div class="wa-support-row">
-        <a class="wa-toggle on wa-green-btn" href="https://wa.me/919849690077?text=Hi%20MAP!%20I%27d%20like%20to%20talk%20about%20a%20customised%20private%20gig." target="_blank" rel="noopener noreferrer">Customised Private Gigs</a>
+        <button type="button" class="wa-toggle on wa-green-btn" onclick="showPage('privategigs')">Customised Private Gigs</button>
         <button type="button" class="wa-toggle on wa-support-btn" onclick="showPage('money')">Support the Music</button>
       </div>
     </div>
@@ -799,11 +931,9 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       <div class="page" id="page-boss">
         <h2 class="page-title">THE BOSS DEN</h2>
         <p class="page-kicker">Elvis Lobo aka "The Boss"</p>
-        <p>Moving Arts Program is incredibly proud to have collaborated with the magician himself, Elvis Lobo.</p>
-        <p>A true Goan legend and cultural icon, it's fair to say that Elvis gave us the fuel to continue promoting music as selflessly and honestly as he lives it.</p>
-        <p>For decades, Elvis has been the beating heart of the Goan music scene, effortlessly blending genres and casting a spell on anyone who watches him play. He doesn't just perform; he creates a community through sound.</p>
-        <p>While we feel incredibly lucky to have shared the stage with him for countless magical gigs, many of those unforgettable nights live on only in our memories. However, a few of these legendary moments were captured on film.</p>
-        <p>Explore the magic below:</p>
+        <p>Moving Arts Program is incredibly proud to have collaborated with the magician himself, Elvis Lobo — a true Goan legend whose genre-blending guitar work has been the beating heart of the Goa music scene for decades.</p>
+        <a class="cta" href="https://movingartsprogram.com/elvis-lobo/">ELVIS'S FULL STORY &amp; ARCHIVE →</a>
+        <p>Explore his live performances below:</p>
 
         <div class="wa-playlist">
           <div class="wa-pl-title">ELVIS LOBO — LIVE AT MAP</div>
@@ -871,6 +1001,17 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
           <div style="font-size:12px;color:#8fae8f;margin-top:4px;">Scan with any UPI app · tap the ID to copy</div>
           <a class="cta" href="upi://pay?pa=zimbo77-7@okhdfcbank&pn=MAP%20support&cu=INR&tn=Support%20MAP">DONATE NOW — PAY VIA UPI</a>
         </div>
+        <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
+      </div>
+
+      <div class="page" id="page-privategigs">
+        <h2 class="page-title">CUSTOMISED PRIVATE GIGS</h2>
+        <p class="page-kicker">Your event. Our curation.</p>
+        <p>Want that same MAP energy at your own event?</p>
+        <p>We bring our curatorial ear — and our network of Goa's finest independent and touring musicians — to private gigs: weddings, birthdays, anniversaries, corporate nights, whatever you're celebrating.</p>
+        <p>No cookie-cutter cover bands, no generic playlists — just real musicians, matched to your crowd and your vibe, the MAP way.</p>
+        <p>Tell us your date, your space, and your people. We'll take it from there.</p>
+        <a class="cta" href="https://wa.me/919849690077?text=Hi%20MAP!%20I%27d%20like%20to%20talk%20about%20a%20customised%20private%20gig." target="_blank" rel="noopener noreferrer">MESSAGE US ON WHATSAPP</a>
         <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
       </div>
 
@@ -1065,7 +1206,8 @@ const titles = {
   vinyl:"06. VINYL RESURRECTION WITH BOBBY",
   money:"SUPPORT THE MUSIC",
   boss:"01. THE DARK KNIGHT SESSIONS",
-  about:"ABOUT US"
+  about:"ABOUT US",
+  privategigs:"CUSTOMISED PRIVATE GIGS"
 };
 let current = "home";
 
@@ -1348,7 +1490,7 @@ function showPage(id){
   if(contentTitle) contentTitle.textContent = (id === "money") ? "LITTLE HELP FROM MY FRIENDS" : "OBJECTIVE";
 
   const siteNavPlaylist = document.getElementById("siteNavPlaylist");
-  if(siteNavPlaylist) siteNavPlaylist.style.display = (id === "boss" || id === "about") ? "none" : "block";
+  if(siteNavPlaylist) siteNavPlaylist.style.display = (id === "boss" || id === "about" || id === "privategigs") ? "none" : "block";
 
   const topRow = document.querySelector(".wa-top-row");
   const mediaArea = document.getElementById("waMediaArea");
