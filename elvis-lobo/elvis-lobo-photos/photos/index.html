@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elvis Lobo — "The Boss" | Goa Guitarist &amp; Live Music | Moving Arts Program</title>
+<meta name="description" content="Elvis Lobo — Goa's genre-blending guitar legend and Moving Arts Program's most frequent collaborator. Watch live performances and get in touch about his music.">
+<link rel="canonical" href="https://movingartsprogram.com/elvis-lobo/">
+<meta property="og:title" content="Elvis Lobo — \"The Boss\" | Moving Arts Program">
+<meta property="og:description" content="Goa's genre-blending guitar legend and MAP's most frequent collaborator — live performances, straight from The Boss Den.">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://movingartsprogram.com/elvis-lobo/">
+<meta property="og:image" content="https://movingartsprogram.com/map-og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --phos:#7CFC00; --lcd:#0a1f0a; --lcd-deep:#051105;
+  --mag:#ff2fb0; --vu:#ffe135; --gold:#c9a648;
+  --ch-hi:#525260; --ch:#3a3a44; --ch-lo:#26262e;
+  --clay-drop:0 14px 28px rgba(0,0,0,.5), 0 4px 10px rgba(0,0,0,.35);
+  --clay-in:inset 0 7px 16px rgba(0,0,0,.65), inset 0 -3px 8px rgba(255,255,255,.06);
+  --r-pill:999px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;min-height:100vh;font-family:'VT323',monospace;font-size:15px;line-height:1.4;color:#d8e8d8;
+  background:radial-gradient(130% 90% at 50% -10%, #24243a 0%, #0d0d12 55%, #08080b 100%);
+}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 50px;}
+
+/* ===== chassis ===== */
+.chassis{
+  border-radius:24px;padding:7px;
+  background:linear-gradient(180deg,var(--ch-hi),var(--ch) 45%,var(--ch-lo));
+  box-shadow:var(--clay-drop);
+}
+.titlebar{
+  display:flex;align-items:center;gap:9px;padding:10px 16px;
+  background:linear-gradient(180deg,#46464f,#242429);
+  border-radius:18px 18px 5px 5px;
+}
+.dot{width:9px;height:9px;border-radius:50%;box-shadow:inset 0 1px 1px rgba(255,255,255,.4);}
+.dot.g{background:var(--phos);box-shadow:0 0 6px rgba(124,252,0,.7);}
+.dot.y{background:var(--vu);}
+.dot.m{background:var(--mag);}
+.titlebar .ttl{
+  margin-left:auto;font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:.5px;color:#9a9aa8;
+}
+.screen{
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,var(--lcd) 0%, var(--lcd-deep) 100%);
+  border-radius:5px 5px 17px 17px;
+  box-shadow:var(--clay-in);
+  padding:24px 18px 30px;
+}
+.screen::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1px, transparent 1px 3px);
+}
+.screen > *{position:relative;z-index:1;}
+
+.back-link{display:inline-block;color:var(--phos);text-decoration:none;font-size:15px;letter-spacing:.5px;margin-bottom:16px;}
+.back-link:hover{text-decoration:underline;}
+h1{
+  font-family:'Press Start 2P',monospace;color:var(--phos);font-size:19px;letter-spacing:1px;
+  margin:0 0 10px;text-shadow:0 0 8px rgba(124,252,0,.4);line-height:1.5;
+}
+.kicker{color:#c8ffc8;font-size:16px;margin:0 0 18px;}
+
+.pullquote{
+  border-left:4px solid var(--mag);border-radius:6px;
+  padding:10px 10px 10px 16px;margin:0 0 24px;
+  font-weight:bold;color:#d6336c;font-size:15px;line-height:1.5;
+  animation:pinkBreathe 3.2s ease-in-out infinite;
+}
+@keyframes pinkBreathe{
+  0%,100%{ box-shadow:0 0 6px rgba(255,47,176,.20); text-shadow:0 0 4px rgba(255,47,176,.25); }
+  50%{ box-shadow:0 0 26px rgba(255,47,176,.65), inset 0 0 14px rgba(255,47,176,.10); text-shadow:0 0 12px rgba(255,47,176,.7); }
+}
+
+h2{
+  font-family:Tahoma,Arial,sans-serif;color:#fff;font-size:13px;letter-spacing:.5px;
+  border-left:6px solid var(--phos);padding-left:12px;margin:32px 0 14px;
+}
+p{max-width:66ch;margin:0 0 12px;}
+
+.cta{
+  display:inline-block;margin-top:6px;font-family:Tahoma,Arial,sans-serif;font-size:12px;font-weight:bold;
+  color:#0a1f0a;background:linear-gradient(180deg,#b8ff66 0%, var(--phos) 45%, #57bd00 100%);
+  padding:12px 22px;border:none;border-radius:var(--r-pill);text-decoration:none;cursor:pointer;
+  box-shadow:0 6px 12px rgba(87,189,0,.3), 0 4px 8px rgba(0,0,0,.4),
+             inset 0 2px 3px rgba(255,255,255,.55), inset 0 -4px 6px rgba(0,60,0,.3);
+}
+
+/* ===== album (radial pop-out) ===== */
+.album-box{
+  margin-top:6px;text-align:center;padding:26px 10px 20px;border-radius:16px;
+  background:rgba(0,0,0,.28);box-shadow:inset 0 2px 6px rgba(0,0,0,.5);
+}
+.album-orbit{
+  position:relative;width:260px;height:260px;margin:0 auto;
+}
+.orbit-center{
+  position:absolute;left:50%;top:50%;
+  width:126px;height:126px;border-radius:50%;z-index:5;cursor:pointer;
+  border:4px solid var(--gold);overflow:hidden;
+  animation:heartbeat 1.6s ease-in-out infinite;
+  transform-origin:center center;
+}
+.orbit-center img{width:100%;height:100%;object-fit:cover;display:block;}
+@keyframes heartbeat{
+  0%   { transform:translate(-50%,-50%) scale(1);     box-shadow:0 6px 14px rgba(0,0,0,.5), 0 0 10px 2px rgba(255,47,176,.30); }
+  14%  { transform:translate(-50%,-50%) scale(1.16);   box-shadow:0 6px 14px rgba(0,0,0,.5), 0 0 32px 9px rgba(255,47,176,.90); }
+  28%  { transform:translate(-50%,-50%) scale(1);      box-shadow:0 6px 14px rgba(0,0,0,.5), 0 0 10px 2px rgba(255,47,176,.30); }
+  42%  { transform:translate(-50%,-50%) scale(1.16);   box-shadow:0 6px 14px rgba(0,0,0,.5), 0 0 32px 9px rgba(124,252,0,.90); }
+  58%  { transform:translate(-50%,-50%) scale(1);      box-shadow:0 6px 14px rgba(0,0,0,.5), 0 0 10px 2px rgba(124,252,0,.25); }
+  100% { transform:translate(-50%,-50%) scale(1);      box-shadow:0 6px 14px rgba(0,0,0,.5), 0 0 10px 2px rgba(124,252,0,.25); }
+}
+.orbit-satellite{
+  --ox:0px; --oy:0px;
+  position:absolute;left:50%;top:50%;z-index:4;cursor:pointer;
+  width:62px;height:62px;border-radius:50%;overflow:hidden;padding:0;background:none;
+  border:1.5px solid var(--phos);box-shadow:0 4px 10px rgba(0,0,0,.5), 0 0 12px rgba(124,252,0,.55);
+  opacity:0;pointer-events:none;
+  transform:translate(-50%,-50%) scale(.25);
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+.orbit-satellite img{width:100%;height:100%;object-fit:cover;display:block;}
+.album-orbit:hover .orbit-satellite,
+.album-orbit.active .orbit-satellite{
+  opacity:1;pointer-events:auto;
+  transform:translate(calc(-50% + var(--ox)), calc(-50% + var(--oy))) scale(1);
+}
+.album-hint{
+  margin:14px 0 0;font-family:Tahoma,Arial,sans-serif;font-size:12px;font-weight:bold;
+  color:var(--gold);letter-spacing:.5px;
+}
+@media (max-width:420px){
+  .album-orbit{width:220px;height:220px;}
+  .orbit-center{width:104px;height:104px;}
+  .orbit-satellite{width:52px;height:52px;}
+}
+
+/* ===== lightbox ===== */
+.lightbox{
+  position:fixed;inset:0;background:rgba(3,5,3,.94);display:none;
+  align-items:center;justify-content:center;z-index:100;padding:24px;
+}
+.lightbox.show{display:flex;}
+.lightbox img{max-width:100%;max-height:85vh;border-radius:12px;border:1.5px solid var(--phos);box-shadow:0 10px 40px rgba(0,0,0,.7), 0 0 26px rgba(124,252,0,.4);}
+.lightbox-close{
+  position:absolute;top:18px;right:20px;width:42px;height:42px;border-radius:50%;
+  background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);
+  font-size:20px;cursor:pointer;
+}
+
+/* ===== video grid ===== */
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:10px;}
+.video-card{display:block;text-decoration:none;color:#d8e8d8;}
+.video-card img{width:100%;border-radius:10px;display:block;border:1px solid #2a2a33;}
+.video-card .vt{font-size:14px;margin-top:6px;line-height:1.25;color:#c8ffc8;}
+
+footer{margin-top:36px;font-size:13px;color:#6f8f6f;}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  "name": "Elvis Lobo",
+  "alternateName": "The Boss",
+  "url": "https://movingartsprogram.com/elvis-lobo/",
+  "description": "Elvis Lobo, known as \"The Boss,\" is a Goan guitarist and cultural icon celebrated for effortlessly blending genres live. He is Moving Arts Program's most frequent and definitive collaborator, featured across dozens of live performances filmed at The Boss Den.",
+  "genre": ["Blues", "Jazz", "Rock"],
+  "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" },
+  "subjectOf": { "@id": "https://movingartsprogram.com/#organization" },
+  "image": [
+    "https://movingartsprogram.com/elvis-lobo/photos/elvis-lobo-goa-guitarist-1.jpg",
+    "https://movingartsprogram.com/elvis-lobo/photos/elvis-lobo-goa-guitarist-2.jpg",
+    "https://movingartsprogram.com/elvis-lobo/photos/elvis-lobo-goa-guitarist-3.jpg",
+    "https://movingartsprogram.com/elvis-lobo/photos/elvis-lobo-goa-guitarist-4.jpg",
+    "https://movingartsprogram.com/elvis-lobo/photos/elvis-lobo-goa-guitarist-5.jpg",
+    "https://movingartsprogram.com/elvis-lobo/photos/elvis-lobo-goa-guitarist-6.jpg",
+    "https://movingartsprogram.com/elvis-lobo/photos/elvis-lobo-goa-guitarist-7.jpg",
+    "https://movingartsprogram.com/elvis-lobo/photos/elvis-lobo-goa-guitarist-8.jpg"
+  ]
+}
+</script>
+<script>
+window.MAP_GA_ID = "G-JMXNSRJPDD";
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+(function(){
+  if(!/^G-[A-Z0-9]{6,}$/.test(window.MAP_GA_ID)) return;
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + window.MAP_GA_ID;
+  document.head.appendChild(s);
+  gtag("js", new Date());
+  gtag("config", window.MAP_GA_ID, {send_page_view:true});
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+<div class="chassis">
+  <div class="titlebar">
+    <span class="dot g"></span><span class="dot y"></span><span class="dot m"></span>
+    <span class="ttl">THE BOSS DEN</span>
+  </div>
+  <div class="screen">
+
+    <a class="back-link" href="/">← Moving Arts Program</a>
+    <h1>ELVIS LOBO — THE BOSS</h1>
+    <p class="kicker">Goa's genre-blending guitar legend.</p>
+
+    <blockquote class="pullquote">"The sound should come from heart, then transmitted to brain, directing the fingers to move — sound should always come from heart."</blockquote>
+
+    <p>Elvis Lobo — known across Goa simply as "The Boss" — is a true Goan legend and cultural icon. For decades he's been the beating heart of the Goan music scene, effortlessly blending blues, jazz, and rock into something that's entirely his own.</p>
+    <p>He doesn't just perform — he builds a community through sound, casting a spell on anyone who watches him play live.</p>
+    <p>Elvis is Moving Arts Program's most frequent and definitive collaborator. MAP was built on the goodwill and energy he brought to Goa's independent music scene, and this page — The Boss Den — is our archive of that partnership: dozens of nights of magic, the ones we were lucky enough to catch on film.</p>
+
+    <h2>THE ALBUM</h2>
+    <div class="album-box">
+      <div class="album-orbit" id="albumOrbit">
+        <div class="orbit-center" id="orbitCenter">
+          <img src="photos/elvis-lobo-thumb-1.jpg" alt="Elvis Lobo — album">
+        </div>
+        <button class="orbit-satellite" type="button" data-full="0" style="--ox:0px; --oy:-108px;"><img src="photos/elvis-lobo-thumb-1.jpg" alt="Elvis Lobo, Goa guitarist, live photo 1"></button>
+        <button class="orbit-satellite" type="button" data-full="1" style="--ox:76px; --oy:-76px;"><img src="photos/elvis-lobo-thumb-2.jpg" alt="Elvis Lobo, Goa guitarist, live photo 2"></button>
+        <button class="orbit-satellite" type="button" data-full="2" style="--ox:108px; --oy:0px;"><img src="photos/elvis-lobo-thumb-3.jpg" alt="Elvis Lobo, Goa guitarist, live photo 3"></button>
+        <button class="orbit-satellite" type="button" data-full="3" style="--ox:76px; --oy:76px;"><img src="photos/elvis-lobo-thumb-4.jpg" alt="Elvis Lobo, Goa guitarist, live photo 4"></button>
+        <button class="orbit-satellite" type="button" data-full="4" style="--ox:0px; --oy:108px;"><img src="photos/elvis-lobo-thumb-5.jpg" alt="Elvis Lobo, Goa guitarist, live photo 5"></button>
+        <button class="orbit-satellite" type="button" data-full="5" style="--ox:-76px; --oy:76px;"><img src="photos/elvis-lobo-thumb-6.jpg" alt="Elvis Lobo, Goa guitarist, live photo 6"></button>
+        <button class="orbit-satellite" type="button" data-full="6" style="--ox:-108px; --oy:0px;"><img src="photos/elvis-lobo-thumb-7.jpg" alt="Elvis Lobo, Goa guitarist, live photo 7"></button>
+        <button class="orbit-satellite" type="button" data-full="7" style="--ox:-76px; --oy:-76px;"><img src="photos/elvis-lobo-thumb-8.jpg" alt="Elvis Lobo, Goa guitarist, live photo 8"></button>
+      </div>
+      <p class="album-hint">Hover or tap the photo to see the album</p>
+    </div>
+
+    <blockquote class="pullquote">"One should try to be a better human being first, go with flow, music will take its course and fall in place."</blockquote>
+
+    <h2>WATCH ELVIS LIVE</h2>
+    <div class="video-grid">
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=caYwXm5Rvwk"><img loading="lazy" src="https://img.youtube.com/vi/caYwXm5Rvwk/hqdefault.jpg" alt="Elvis Lobo — The Dark Knight Sessions"><div class="vt">The Dark Knight Sessions</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=u1aKt3anCXo"><img loading="lazy" src="https://img.youtube.com/vi/u1aKt3anCXo/hqdefault.jpg" alt="Elvis Lobo — Going Down, Jeff Beck Improvisation"><div class="vt">Going Down (Jeff Beck Improvisation)</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=CUMDop6xo2I"><img loading="lazy" src="https://img.youtube.com/vi/CUMDop6xo2I/hqdefault.jpg" alt="Elvis Lobo — The Limited Edition Promo"><div class="vt">The Limited Edition Promo</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=F2bAsne_GqI"><img loading="lazy" src="https://img.youtube.com/vi/F2bAsne_GqI/hqdefault.jpg" alt="Elvis Lobo — This Is Jazz Part 1, Silva Heritage"><div class="vt">This Is Jazz Pt 1 — Silva Heritage</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=POBsfozeKFQ"><img loading="lazy" src="https://img.youtube.com/vi/POBsfozeKFQ/hqdefault.jpg" alt="Elvis Lobo — This Is Jazz Part 2, Silva Heritage"><div class="vt">This Is Jazz Pt 2 — Silva Heritage</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=eyu928pd124"><img loading="lazy" src="https://img.youtube.com/vi/eyu928pd124/hqdefault.jpg" alt="Elvis Lobo — The Classics duet with Tatiyana, Part 1"><div class="vt">The Classics: Duet w/ Tatiyana Pt 1 — Saltamontes</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=uM-UgW_8Xrw"><img loading="lazy" src="https://img.youtube.com/vi/uM-UgW_8Xrw/hqdefault.jpg" alt="Elvis Lobo — The Classics duet with Tatiyana, Part 2"><div class="vt">The Classics: Duet w/ Tatiyana Pt 2 — Saltamontes</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=tsmKt7yXSAU"><img loading="lazy" src="https://img.youtube.com/vi/tsmKt7yXSAU/hqdefault.jpg" alt="Elvis Lobo — Birthday Bash, Part 1, Guru Bar"><div class="vt">Birthday Bash Pt 1 — Guru Bar</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=bXlf6LWi-aA"><img loading="lazy" src="https://img.youtube.com/vi/bXlf6LWi-aA/hqdefault.jpg" alt="Elvis Lobo — Birthday Bash, Part 2, Guru Bar"><div class="vt">Birthday Bash Pt 2 — Guru Bar</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=cKVD4ls2Qic"><img loading="lazy" src="https://img.youtube.com/vi/cKVD4ls2Qic/hqdefault.jpg" alt="Elvis Lobo — Solo with Nylon, Unaccompanied at Saltamontes"><div class="vt">Solo with Nylon — Unaccompanied at Saltamontes</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=1yQ4YYLpLRA"><img loading="lazy" src="https://img.youtube.com/vi/1yQ4YYLpLRA/hqdefault.jpg" alt="Elvis Lobo — The Classics with Karim, Tatiyana, Cliffy and Alex Yurushkin, Part 1"><div class="vt">The Classics w/ Karim, Tatiyana, Cliffy &amp; Alex Yurushkin Pt 1</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=c9TjLTc5KcA"><img loading="lazy" src="https://img.youtube.com/vi/c9TjLTc5KcA/hqdefault.jpg" alt="Elvis Lobo — The Classics with Karim, Tatiyana, Cliffy and Alex Yurushkin, Part 2"><div class="vt">The Classics w/ Karim, Tatiyana, Cliffy &amp; Alex Yurushkin Pt 2</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=U8jOlOFzcyc"><img loading="lazy" src="https://img.youtube.com/vi/U8jOlOFzcyc/hqdefault.jpg" alt="Elvis Lobo — Awake the Dead Sessions, Part 1"><div class="vt">Awake the Dead Sessions Pt 1</div></a>
+      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=Db7UhRLFh6U"><img loading="lazy" src="https://img.youtube.com/vi/Db7UhRLFh6U/hqdefault.jpg" alt="Elvis Lobo — Awake the Dead Sessions, Part 2"><div class="vt">Awake the Dead Sessions Pt 2</div></a>
+    </div>
+
+    <footer>
+      <a class="back-link" href="/" aria-label="Home" title="Home">⌂ Back to Moving Arts Program</a>
+    </footer>
+
+  </div>
+</div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" type="button">✕</button>
+  <img id="lightboxImg" src="" alt="Elvis Lobo — full size photo">
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var FULL = ["photos/elvis-lobo-goa-guitarist-1.jpg","photos/elvis-lobo-goa-guitarist-2.jpg","photos/elvis-lobo-goa-guitarist-3.jpg","photos/elvis-lobo-goa-guitarist-4.jpg","photos/elvis-lobo-goa-guitarist-5.jpg","photos/elvis-lobo-goa-guitarist-6.jpg","photos/elvis-lobo-goa-guitarist-7.jpg","photos/elvis-lobo-goa-guitarist-8.jpg"];
+
+  var orbit = document.getElementById('albumOrbit');
+  var center = document.getElementById('orbitCenter');
+  center.addEventListener('click', function(e){
+    e.stopPropagation();
+    orbit.classList.toggle('active');
+  });
+  document.addEventListener('click', function(e){
+    if (orbit.classList.contains('active') && !orbit.contains(e.target)){
+      orbit.classList.remove('active');
+    }
+  });
+
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+
+  function openLightbox(idx){
+    lightboxImg.src = FULL[idx];
+    lightbox.classList.add('show');
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('show');
+  }
+  document.querySelectorAll('.orbit-satellite').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      openLightbox(parseInt(btn.getAttribute('data-full'), 10));
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){
+    if (e.target === lightbox) closeLightbox();
+  });
+})();
+</script>
+</body>
+</html>
