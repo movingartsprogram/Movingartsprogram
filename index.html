@@ -976,7 +976,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
         <div class="wa-playlist">
           <div class="wa-pl-title">NOW SPINNING — THIS PAGE'S THEME SONG</div>
           <div class="wa-embed-wrap">
-            <iframe src="https://open.spotify.com/embed/track/2RnPATK99oGOZygnD2GTO6?utm_source=generator&theme=0"
+            <iframe id="spotifyEmbed" src="https://open.spotify.com/embed/track/2RnPATK99oGOZygnD2GTO6?utm_source=generator&theme=0"
               width="100%" height="152" frameborder="0" loading="lazy"
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               title="With a Little Help from My Friends — The Beatles, via Spotify"></iframe>
@@ -1222,6 +1222,7 @@ const eventVideos = {
   boss: "caYwXm5Rvwk"
 };
 const CORE_VIDEO_PAGES = ["unaccompanied","classics","dead","rock","outcasts","vinyl","boss"];
+const SPOTIFY_SRC = "https://open.spotify.com/embed/track/2RnPATK99oGOZygnD2GTO6?utm_source=generator&theme=0";
 let mediaMode = "video";
 /* The visualiser can't read the actual audio samples of the YouTube
    embed — browsers block that for any cross-origin iframe, regardless
@@ -1510,6 +1511,11 @@ function showPage(id){
     document.getElementById("waYoutubeFrame").dataset.pendingSrc = "";
     stopMilkdrop();
     setPlayGlyph(marqueePlaying);
+  }
+
+  const spotifyFrame = document.getElementById("spotifyEmbed");
+  if(spotifyFrame){
+    spotifyFrame.src = (id === "money") ? SPOTIFY_SRC : "";
   }
   mapScrollMax = 0;
   mapTrack("page_view", {page_title: (titles[id] || id), page_location: location.origin + location.pathname + "#" + id, page_path: "/#" + id, map_page: id});
