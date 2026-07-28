@@ -640,13 +640,14 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       "name": "Grateful Dead Tribute Festival",
       "url": "https://movingartsprogram.com/#page-dead",
       "description": "India's premier Grateful Dead tribute festival, held every February 14th in Goa at Guru Bar. Live open-jam performances from Space & Co. (Pune), Dirty Class (Delhi), and Goan guitarist Elvis Lobo, celebrating the Dead's music and legacy.",
-      "image": "https://movingartsprogram.com/map-og.jpg",
+      "image": "https://movingartsprogram.com/dead-tribute-poster.jpg",
       "startDate": "2027-02-14T18:00:00+05:30",
       "endDate": "2027-02-15T01:00:00+05:30",
       "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
       "eventStatus": "https://schema.org/EventScheduled",
       "location": { "@type": "Place", "name": "Guru Bar",
-        "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" } },
+        "address": { "@type": "PostalAddress", "streetAddress": "H.no. 721, St Anthony Prais Waddo",
+          "addressLocality": "Anjuna", "addressRegion": "Goa", "postalCode": "403509", "addressCountry": "IN" } },
       "organizer": { "@id": "https://movingartsprogram.com/#organization" },
       "performer": [
         { "@type": "MusicGroup", "name": "Space & Co." },
@@ -655,9 +656,10 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       ],
       "offers": {
         "@type": "Offer",
-        "price": "500",
+        "price": 500,
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock",
+        "validFrom": "2026-07-28T00:00:00+05:30",
         "url": "https://movingartsprogram.com/#page-dead"
       }
     },
