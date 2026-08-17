@@ -332,6 +332,17 @@ input[type=range].wa-vol::-moz-range-thumb{
   box-shadow:0 5px 9px rgba(0,0,0,.42), var(--clay-face-sm), 0 0 8px rgba(124,252,0,.22);
 }
 .wa-support-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.wa-book-row{display:flex;justify-content:center;margin-top:10px;}
+.wa-toggle.wa-book-btn{
+  color:var(--vu);font-weight:bold;letter-spacing:.6px;padding:8px 18px;
+  animation:wa-book-glow 2.2s ease-in-out infinite;
+}
+@keyframes wa-book-glow{
+  0%,100%{text-shadow:0 0 8px rgba(255,225,53,.9);
+    box-shadow:0 5px 9px rgba(0,0,0,.42), var(--clay-face-sm), 0 0 12px rgba(255,225,53,.7), 0 0 24px rgba(255,225,53,.28);}
+  50%{text-shadow:none;
+    box-shadow:0 5px 9px rgba(0,0,0,.42), var(--clay-face-sm);}
+}
 .wa-toggle.wa-support-btn{
   color:var(--mag);
   animation:wa-hard-blink 1.3s steps(1,end) infinite;
@@ -668,7 +679,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       "name": "The Classics",
       "serviceType": "Recurring live music series",
       "url": "https://movingartsprogram.com/#page-classics",
-      "description": "MAP's monthly tribute series bringing a true master musician to an intimate Goa stage — no support acts, no spectacle, just exceptional live musicianship. Free entry; exact date depends on artist availability.",
+      "description": "MAP's monthly tribute series bringing a true master musician to an intimate Goa stage — no support acts, no spectacle, just exceptional live musicianship. Exact date depends on artist availability.",
       "provider": { "@id": "https://movingartsprogram.com/#organization" },
       "areaServed": { "@type": "AdministrativeArea", "name": "Goa, India" }
     },
@@ -677,7 +688,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       "name": "Unaccompanied",
       "serviceType": "Recurring live music series",
       "url": "https://movingartsprogram.com/#page-unaccompanied",
-      "description": "MAP's platform for solo, 100% original, uninterrupted 90-minute sets — no backing tracks, no covers. Held every second and fourth Sunday at two premium Goa venues. Free entry.",
+      "description": "MAP's platform for solo, 100% original, uninterrupted 90-minute sets — no backing tracks, no covers. Held every second and fourth Sunday at two premium Goa venues.",
       "provider": { "@id": "https://movingartsprogram.com/#organization" },
       "areaServed": { "@type": "AdministrativeArea", "name": "Goa, India" }
     },
@@ -686,7 +697,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       "name": "Rock Revival Festival",
       "serviceType": "Recurring live music series",
       "url": "https://movingartsprogram.com/#page-rock",
-      "description": "MAP's hard rock, classic rock, and metal celebration, held every three to four months — three or more bands sharing one loud night in Goa. Free entry; exact date depends on venue and lineup availability.",
+      "description": "MAP's hard rock, classic rock, and metal celebration, held every three to four months — three or more bands sharing one loud night in Goa. Exact date depends on venue and lineup availability.",
       "provider": { "@id": "https://movingartsprogram.com/#organization" },
       "areaServed": { "@type": "AdministrativeArea", "name": "Goa, India" }
     },
@@ -695,7 +706,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       "name": "The Outcasts",
       "serviceType": "Recurring live music series",
       "url": "https://movingartsprogram.com/#page-outcasts",
-      "description": "MAP's twice-yearly platform for genre-defying, boundary-dissolving live music in Goa. Free entry; exact date depends on finding the right artists.",
+      "description": "MAP's twice-yearly platform for genre-defying, boundary-dissolving live music in Goa. Exact date depends on finding the right artists.",
       "provider": { "@id": "https://movingartsprogram.com/#organization" },
       "areaServed": { "@type": "AdministrativeArea", "name": "Goa, India" }
     },
@@ -704,7 +715,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       "name": "Vinyl Resurrection with Bobby",
       "serviceType": "Recurring listening session series",
       "url": "https://movingartsprogram.com/#page-vinyl",
-      "description": "Theme-based vinyl listening sessions in Goa hosted by longtime collector Bobby — deep dives into vinyl culture, trivia, and community, including sessions pairing live musicians with the decks. Free entry.",
+      "description": "Theme-based vinyl listening sessions in Goa hosted by longtime collector Bobby — deep dives into vinyl culture, trivia, and community, including sessions pairing live musicians with the decks.",
       "provider": { "@id": "https://movingartsprogram.com/#organization" },
       "areaServed": { "@type": "AdministrativeArea", "name": "Goa, India" }
     },
@@ -806,6 +817,10 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
         <button type="button" class="wa-toggle on wa-green-btn" onclick="showPage('privategigs')">Customised Private Gigs</button>
         <button type="button" class="wa-toggle on wa-support-btn" onclick="showPage('money')">Support the Music</button>
       </div>
+
+      <div class="wa-book-row">
+        <a class="wa-toggle on wa-book-btn" href="/gig-bookings/" title="Book your seats">&#127915; BOOK YOUR SEATS</a>
+      </div>
     </div>
   </div>
 
@@ -845,7 +860,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
         <h3>ARTIST SUPPORT</h3>
         <p>Top quarterly performers join MAP's Soloist Summit. Every six months, standout artists receive dedicated management and global album releases.</p>
         <h3>APPLY &amp; THE PROMISE</h3>
-        <p>Open to any soloist who can hold a stage for 90 minutes with original music. MAP operates pro bono: artists are paid, and all support is 100% free.</p>
+        <p>Open to any soloist who can hold a stage for 90 minutes with original music. MAP operates pro bono: artists are paid, and it costs the artist nothing.</p>
         <div class="wa-playlist">
           <div class="wa-pl-title">UNACCOMPANIED — PICK A SONG</div>
           <ul class="wa-pl-list" id="unaccompaniedPlaylist">
@@ -992,7 +1007,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
         <a class="blink-green" href="mailto:movingartsp@gmail.com?subject=Brand%20Sponsorship">Brand Sponsorships to grow, contact us to be part of it.</a>
         <h3>MERCHANDISE</h3>
         <p>Merch coming soon 🤘 — but hey, the donation section works perfectly. Every three months, donations received and expenses will be made public.</p>
-        <p>Every piece will fund artist fees and free entry for the community.</p>
+        <p>Every piece will fund artist fees and keep the music going for the community.</p>
         <div class="grid2">
           <div class="card"><div class="sw">COMING SOON</div>MAP Logo Tee</div>
           <div class="card"><div class="sw">COMING SOON</div>Rock Revival Poster</div>
@@ -1001,7 +1016,7 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
         </div>
         <h3>DONATE</h3>
         <div class="donate">
-          MAP is a pro bono initiative — artists get paid, audiences get in free. Your contribution goes straight to fees, venues, and gear.<br><br>
+          MAP is a pro bono initiative — artists get paid, MAP keeps nothing. Your contribution goes straight to fees, venues, and gear.<br><br>
           <img class="upi-qr" src="data:image/png;base64,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" alt="UPI QR code for donating to MAP">
           <button type="button" class="upi-id" id="upiCopy" title="Tap to copy">UPI ID: zimbo77-7@okhdfcbank</button>
           <div style="font-size:12px;color:#8fae8f;margin-top:4px;">Scan with any UPI app · tap the ID to copy</div>
@@ -1818,6 +1833,8 @@ document.addEventListener("click", function(e){
     mapTrack("transport", {control: el.getAttribute("aria-label") || txt, map_page: current});
   } else if(el.matches(".wa-media-btn")){
     mapTrack("media_button", {label: txt, map_page: current});
+  } else if(el.matches(".wa-book-btn")){
+    mapTrack("booking_page_click", {map_page: current});
   } else if(el.matches(".wa-toggle")){
     mapTrack("panel_button", {label: el.title || txt, link_url: el.href || "", map_page: current});
   } else if(el.matches(".wa-titlebar button")){
