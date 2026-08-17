@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<!-- MAP GIG BOOKINGS — build: bookings-v1 -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Gig — Moving Arts Program, Goa</title>
+<meta name="description" content="Book your seats for Moving Arts Program live music events in Goa. Every rupee goes to the artists and volunteers.">
+<meta name="theme-color" content="#0d0d12">
+<link rel="canonical" href="https://movingartsprogram.com/gig-bookings/">
+<meta property="og:title" content="Book a Gig — Moving Arts Program">
+<meta property="og:description" content="Reserve your seats for MAP live music in Goa. Every rupee goes to the artists and volunteers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://movingartsprogram.com/gig-bookings/">
+<meta property="og:site_name" content="Moving Arts Program">
+<meta property="og:image" content="https://movingartsprogram.com/gig-bookings/current-event-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Book a Gig — Moving Arts Program">
+<meta name="twitter:description" content="Reserve your seats for MAP live music in Goa.">
+<meta name="twitter:image" content="https://movingartsprogram.com/gig-bookings/current-event-poster.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a1f0a'/%3E%3Cpath d='M5 3.5v9l7-4.5z' fill='%237CFC00'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MAP GIG BOOKINGS — same clay-fluffy skin as the main site.
+   Tokens copied verbatim from index.html (build clay-fluffy-v1)
+   so this page and the homepage stay visually identical.
+   ============================================================ */
+:root{
+  --phos:#7CFC00; --phos-dim:#2c6a2c; --phos-line:#173d17;
+  --lcd:#0a1f0a; --lcd-deep:#051105;
+  --mag:#ff2fb0; --vu:#ffe135; --gold:#c9a648;
+  --ch-hi:#525260; --ch:#3a3a44; --ch-lo:#26262e; --line:#0b0b0f;
+  --r-lg:30px; --r-md:18px; --r-sm:12px; --r-pill:999px;
+  --clay-drop:0 14px 28px rgba(0,0,0,.5), 0 4px 10px rgba(0,0,0,.35);
+  --clay-face:inset 0 6px 10px rgba(255,255,255,.16), inset 0 -9px 16px rgba(0,0,0,.45);
+  --clay-face-sm:inset 0 2px 3px rgba(255,255,255,.22), inset 0 -4px 6px rgba(0,0,0,.5);
+  --clay-in:inset 0 7px 16px rgba(0,0,0,.65), inset 0 -3px 8px rgba(255,255,255,.06);
+  --clay-in-sm:inset 0 3px 8px rgba(0,0,0,.6), inset 0 -2px 5px rgba(255,255,255,.08);
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;min-height:100vh;
+  background:radial-gradient(130% 90% at 50% -10%, #1b1c26 0%, #0d0d12 55%, #08080b 100%);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:16px 8px;font-family:'VT323',monospace;
+}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(45deg, rgba(255,255,255,.01) 0 1px, transparent 1px 3px);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(90% 80% at 50% 42%, transparent 55%, rgba(0,0,0,.5) 100%);}
+
+.winamp{width:100%;max-width:420px;position:relative;z-index:1;}
+
+.wa-main{
+  background:radial-gradient(130% 150% at 50% -8%, #5f5f6c 0%, var(--ch) 55%, #2a2a32 100%);
+  border:none;border-radius:var(--r-lg);
+  box-shadow:var(--clay-drop), var(--clay-face);
+  padding:10px;
+}
+.wa-titlebar{
+  background:linear-gradient(180deg,#1a7a1a 0%, #0d3d0d 100%);
+  border:none;border-radius:var(--r-pill);
+  color:#c8ffc8;font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 12px;margin-bottom:10px;
+  box-shadow:0 6px 12px rgba(0,0,0,.4), inset 0 3px 4px rgba(220,255,220,.28), inset 0 -5px 8px rgba(0,0,0,.55);
+}
+.wa-titlebar h1{margin:0;font:inherit;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.5);}
+.wa-titlebar .tb-dot{width:14px;height:14px;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(120% 120% at 35% 25%, #b8ff66 0%, #3f8f00 70%);
+  box-shadow:0 0 8px rgba(124,252,0,.8), inset 0 1px 2px rgba(255,255,255,.5);
+  animation:wa-pulse 2.2s ease-in-out infinite;}
+
+/* ---------- content window ---------- */
+.wa-content-window{margin-top:10px;
+  background:radial-gradient(140% 120% at 50% 0%, #0c280c 0%, var(--lcd) 45%, var(--lcd-deep) 100%);
+  border:none;border-radius:var(--r-lg);
+  box-shadow:var(--clay-drop), inset 0 5px 12px rgba(0,0,0,.55), inset 0 -3px 7px rgba(255,255,255,.05), inset 0 0 28px rgba(124,252,0,.06);
+}
+.wa-content-title{
+  background:linear-gradient(180deg,#1a7a1a 0%, #0d3d0d 100%);
+  border:none;border-radius:var(--r-pill);
+  color:#c8ffc8;font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;
+  padding:6px 14px;margin:10px 10px 0;
+  box-shadow:0 5px 10px rgba(0,0,0,.4), inset 0 2px 3px rgba(200,255,200,.26), inset 0 -4px 6px rgba(0,0,0,.55);
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+.wa-content-body{padding:16px;}
+
+/* ---------- page typography (identical to site) ---------- */
+.page-title{font-family:'Press Start 2P',monospace;color:var(--phos);font-size:15px;letter-spacing:1px;margin:0 0 6px;text-shadow:0 0 6px rgba(124,252,0,.4);line-height:1.5;}
+.page-kicker{color:#c8ffc8;font-size:14px;margin:0 0 16px;}
+h3{font-family:Tahoma,Arial,sans-serif;color:#fff;font-size:11px;letter-spacing:.5px;padding-left:14px;margin:18px 0 8px;position:relative;}
+h3::before{content:'';position:absolute;left:0;top:-1px;bottom:-1px;width:6px;border-radius:var(--r-pill);
+  background:linear-gradient(180deg,#b0ff66,var(--phos) 45%,#3f8f00);
+  box-shadow:0 2px 4px rgba(0,0,0,.5), inset 0 1px 1px rgba(255,255,255,.55);}
+p{font-family:'VT323',monospace;font-size:15px;line-height:1.3;color:#d8e8d8;margin:0 0 8px;}
+.ripple{display:block;font-style:italic;font-weight:bold;color:var(--phos);font-size:17px;
+  margin:12px 0 4px;text-shadow:0 0 8px rgba(124,252,0,.45);letter-spacing:.3px;}
+.ripple-credit{font-family:Tahoma,Arial,sans-serif;font-size:8px;color:var(--phos-dim);letter-spacing:1px;margin:0 0 10px;}
+
+@keyframes wa-pulse{0%,100%{opacity:1;}50%{opacity:.55;}}
+.blink-pink{display:block;color:var(--mag);font-family:'VT323',monospace;font-size:15px;line-height:1.15;animation:wa-pulse 2.6s ease-in-out infinite;text-decoration:none;}
+
+/* ---------- poster ---------- */
+.poster-wrap{margin:14px 0 4px;padding:8px;border-radius:var(--r-md);
+  background:linear-gradient(180deg,#131313 0%, #050505 100%);
+  box-shadow:0 10px 20px rgba(0,0,0,.45), inset 0 2px 3px rgba(255,255,255,.08), inset 0 -5px 9px rgba(0,0,0,.6);}
+.poster-wrap img{width:100%;height:auto;display:block;border-radius:var(--r-sm);
+  box-shadow:0 6px 14px rgba(0,0,0,.6);}
+.poster-cap{font-family:Tahoma,Arial,sans-serif;font-size:7px;color:var(--phos-dim);text-align:center;letter-spacing:1px;margin-top:6px;}
+
+/* ---------- event detail strip (playlist rows) ---------- */
+.wa-playlist{margin-top:14px;overflow:hidden;
+  background:linear-gradient(180deg,#131313 0%, #050505 100%);
+  border:none;border-radius:var(--r-md);
+  box-shadow:0 10px 20px rgba(0,0,0,.45), inset 0 2px 3px rgba(255,255,255,.08), inset 0 -5px 9px rgba(0,0,0,.6);}
+.wa-pl-title{
+  background:linear-gradient(180deg,#1a7a1a 0%, #0d3d0d 100%);
+  color:#c8ffc8;font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;padding:6px 12px;
+  box-shadow:inset 0 2px 3px rgba(200,255,200,.26), inset 0 -4px 6px rgba(0,0,0,.5);
+  text-shadow:0 1px 2px rgba(0,0,0,.5);}
+.wa-pl-list{list-style:none;margin:0;padding:5px;}
+.wa-pl-list li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+  font-family:'VT323',monospace;font-size:15px;color:#d8e8d8;padding:5px 8px;border-radius:var(--r-sm);}
+.wa-pl-list li + li{box-shadow:inset 0 1px 0 rgba(124,252,0,.09);}
+.wa-pl-list li .pl-name{color:#8fae8f;letter-spacing:.5px;}
+.wa-pl-list li .pl-dur{color:var(--phos);text-align:right;}
+
+/* ---------- form ---------- */
+.form-field{margin-bottom:12px;}
+.form-field label{display:block;font-family:Tahoma,Arial,sans-serif;font-size:9px;color:#c8ffc8;
+  letter-spacing:.5px;margin-bottom:5px;}
+.form-field .opt{color:var(--phos-dim);}
+input[type=text],input[type=tel],input[type=number],select,textarea{
+  width:100%;font-family:'VT323',monospace;font-size:17px;color:var(--phos);
+  background:linear-gradient(180deg,#061006,#0b1c0b);
+  border:none;border-radius:var(--r-sm);padding:10px 12px;
+  box-shadow:var(--clay-in-sm);
+  -webkit-appearance:none;appearance:none;
+}
+select{background-image:linear-gradient(180deg,#061006,#0b1c0b);cursor:pointer;}
+textarea{resize:vertical;min-height:58px;line-height:1.25;}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{
+  outline:2px solid rgba(124,252,0,.8);outline-offset:3px;}
+input::placeholder,textarea::placeholder{color:#2c6a2c;}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+
+.cta{
+  display:inline-block;margin-top:8px;font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;
+  color:#0a1f0a;background:linear-gradient(180deg,#b8ff66 0%, var(--phos) 45%, #57bd00 100%);
+  padding:11px 18px;border:none;border-radius:var(--r-pill);text-decoration:none;cursor:pointer;
+  box-shadow:0 6px 12px rgba(87,189,0,.3), 0 4px 8px rgba(0,0,0,.4),
+             inset 0 2px 3px rgba(255,255,255,.55), inset 0 -4px 6px rgba(0,60,0,.3);
+}
+.cta:active{filter:brightness(1.1);transform:translateY(1px);
+  box-shadow:inset 0 3px 6px rgba(0,60,0,.45), inset 0 -1px 2px rgba(255,255,255,.3);}
+.cta[disabled]{opacity:.55;cursor:not-allowed;}
+.cta-block{display:block;width:100%;text-align:center;}
+.cta-pink{color:#1a0010;background:linear-gradient(180deg,#ff9fdc 0%, var(--mag) 45%, #b3006f 100%);
+  box-shadow:0 6px 12px rgba(255,47,176,.3), 0 4px 8px rgba(0,0,0,.4),
+             inset 0 2px 3px rgba(255,255,255,.5), inset 0 -4px 6px rgba(90,0,50,.35);}
+
+.err{display:none;font-family:'VT323',monospace;font-size:15px;color:var(--mag);margin:6px 0 0;}
+.err.show{display:block;}
+
+/* ---------- confirmation ---------- */
+.confirm{display:none;}
+.confirm.show{display:block;}
+.booking-id{
+  background:linear-gradient(180deg,#101c10 0%, #070d07 100%);
+  border-radius:var(--r-md);padding:16px;text-align:center;margin-top:6px;
+  box-shadow:0 8px 14px rgba(0,0,0,.45), inset 0 2px 3px rgba(124,252,0,.14), inset 0 -5px 8px rgba(0,0,0,.6);
+}
+.booking-id .lbl{font-family:Tahoma,Arial,sans-serif;font-size:9px;color:#8fae8f;letter-spacing:1px;}
+.booking-id .idv{font-family:'Press Start 2P',monospace;font-size:16px;color:var(--phos);
+  display:block;margin:10px 0 6px;text-shadow:0 0 10px rgba(124,252,0,.6);word-break:break-all;}
+.booking-id .amt{font-family:'VT323',monospace;font-size:20px;color:var(--vu);}
+.upi-qr{width:180px;height:180px;display:flex;align-items:center;justify-content:center;
+  margin:14px auto 8px;border-radius:18px;background:#fff;padding:8px;
+  box-shadow:0 8px 16px rgba(0,0,0,.5), 0 3px 6px rgba(0,0,0,.35);}
+.upi-qr img,.upi-qr canvas{width:100%;height:100%;display:block;}
+.upi-id{font-family:'VT323',monospace;font-size:15px;letter-spacing:.5px;color:var(--phos);
+  background:none;border:1.5px dashed #1e5c1e;border-radius:var(--r-pill);padding:4px 12px;cursor:pointer;}
+.upi-id:active{background:#0d2f0d;}
+.small{font-size:12px;color:#8fae8f;margin-top:6px;}
+
+/* ---------- home button ---------- */
+.page-home-end{margin-top:20px;text-align:center;}
+.wa-btn{
+  width:42px;height:32px;
+  background:radial-gradient(130% 140% at 35% 18%, #6c6c78 0%, #3a3a44 60%, #2c2c34 100%);
+  border:none;border-radius:15px;color:#eee;font-size:11px;font-family:inherit;
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+  box-shadow:0 6px 10px rgba(0,0,0,.45), inset 0 3px 4px rgba(255,255,255,.26), inset 0 -5px 7px rgba(0,0,0,.55);
+  text-shadow:0 1px 1px rgba(0,0,0,.6);text-decoration:none;
+}
+.page-home-end .wa-btn{color:var(--mag);text-shadow:0 0 6px rgba(255,47,176,.95);
+  animation:wa-pink-glow 2.6s ease-in-out infinite;}
+.page-home-end .home-label{display:block;font-family:Tahoma,Arial,sans-serif;font-size:8px;
+  color:#8fae8f;letter-spacing:1px;margin-top:8px;}
+@keyframes wa-pink-glow{
+  0%,100%{box-shadow:0 6px 10px rgba(0,0,0,.45), inset 0 3px 4px rgba(255,255,255,.26), inset 0 -5px 7px rgba(0,0,0,.55), 0 0 12px rgba(255,47,176,.85), 0 0 26px rgba(255,47,176,.4);}
+  50%{box-shadow:0 6px 10px rgba(0,0,0,.45), inset 0 3px 4px rgba(255,255,255,.26), inset 0 -5px 7px rgba(0,0,0,.55), 0 0 6px rgba(255,47,176,.5);}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+</style>
+
+<!-- ═══ GOOGLE ANALYTICS 4 — same property as the homepage ═══════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JMXNSRJPDD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JMXNSRJPDD');
+  function mapTrack(name, params){ try{ gtag('event', name, params || {}); }catch(e){} }
+</script>
+</head>
+<body>
+
+<div class="winamp">
+  <div class="wa-main">
+
+    <div class="wa-titlebar">
+      <h1>MAP GIG BOOKINGS</h1>
+      <span class="tb-dot" aria-hidden="true"></span>
+    </div>
+
+    <div class="wa-content-window">
+      <div class="wa-content-title">BOOK YOUR SEATS</div>
+      <div class="wa-content-body">
+
+        <!-- ═══ 1. THE PERMANENT TEXT — never changes between gigs ═══ -->
+        <h2 class="page-title">BOOKINGS</h2>
+        <p class="page-kicker">Reserve your seats. Pay by UPI. Done.</p>
+
+        <p>Welcome to a gig curated with a whole lotta love by Moving Arts Program.</p>
+        <p>Every rupee you pay here goes to the artists and the volunteers. MAP keeps nothing. We call it art contribution — music support money.</p>
+        <p>We work constantly to bring you the best music, and to use whatever technology it takes to make attending a gig completely hassle-free.</p>
+        <p>Thank you for booking with us. 🙏</p>
+        <span class="ripple">Let there be songs to fill the air…</span>
+        <p class="ripple-credit">— RIPPLE, GRATEFUL DEAD</p>
+        <p>Thanks again.</p>
+
+        <!-- ═══ 2. THE POSTER — swap this file each gig, name stays the same ═══ -->
+        <div class="poster-wrap">
+          <img id="eventPoster" src="current-event-poster.jpg" alt="Current Moving Arts Program event poster">
+          <div class="poster-cap" id="posterCap">CURRENT EVENT</div>
+        </div>
+
+        <!-- ═══ 3. EVENT DETAILS — driven by the Google Sheet ═══ -->
+        <div class="wa-playlist">
+          <div class="wa-pl-title" id="eventName">LOADING EVENT…</div>
+          <ul class="wa-pl-list">
+            <li><span class="pl-name">DATE</span><span class="pl-dur" id="evDate">—</span></li>
+            <li><span class="pl-name">TIME</span><span class="pl-dur" id="evTime">—</span></li>
+            <li><span class="pl-name">VENUE</span><span class="pl-dur" id="evVenue">—</span></li>
+            <li><span class="pl-name">PER SEAT</span><span class="pl-dur" id="evPrice">—</span></li>
+            <li><span class="pl-name">SEATS LEFT</span><span class="pl-dur" id="evSeats">—</span></li>
+          </ul>
+        </div>
+
+        <!-- ═══ 4. THE FORM ═══ -->
+        <div id="formWrap">
+          <h3>YOUR BOOKING</h3>
+
+          <div class="form-field">
+            <label for="fName">NAME</label>
+            <input type="text" id="fName" autocomplete="name" placeholder="Your full name" maxlength="60">
+          </div>
+
+          <div class="form-field">
+            <label for="fSeats">NUMBER OF SEATS</label>
+            <select id="fSeats"></select>
+          </div>
+
+          <div class="form-field">
+            <label for="fMobile">MOBILE NUMBER</label>
+            <input type="tel" id="fMobile" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number" maxlength="15">
+          </div>
+
+          <div class="form-field">
+            <label for="fSeating">ANY REQUEST ON SEATING <span class="opt">(OPTIONAL)</span></label>
+            <textarea id="fSeating" placeholder="Near the stage, wheelchair access, seating together…" maxlength="200"></textarea>
+          </div>
+
+          <div class="hp"><label for="fWebsite">Leave this blank</label><input type="text" id="fWebsite" tabindex="-1" autocomplete="off"></div>
+
+          <p class="err" id="formErr"></p>
+
+          <button type="button" class="cta cta-block" id="submitBtn">CONFIRM BOOKING &amp; GET PAYMENT DETAILS</button>
+          <p class="small">Your name and number are used only to manage this booking. We don't share them with anyone.</p>
+        </div>
+
+        <!-- ═══ 5. CONFIRMATION + PAYMENT ═══ -->
+        <div class="confirm" id="confirmWrap">
+          <h3>BOOKING RECEIVED — NOW PAY</h3>
+
+          <div class="booking-id">
+            <span class="lbl">YOUR BOOKING REFERENCE</span>
+            <span class="idv" id="bookingId">—</span>
+            <span class="lbl">AMOUNT DUE</span><br>
+            <span class="amt" id="amountDue">—</span>
+
+            <div class="upi-qr" id="qrBox"></div>
+            <button type="button" class="upi-id" id="upiCopy" title="Tap to copy">UPI ID: zimbo77-7@okhdfcbank</button>
+            <div class="small">Scan with any UPI app · tap the ID to copy</div>
+
+            <a class="cta cta-block" id="upiPayBtn" href="#">PAY NOW VIA UPI</a>
+            <div class="small" id="payNote">Your reference is already filled into the payment note. If it isn't, please type it in yourself.</div>
+          </div>
+
+          <p class="small" id="seatNote"></p>
+
+          <a class="cta cta-block cta-pink" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">SEND US THIS BOOKING ON WHATSAPP</a>
+          <p class="small">Your seats are held once payment is received. We'll confirm on WhatsApp.</p>
+        </div>
+
+        <!-- ═══ 6. BACK TO HOME ═══ -->
+        <div class="page-home-end">
+          <a class="wa-btn" href="/" aria-label="Moving Arts Program home" title="Home">⌂</a>
+          <span class="home-label">BACK TO MOVING ARTS PROGRAM</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════
+   MAP BOOKINGS — configuration
+   ──────────────────────────────────────────────────────────────
+   Paste the Google Apps Script web-app address on the SCRIPT_URL
+   line below once the Sheet is set up. Until then the page runs
+   in PREVIEW MODE: everything works on screen, nothing is saved.
+   ══════════════════════════════════════════════════════════════ */
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwruu1tbiMhb421nFax18Lr_1HH62C0rMsNAhmehdVlh3CDfTntP86LY8JcqeLhYzpe/exec";
+
+/* Fallback event details — used in preview mode, and if the Sheet
+   is ever unreachable. The Sheet overrides all of these. */
+var EVENT = {
+  name:   "ELVIS PRESLEY TRIBUTE",
+  code:   "SHOOK",
+  date:   "WED 2 SEPT",
+  time:   "8 PM ONWARDS",
+  venue:  "SILVA HERITAGE, BENAULIM",
+  price:  500,
+  seats:  50,
+  booked: 0,
+  status: "OPEN",
+  maxPerBooking: 10,
+  posterVersion: 1
+};
+
+var UPI_VPA  = "zimbo77-7@okhdfcbank";
+var UPI_NAME = "MAP support";
+var WA_NUMBER = "919849690077";
+
+/* ---------- render event details ---------- */
+function seatsLeft(){ return Math.max(0, EVENT.seats - (EVENT.booked || 0)); }
+
+function renderEvent(){
+  document.getElementById("eventName").textContent = EVENT.name;
+  document.getElementById("evDate").textContent  = EVENT.date;
+  document.getElementById("evTime").textContent  = EVENT.time;
+  document.getElementById("evVenue").textContent = EVENT.venue;
+  document.getElementById("evPrice").textContent = "₹" + EVENT.price;
+  document.getElementById("posterCap").textContent = EVENT.name;
+  document.getElementById("eventPoster").src = "current-event-poster.jpg?v=" + (EVENT.posterVersion || 1);
+
+  var left = seatsLeft();
+  var seatsEl = document.getElementById("evSeats");
+  var btn = document.getElementById("submitBtn");
+
+  if(EVENT.status === "CLOSED"){
+    seatsEl.textContent = "CLOSED";
+    btn.disabled = true; btn.textContent = "BOOKINGS ARE CLOSED";
+  } else if(EVENT.status === "SOLD OUT" || left === 0){
+    seatsEl.textContent = "SOLD OUT";
+    btn.disabled = true; btn.textContent = "SOLD OUT";
+  } else {
+    seatsEl.textContent = left + " of " + EVENT.seats;
+  }
+
+  var sel = document.getElementById("fSeats");
+  var max = Math.min(EVENT.maxPerBooking || 10, left || 1);
+  sel.innerHTML = "";
+  for(var i = 1; i <= max; i++){
+    var o = document.createElement("option");
+    o.value = i; o.textContent = i + (i === 1 ? " seat" : " seats") + "  —  ₹" + (i * EVENT.price);
+    sel.appendChild(o);
+  }
+}
+
+/* ---------- pull live event details from the Sheet ---------- */
+function loadEvent(){
+  if(!SCRIPT_URL){ renderEvent(); return; }
+  var cb = "mapCfg" + Date.now();
+  window[cb] = function(data){
+    if(data && data.ok && data.event){ for(var k in data.event){ EVENT[k] = data.event[k]; } }
+    renderEvent();
+    delete window[cb];
+  };
+  var s = document.createElement("script");
+  s.src = SCRIPT_URL + "?action=config&callback=" + cb;
+  s.onerror = function(){ renderEvent(); };
+  document.head.appendChild(s);
+}
+loadEvent();
+
+/* ---------- validation ---------- */
+function showErr(msg){
+  var e = document.getElementById("formErr");
+  e.textContent = msg; e.classList.add("show");
+}
+function clearErr(){ document.getElementById("formErr").classList.remove("show"); }
+
+/* ---------- submit ---------- */
+document.getElementById("submitBtn").addEventListener("click", function(){
+  clearErr();
+
+  var name   = document.getElementById("fName").value.trim();
+  var seats  = parseInt(document.getElementById("fSeats").value, 10);
+  var mobile = document.getElementById("fMobile").value.replace(/[^0-9]/g, "");
+  var note   = document.getElementById("fSeating").value.trim();
+  var trap   = document.getElementById("fWebsite").value;
+
+  if(trap){ return; }
+  if(name.length < 2){ showErr("Please enter your name."); return; }
+  if(!seats || seats < 1){ showErr("Please choose how many seats you want."); return; }
+  if(mobile.length === 12 && mobile.indexOf("91") === 0){ mobile = mobile.slice(2); }
+  if(mobile.length !== 10){ showErr("Please enter a valid 10-digit mobile number."); return; }
+
+  var btn = this;
+  btn.disabled = true; btn.textContent = "SAVING YOUR BOOKING…";
+
+  mapTrack("booking_submit", {event_name: EVENT.name, seats: seats});
+
+  var payload = {name:name, seats:seats, mobile:mobile, note:note};
+
+  if(!SCRIPT_URL){
+    /* PREVIEW MODE — nothing is saved anywhere */
+    setTimeout(function(){
+      showConfirm(EVENT.code + "-001", seats, true);
+    }, 500);
+    return;
+  }
+
+  var cb = "mapBk" + Date.now();
+  window[cb] = function(data){
+    delete window[cb];
+    if(data && data.ok){
+      showConfirm(data.bookingId, seats, false);
+    } else {
+      btn.disabled = false;
+      btn.textContent = "CONFIRM BOOKING & GET PAYMENT DETAILS";
+      showErr((data && data.message) || "Couldn't save that — please check your connection and try again.");
+    }
+  };
+  var q = "?action=book&callback=" + cb +
+          "&name="   + encodeURIComponent(payload.name) +
+          "&seats="  + encodeURIComponent(payload.seats) +
+          "&mobile=" + encodeURIComponent(payload.mobile) +
+          "&note="   + encodeURIComponent(payload.note);
+  var s = document.createElement("script");
+  s.src = SCRIPT_URL + q;
+  s.onerror = function(){
+    delete window[cb];
+    btn.disabled = false;
+    btn.textContent = "CONFIRM BOOKING & GET PAYMENT DETAILS";
+    showErr("Couldn't reach the booking system. Please message us on WhatsApp instead.");
+  };
+  document.head.appendChild(s);
+});
+
+/* ---------- confirmation screen ---------- */
+function showConfirm(bookingId, seats, preview){
+  var amount = seats * EVENT.price;
+
+  document.getElementById("formWrap").style.display = "none";
+  document.getElementById("confirmWrap").classList.add("show");
+  document.getElementById("bookingId").textContent = bookingId;
+  document.getElementById("amountDue").textContent = "₹" + amount + "  (" + seats + (seats === 1 ? " seat)" : " seats)");
+  document.getElementById("seatNote").textContent = preview
+    ? "PREVIEW MODE — this booking has not been saved anywhere."
+    : "";
+
+  var upiUri = "upi://pay?pa=" + encodeURIComponent(UPI_VPA) +
+               "&pn=" + encodeURIComponent(UPI_NAME) +
+               "&am=" + amount +
+               "&cu=INR" +
+               "&tn=" + encodeURIComponent(bookingId);
+
+  document.getElementById("upiPayBtn").href = upiUri;
+
+  /* QR with the amount and reference already inside it */
+  var box = document.getElementById("qrBox");
+  box.innerHTML = "";
+  try{
+    new QRCode(box, {text: upiUri, width: 164, height: 164,
+      colorDark: "#000000", colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M});
+  }catch(e){
+    box.innerHTML = '<div style="font-family:Tahoma,Arial,sans-serif;font-size:9px;color:#333;text-align:center;padding:8px;">' +
+      'Pay ₹' + amount + ' to<br><b>' + UPI_VPA + '</b><br>Note: ' + bookingId + '</div>';
+  }
+
+  var waText = "Hi MAP! Booking " + bookingId + " — " + seats +
+               (seats === 1 ? " seat" : " seats") + " for " + EVENT.name + ". Paying ₹" + amount + " now.";
+  document.getElementById("waBtn").href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waText);
+
+  mapTrack("booking_confirmed", {event_name: EVENT.name, seats: seats, value: amount, currency: "INR", booking_id: bookingId});
+  document.getElementById("confirmWrap").scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+/* ---------- tap the UPI ID to copy ---------- */
+(function(){
+  var btn = document.getElementById("upiCopy");
+  var original = btn.textContent;
+  btn.addEventListener("click", async function(){
+    try{
+      await navigator.clipboard.writeText(UPI_VPA);
+      btn.textContent = "COPIED ✓ " + UPI_VPA;
+    }catch(err){
+      btn.textContent = "LONG-PRESS TO COPY: " + UPI_VPA;
+    }
+    mapTrack("donate_upi_copy", {map_page: "gig-bookings"});
+    setTimeout(function(){ btn.textContent = original; }, 1800);
+  });
+})();
+
+document.getElementById("upiPayBtn").addEventListener("click", function(){
+  mapTrack("booking_upi_pay", {event_name: EVENT.name});
+});
+document.getElementById("waBtn").addEventListener("click", function(){
+  mapTrack("booking_whatsapp", {event_name: EVENT.name});
+});
+</script>
+</body>
+</html>
