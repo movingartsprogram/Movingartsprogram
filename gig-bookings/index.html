@@ -381,7 +381,6 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 
         <!-- ═══ 1. THE PERMANENT TEXT — never changes between gigs ═══ -->
         <h2 class="page-title">BOOKINGS</h2>
-        <p class="page-kicker">Reserve your seats. Pay by UPI. Done.</p>
 
         <p>Welcome to a gig curated with a whole lotta love by Moving Arts Program.</p>
         <p>Every rupee you pay here goes to the artists and the volunteers. MAP keeps nothing. We call it art contribution — music support money.</p>
@@ -788,7 +787,11 @@ function showConfirm(bookingId, seats, preview, name, mobile){
                (seats === 1 ? " seat" : " seats") + " for " + EVENT.name + ". Paid ₹" + amount + ".";
   document.getElementById("waBtn2").href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waText);
 
-  mapTrack("booking_confirmed", {event_name: EVENT.name, seats: seats, value: amount, currency: "INR", booking_id: bookingId});
+  /* NOT booking_confirmed — at this point the money has not arrived. This
+     screen is reached when someone abandons the Razorpay window, or when
+     Razorpay is unreachable and we fall back to manual UPI. Counting it as
+     a conversion would inflate revenue in GA4. */
+  mapTrack("booking_payment_pending", {event_name: EVENT.name, seats: seats, value: amount, currency: "INR", booking_id: bookingId});
   document.getElementById("confirmWrap").scrollIntoView({behavior: "smooth", block: "start"});
 }
 
