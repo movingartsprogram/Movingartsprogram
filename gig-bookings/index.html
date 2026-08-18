@@ -194,6 +194,31 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
   background:none;border:1.5px dashed #1e5c1e;border-radius:var(--r-pill);padding:4px 12px;cursor:pointer;}
 .upi-id:active{background:#0d2f0d;}
 .small{font-size:12px;color:#8fae8f;margin-top:6px;}
+.qr-toggle{
+  display:block;width:100%;margin-top:12px;padding:8px 10px;
+  font-family:Tahoma,Arial,sans-serif;font-size:9px;letter-spacing:.5px;
+  color:#8fae8f;background:none;border:none;border-radius:var(--r-pill);
+  box-shadow:inset 0 0 0 1.5px rgba(124,252,0,.18);cursor:pointer;
+}
+.qr-toggle:active{background:#0d2f0d;}
+.cta-paid{color:#1a1400;background:linear-gradient(180deg,#fff29a 0%, var(--vu) 45%, #b39400 100%);
+  box-shadow:0 6px 12px rgba(255,225,53,.28), 0 4px 8px rgba(0,0,0,.4),
+             inset 0 2px 3px rgba(255,255,255,.55), inset 0 -4px 6px rgba(80,65,0,.32);}
+.ticket{
+  background:linear-gradient(180deg,#101c10 0%, #070d07 100%);
+  border-radius:var(--r-md);padding:16px;margin-top:6px;
+  box-shadow:0 8px 14px rgba(0,0,0,.45), inset 0 2px 3px rgba(124,252,0,.16), inset 0 -5px 8px rgba(0,0,0,.6);
+}
+.ticket .t-ref{font-family:'Press Start 2P',monospace;font-size:15px;color:var(--phos);
+  display:block;text-align:center;margin:4px 0 14px;text-shadow:0 0 10px rgba(124,252,0,.6);word-break:break-all;}
+.ticket dl{margin:0;}
+.ticket .t-row{display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+  font-family:'VT323',monospace;font-size:16px;color:#d8e8d8;padding:5px 2px;}
+.ticket .t-row + .t-row{box-shadow:inset 0 1px 0 rgba(124,252,0,.09);}
+.ticket .t-k{font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1px;color:#8fae8f;}
+.ticket .t-v{color:var(--phos);text-align:right;}
+.pending-note{font-family:'VT323',monospace;font-size:15px;line-height:1.2;color:var(--vu);
+  text-align:center;margin:12px 0 4px;}
 .screenshot-note{
   font-family:'VT323',monospace;font-size:17px;line-height:1.2;color:var(--vu);
   text-align:center;margin:14px 0 4px;padding:10px 12px;
@@ -317,20 +342,46 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
             <span class="lbl">AMOUNT DUE</span><br>
             <span class="amt" id="amountDue">—</span>
 
-            <div class="upi-qr" id="qrBox"></div>
-            <button type="button" class="upi-id" id="upiCopy" title="Tap to copy">UPI ID: zimbo77-7@okhdfcbank</button>
-            <div class="small">Scan with any UPI app · tap the ID to copy</div>
-
             <a class="cta cta-block" id="upiPayBtn" href="#">PAY NOW VIA UPI</a>
-            <div class="small" id="payNote">Your reference is already filled into the payment note. If it isn't, please type it in yourself.</div>
+            <div class="small" id="payNote">Opens your UPI app with the amount and your reference already filled in.</div>
+
+            <button type="button" class="qr-toggle" id="qrToggle">PAYING FROM ANOTHER DEVICE? SHOW QR ▾</button>
+            <div id="qrWrap" hidden>
+              <div class="upi-qr" id="qrBox"></div>
+              <button type="button" class="upi-id" id="upiCopy" title="Tap to copy">UPI ID: zimbo77-7@okhdfcbank</button>
+              <div class="small">Scan with any UPI app · tap the ID to copy</div>
+            </div>
           </div>
 
           <p class="screenshot-note">📸 Please screenshot this screen — it's your booking record.</p>
 
           <p class="small" id="seatNote"></p>
 
-          <a class="cta cta-block cta-pink" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">SEND US THIS BOOKING ON WHATSAPP</a>
-          <p class="small">Sending it on WhatsApp gives us a second copy — and that's how we'll confirm your seats once payment is received.</p>
+          <button type="button" class="cta cta-block cta-paid" id="paidBtn">I'VE PAID — SHOW MY TICKET</button>
+          <p class="small">Tap this once you've completed the payment.</p>
+        </div>
+
+        <!-- ═══ 5b. THE TICKET ═══ -->
+        <div class="confirm" id="ticketWrap">
+          <h3>YOUR BOOKING</h3>
+
+          <div class="ticket">
+            <span class="t-ref" id="tRef">—</span>
+            <div class="t-row"><span class="t-k">NAME</span><span class="t-v" id="tName">—</span></div>
+            <div class="t-row"><span class="t-k">SEATS</span><span class="t-v" id="tSeats">—</span></div>
+            <div class="t-row"><span class="t-k">MOBILE</span><span class="t-v" id="tMobile">—</span></div>
+            <div class="t-row"><span class="t-k">AMOUNT</span><span class="t-v" id="tAmount">—</span></div>
+            <div class="t-row"><span class="t-k">EVENT</span><span class="t-v" id="tEvent">—</span></div>
+            <div class="t-row"><span class="t-k">DATE</span><span class="t-v" id="tDate">—</span></div>
+            <div class="t-row"><span class="t-k">TIME</span><span class="t-v" id="tTime">—</span></div>
+            <div class="t-row"><span class="t-k">VENUE</span><span class="t-v" id="tVenue">—</span></div>
+          </div>
+
+          <p class="pending-note">Payment being verified.<br>We'll confirm on WhatsApp shortly.</p>
+          <p class="screenshot-note">📸 Please screenshot this — it's your booking record.</p>
+
+          <a class="cta cta-block cta-pink" id="waBtn2" href="#" target="_blank" rel="noopener noreferrer">SEND US THIS BOOKING ON WHATSAPP</a>
+          <p class="small">Sending it on WhatsApp gives us a second copy and speeds up confirmation.</p>
         </div>
 
         <!-- ═══ 6. BACK TO HOME ═══ -->
@@ -457,7 +508,7 @@ document.getElementById("submitBtn").addEventListener("click", function(){
   if(!SCRIPT_URL){
     /* PREVIEW MODE — nothing is saved anywhere */
     setTimeout(function(){
-      showConfirm(EVENT.code + "-001", seats, true);
+      showConfirm(EVENT.code + "-001", seats, true, name, mobile);
     }, 500);
     return;
   }
@@ -466,7 +517,7 @@ document.getElementById("submitBtn").addEventListener("click", function(){
   window[cb] = function(data){
     delete window[cb];
     if(data && data.ok){
-      showConfirm(data.bookingId, seats, false);
+      showConfirm(data.bookingId, seats, false, name, mobile);
     } else {
       btn.disabled = false;
       btn.textContent = "CONFIRM BOOKING & GET PAYMENT DETAILS";
@@ -490,8 +541,11 @@ document.getElementById("submitBtn").addEventListener("click", function(){
 });
 
 /* ---------- confirmation screen ---------- */
-function showConfirm(bookingId, seats, preview){
+var LAST = {};   /* what the guest just booked, for the ticket screen */
+
+function showConfirm(bookingId, seats, preview, name, mobile){
   var amount = seats * EVENT.price;
+  LAST = {id: bookingId, seats: seats, amount: amount, name: name || "", mobile: mobile || "", preview: !!preview};
 
   document.getElementById("formWrap").style.display = "none";
   document.getElementById("confirmWrap").classList.add("show");
@@ -522,8 +576,8 @@ function showConfirm(bookingId, seats, preview){
   }
 
   var waText = "Hi MAP! Booking " + bookingId + " — " + seats +
-               (seats === 1 ? " seat" : " seats") + " for " + EVENT.name + ". Paying ₹" + amount + " now.";
-  document.getElementById("waBtn").href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waText);
+               (seats === 1 ? " seat" : " seats") + " for " + EVENT.name + ". Paid ₹" + amount + ".";
+  document.getElementById("waBtn2").href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waText);
 
   mapTrack("booking_confirmed", {event_name: EVENT.name, seats: seats, value: amount, currency: "INR", booking_id: bookingId});
   document.getElementById("confirmWrap").scrollIntoView({behavior: "smooth", block: "start"});
@@ -548,8 +602,51 @@ function showConfirm(bookingId, seats, preview){
 document.getElementById("upiPayBtn").addEventListener("click", function(){
   mapTrack("booking_upi_pay", {event_name: EVENT.name});
 });
-document.getElementById("waBtn").addEventListener("click", function(){
+document.getElementById("waBtn2").addEventListener("click", function(){
   mapTrack("booking_whatsapp", {event_name: EVENT.name});
+});
+
+/* ---------- show / hide the QR ---------- */
+document.getElementById("qrToggle").addEventListener("click", function(){
+  var w = document.getElementById("qrWrap");
+  var open = !w.hasAttribute("hidden");
+  if(open){ w.setAttribute("hidden",""); this.textContent = "PAYING FROM ANOTHER DEVICE? SHOW QR ▾"; }
+  else    { w.removeAttribute("hidden");  this.textContent = "HIDE QR ▴"; }
+});
+
+/* ---------- "I've paid" ---------- */
+document.getElementById("paidBtn").addEventListener("click", function(){
+  var btn = this;
+  btn.disabled = true; btn.textContent = "ONE MOMENT…";
+
+  mapTrack("booking_says_paid", {event_name: EVENT.name, booking_id: LAST.id, value: LAST.amount, currency: "INR"});
+
+  function done(){
+    document.getElementById("tRef").textContent    = LAST.id;
+    document.getElementById("tName").textContent   = LAST.name || "—";
+    document.getElementById("tSeats").textContent  = LAST.seats;
+    document.getElementById("tMobile").textContent = LAST.mobile || "—";
+    document.getElementById("tAmount").textContent = "₹" + LAST.amount;
+    document.getElementById("tEvent").textContent  = EVENT.name;
+    document.getElementById("tDate").textContent   = EVENT.date;
+    document.getElementById("tTime").textContent   = EVENT.time;
+    document.getElementById("tVenue").textContent  = EVENT.venue;
+
+    document.getElementById("confirmWrap").classList.remove("show");
+    document.getElementById("ticketWrap").classList.add("show");
+    document.getElementById("ticketWrap").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  if(!SCRIPT_URL || LAST.preview){ setTimeout(done, 400); return; }
+
+  var cb = "mapPd" + Date.now();
+  var settled = false;
+  window[cb] = function(){ if(settled) return; settled = true; delete window[cb]; done(); };
+  var s = document.createElement("script");
+  s.src = SCRIPT_URL + "?action=paid&callback=" + cb + "&id=" + encodeURIComponent(LAST.id);
+  s.onerror = function(){ if(settled) return; settled = true; done(); };  /* never block the ticket */
+  document.head.appendChild(s);
+  setTimeout(function(){ if(!settled){ settled = true; done(); } }, 6000);
 });
 </script>
 </body>
