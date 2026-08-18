@@ -219,6 +219,17 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .ticket .t-v{color:var(--phos);text-align:right;}
 .pending-note{font-family:'VT323',monospace;font-size:15px;line-height:1.2;color:var(--vu);
   text-align:center;margin:12px 0 4px;}
+
+/* ---------- ticket QR ---------- */
+.ticket-qr{margin-top:16px;padding-top:14px;text-align:center;
+  box-shadow:inset 0 1px 0 rgba(124,252,0,.14);}
+.ticket-qr[hidden]{display:none;}
+.tq-box{width:132px;height:132px;margin:0 auto;background:#fff;border-radius:12px;padding:7px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 12px rgba(0,0,0,.45), 0 2px 5px rgba(0,0,0,.3);}
+.tq-box img,.tq-box canvas{width:100%;height:100%;display:block;}
+.tq-cap{font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1.5px;
+  color:#8fae8f;margin-top:8px;}
 .screenshot-note{
   font-family:'VT323',monospace;font-size:17px;line-height:1.2;color:var(--vu);
   text-align:center;margin:14px 0 4px;padding:10px 12px;
@@ -285,36 +296,40 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .cta-gold{color:#241a00;background:linear-gradient(180deg,#f0dfa4 0%, var(--gold) 45%, #8a6f24 100%);
   box-shadow:0 6px 12px rgba(201,166,72,.3), 0 4px 8px rgba(0,0,0,.4),
              inset 0 2px 3px rgba(255,255,255,.5), inset 0 -4px 6px rgba(70,55,0,.32);}
-#printHead{display:none;}
+/* The printed ticket is built fresh into #printArea by the print button.
+   Hiding the live page and re-showing bits of it was unreliable — the dark
+   chassis printed as a black slab and the hidden content still took up a
+   second page. Building a clean, separate block sidesteps all of that. */
+#printArea{display:none;}
 
 @media print{
-  /* Print only the ticket. Everything else is hidden but keeps its
-     place in the layout, which is what makes this trick reliable. */
-  body{background:#fff !important;}
-  body *{visibility:hidden !important;}
-  #ticketWrap, #ticketWrap *{visibility:visible !important;}
-  #ticketWrap{position:absolute !important;left:0;top:0;width:100%;padding:0 6mm;}
+  @page{margin:14mm;}
+  html,body{background:#fff !important;height:auto !important;}
 
-  /* Things that make no sense on paper */
-  #shareBlock, #printBtn, #waBtn2, .screenshot-note, .no-print{display:none !important;}
+  /* Every top-level block of the real page disappears completely —
+     display:none, not visibility:hidden, so it occupies no height. */
+  body > *{display:none !important;}
 
-  /* Ink-friendly: dark theme would print as a black rectangle */
-  #printHead{display:block !important;text-align:center;margin-bottom:8mm;}
-  #printHead .ph-brand{font-family:Tahoma,Arial,sans-serif;font-size:10pt;font-weight:bold;
-    letter-spacing:2px;color:#000 !important;}
-  #printHead .ph-sub{font-family:Tahoma,Arial,sans-serif;font-size:7pt;color:#444 !important;
-    letter-spacing:1px;margin-top:3px;}
-  #ticketWrap h3{color:#000 !important;text-shadow:none !important;text-align:center;}
-  .ticket{background:#fff !important;box-shadow:none !important;
-    border:2px solid #000 !important;border-radius:6px !important;padding:6mm !important;}
-  .ticket .t-ref{color:#000 !important;text-shadow:none !important;}
-  .ticket .t-row{color:#000 !important;}
-  .ticket .t-k{color:#555 !important;}
-  .ticket .t-v{color:#000 !important;}
-  .ticket .t-row + .t-row{box-shadow:inset 0 1px 0 #ccc !important;}
-  .pending-note{color:#000 !important;}
-  #printFoot{display:block !important;text-align:center;margin-top:6mm;
-    font-family:Tahoma,Arial,sans-serif;font-size:7pt;color:#444 !important;line-height:1.6;}
+  #printArea{
+    display:block !important;
+    font-family:Tahoma,Arial,sans-serif;color:#000;
+  }
+  #printArea .pa-brand{text-align:center;font-size:13pt;font-weight:bold;letter-spacing:3px;}
+  #printArea .pa-site{text-align:center;font-size:8pt;color:#555;letter-spacing:1px;margin-top:2mm;}
+  #printArea .pa-title{text-align:center;font-size:8pt;letter-spacing:2.5px;color:#666;margin:9mm 0 3mm;}
+  #printArea .pa-card{border:2px solid #000;border-radius:4px;padding:7mm 6mm;}
+  #printArea .pa-ref{text-align:center;font-family:'Courier New',monospace;font-size:20pt;
+    font-weight:bold;letter-spacing:3px;margin:0 0 6mm;}
+  #printArea table{width:100%;border-collapse:collapse;}
+  #printArea td{padding:2.4mm 0;border-bottom:1px solid #ddd;vertical-align:baseline;}
+  #printArea tr:last-child td{border-bottom:none;}
+  #printArea .pa-k{font-size:7.5pt;letter-spacing:1.5px;color:#666;white-space:nowrap;}
+  #printArea .pa-v{font-family:'Courier New',monospace;font-size:11pt;font-weight:bold;text-align:right;}
+  #printArea .pa-note{text-align:center;font-size:9.5pt;margin-top:6mm;line-height:1.6;}
+  #printArea .pa-qr{text-align:center;margin-top:6mm;}
+  #printArea .pa-qr img,#printArea .pa-qr canvas{width:34mm;height:34mm;}
+  #printArea .pa-qrcap{text-align:center;font-size:7pt;letter-spacing:1.5px;color:#666;margin-top:2mm;}
+  #printArea .pa-foot{text-align:center;font-size:7.5pt;color:#555;margin-top:5mm;line-height:1.7;}
 }
 </style>
 
@@ -439,13 +454,6 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 
         <!-- ═══ 5b. THE TICKET ═══ -->
         <div class="confirm" id="ticketWrap">
-
-          <!-- shown only on paper -->
-          <div id="printHead">
-            <div class="ph-brand">MOVING ARTS PROGRAM</div>
-            <div class="ph-sub">movingartsprogram.com</div>
-          </div>
-
           <h3>YOUR BOOKING</h3>
 
           <div class="ticket">
@@ -458,14 +466,14 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
             <div class="t-row"><span class="t-k">DATE</span><span class="t-v" id="tDate">—</span></div>
             <div class="t-row"><span class="t-k">TIME</span><span class="t-v" id="tTime">—</span></div>
             <div class="t-row"><span class="t-k">VENUE</span><span class="t-v" id="tVenue">—</span></div>
+
+            <div class="ticket-qr" id="tQrWrap">
+              <div class="tq-box" id="tQr"></div>
+              <div class="tq-cap">SCAN AT THE DOOR</div>
+            </div>
           </div>
 
           <p class="pending-note">Payment being verified.<br>We'll confirm on WhatsApp shortly.</p>
-
-          <div id="printFoot" style="display:none;">
-            Every rupee goes to the artists and the volunteers. MAP keeps nothing.<br>
-            Please show this at the door.
-          </div>
 
           <!-- ═══ 5c. TELL YOUR PEOPLE ═══ -->
           <div class="share-block" id="shareBlock">
@@ -500,6 +508,9 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
     </div>
   </div>
 </div>
+
+<!-- ═══ PRINT-ONLY TICKET — filled in by the print button, empty on screen ═══ -->
+<div id="printArea"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -751,6 +762,7 @@ document.getElementById("paidBtn").addEventListener("click", function(){
     document.getElementById("tVenue").textContent  = EVENT.venue;
 
     buildShare();
+    renderTicketQr();
 
     document.getElementById("confirmWrap").classList.remove("show");
     document.getElementById("ticketWrap").classList.add("show");
@@ -840,10 +852,139 @@ document.getElementById("shareCopy").addEventListener("click", async function(){
   setTimeout(function(){ btn.textContent = original; }, 1800);
 });
 
-/* ---------- print / save the ticket ---------- */
+/* ══════════════════════════════════════════════════════════════
+   THE TICKET QR
+   ──────────────────────────────────────────────────────────────
+   Plain text, not a link. Scanning it with any phone camera shows
+   the booking straight away — no app and no internet needed at
+   the door. Kept short so the code stays coarse and scans reliably
+   from a screen or from small print.
+
+   Deliberately NOT the mobile number: a ticket gets screenshotted
+   and forwarded, and a guest's number shouldn't travel with it.
+   ══════════════════════════════════════════════════════════════ */
+function ticketQrText(){
+  return "MAP TICKET\n" +
+         (LAST.id || "") + "\n" +
+         (LAST.name || "") + "\n" +
+         (LAST.seats || 0) + " seat(s) - Rs " + (LAST.amount || 0) + "\n" +
+         EVENT.name + "\n" +
+         EVENT.date + ", " + EVENT.time;
+}
+
+/* Draws the QR into a box. Returns false if the QR library never
+   loaded — the ticket is still perfectly valid without it, so the
+   block is hidden rather than showing a broken square. */
+function drawTicketQr(box, px){
+  if(typeof QRCode === "undefined") return false;
+  box.innerHTML = "";
+  try{
+    new QRCode(box, {
+      text: ticketQrText(), width: px, height: px,
+      colorDark: "#000000", colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    return true;
+  }catch(e){ return false; }
+}
+
+function renderTicketQr(){
+  var wrap = document.getElementById("tQrWrap");
+  if(drawTicketQr(document.getElementById("tQr"), 118)){
+    wrap.removeAttribute("hidden");
+  } else {
+    wrap.setAttribute("hidden", "");
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PRINT / SAVE THE TICKET
+   ──────────────────────────────────────────────────────────────
+   The ticket is rebuilt from scratch into #printArea rather than
+   printing the live screen. The live page is a dark chassis with
+   shadows and gradients; printing it produced a black slab and a
+   stray second page. This builds a clean, black-on-white ticket
+   that always fits one page.
+
+   Everything is written with textContent, never innerHTML, so a
+   guest's name can never inject markup.
+   ══════════════════════════════════════════════════════════════ */
+function buildPrintTicket(){
+  var area = document.getElementById("printArea");
+  area.textContent = "";
+
+  function el(tag, cls, text){
+    var n = document.createElement(tag);
+    if(cls)  n.className = cls;
+    if(text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  area.appendChild(el("div", "pa-brand", "MOVING ARTS PROGRAM"));
+  area.appendChild(el("div", "pa-site",  "movingartsprogram.com"));
+  area.appendChild(el("div", "pa-title", "BOOKING CONFIRMATION"));
+
+  var card = el("div", "pa-card");
+  card.appendChild(el("div", "pa-ref", LAST.id || "—"));
+
+  var rows = [
+    ["NAME",   LAST.name || "—"],
+    ["SEATS",  String(LAST.seats || "—")],
+    ["MOBILE", LAST.mobile || "—"],
+    ["AMOUNT", "\u20B9" + (LAST.amount || 0)],
+    ["EVENT",  EVENT.name],
+    ["DATE",   EVENT.date],
+    ["TIME",   EVENT.time],
+    ["VENUE",  EVENT.venue]
+  ];
+
+  var table = document.createElement("table");
+  for(var i = 0; i < rows.length; i++){
+    var tr = document.createElement("tr");
+    tr.appendChild(el("td", "pa-k", rows[i][0]));
+    tr.appendChild(el("td", "pa-v", rows[i][1]));
+    table.appendChild(tr);
+  }
+  card.appendChild(table);
+  area.appendChild(card);
+
+  area.appendChild(el("div", "pa-note",
+    "Payment being verified. We'll confirm on WhatsApp shortly."));
+
+  /* The QR again, larger, for paper */
+  var qrHolder = el("div", "pa-qr");
+  area.appendChild(qrHolder);
+  if(drawTicketQr(qrHolder, 300)){
+    area.appendChild(el("div", "pa-qrcap", "SCAN AT THE DOOR"));
+  }
+
+  var foot = el("div", "pa-foot");
+  foot.appendChild(document.createTextNode(
+    "Every rupee goes to the artists and the volunteers. MAP keeps nothing."));
+  foot.appendChild(document.createElement("br"));
+  foot.appendChild(document.createTextNode("Please show this at the door."));
+  area.appendChild(foot);
+}
+
+/* The QR library writes an <img> whose source is a data URL. That
+   loads almost instantly but not synchronously, and printing before
+   it lands gives a blank square. So: wait for the image, with a
+   short timeout so a failure can never leave the button stuck. */
+function printWhenReady(){
+  var img = document.querySelector("#printArea .pa-qr img");
+  if(!img || img.complete){ window.print(); return; }
+
+  var fired = false;
+  function go(){ if(fired) return; fired = true; window.print(); }
+  img.addEventListener("load", go);
+  img.addEventListener("error", go);
+  setTimeout(go, 700);
+}
+
 document.getElementById("printBtn").addEventListener("click", function(){
   mapTrack("booking_print", {event_name: EVENT.name, booking_id: LAST.id});
-  window.print();
+  buildPrintTicket();
+  printWhenReady();
 });
 </script>
 </body>
