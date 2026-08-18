@@ -147,7 +147,9 @@ input[type=text],input[type=tel],input[type=number],select,textarea{
   box-shadow:var(--clay-in-sm);
   -webkit-appearance:none;appearance:none;
 }
-select{background-image:linear-gradient(180deg,#061006,#0b1c0b);cursor:pointer;}
+select{background-image:linear-gradient(180deg,#061006,#0b1c0b);cursor:pointer;color-scheme:dark;}
+select option{background:#0b1c0b;color:var(--phos);font-family:'VT323',monospace;font-size:16px;padding:6px;}
+select option:checked,select option:hover{background:#164016;color:#b8ff66;}
 textarea{resize:vertical;min-height:58px;line-height:1.25;}
 input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{
   outline:2px solid rgba(124,252,0,.8);outline-offset:3px;}
@@ -270,7 +272,6 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
             <li><span class="pl-name">TIME</span><span class="pl-dur" id="evTime">—</span></li>
             <li><span class="pl-name">VENUE</span><span class="pl-dur" id="evVenue">—</span></li>
             <li><span class="pl-name">PER SEAT</span><span class="pl-dur" id="evPrice">—</span></li>
-            <li><span class="pl-name">SEATS LEFT</span><span class="pl-dur" id="evSeats">—</span></li>
           </ul>
         </div>
 
@@ -387,17 +388,14 @@ function renderEvent(){
   document.getElementById("eventPoster").src = "current-event-poster.jpg?v=" + (EVENT.posterVersion || 1);
 
   var left = seatsLeft();
-  var seatsEl = document.getElementById("evSeats");
   var btn = document.getElementById("submitBtn");
 
+  /* Seats remaining is deliberately NOT shown to guests.
+     It still drives the sold-out cutoff and the dropdown cap. */
   if(EVENT.status === "CLOSED"){
-    seatsEl.textContent = "CLOSED";
     btn.disabled = true; btn.textContent = "BOOKINGS ARE CLOSED";
   } else if(EVENT.status === "SOLD OUT" || left === 0){
-    seatsEl.textContent = "SOLD OUT";
     btn.disabled = true; btn.textContent = "SOLD OUT";
-  } else {
-    seatsEl.textContent = left + " of " + EVENT.seats;
   }
 
   var sel = document.getElementById("fSeats");
