@@ -245,6 +245,77 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
   50%{box-shadow:0 6px 10px rgba(0,0,0,.45), inset 0 3px 4px rgba(255,255,255,.26), inset 0 -5px 7px rgba(0,0,0,.55), 0 0 6px rgba(255,47,176,.5);}
 }
 @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+
+/* ---------- tell your people ---------- */
+.share-block{
+  margin-top:18px;padding:16px 14px;border-radius:var(--r-md);
+  background:linear-gradient(180deg,#1a0d18 0%, #0c060b 100%);
+  box-shadow:0 8px 14px rgba(0,0,0,.45), inset 0 2px 3px rgba(255,47,176,.18), inset 0 -5px 8px rgba(0,0,0,.6);
+}
+.share-head{
+  font-family:'Press Start 2P',monospace;font-size:11px;line-height:1.5;
+  color:var(--mag);text-align:center;text-shadow:0 0 10px rgba(255,47,176,.55);
+}
+.share-sub{
+  font-family:'VT323',monospace;font-size:16px;line-height:1.25;
+  color:#e6cfe0;text-align:center;margin:10px 0 12px;
+}
+.share-msg{
+  font-family:'VT323',monospace;font-size:16px;line-height:1.35;color:var(--phos);
+  background:#050b05;border-radius:14px;padding:12px 13px;
+  border:1.5px dashed rgba(124,252,0,.35);word-break:break-word;
+}
+.share-msg .share-link{display:block;margin-top:6px;color:var(--vu);}
+.share-row{display:flex;gap:8px;margin-top:12px;}
+.share-btn{
+  flex:1 1 0;padding:11px 6px;cursor:pointer;border:none;border-radius:var(--r-pill);
+  font-family:Tahoma,Arial,sans-serif;font-size:9px;font-weight:bold;letter-spacing:.5px;
+  color:#1a0010;background:linear-gradient(180deg,#ff9fdc 0%, var(--mag) 45%, #b3006f 100%);
+  box-shadow:0 5px 10px rgba(255,47,176,.28), 0 3px 6px rgba(0,0,0,.4),
+             inset 0 2px 3px rgba(255,255,255,.5), inset 0 -4px 6px rgba(90,0,50,.35);
+}
+.share-btn:active{filter:brightness(1.1);transform:translateY(1px);}
+.share-btn.ghost{
+  color:#e6cfe0;background:none;
+  box-shadow:inset 0 0 0 1.5px rgba(255,47,176,.4);
+}
+.share-btn.ghost:active{background:#2a0a22;}
+
+/* ---------- print / save ticket ---------- */
+.cta-gold{color:#241a00;background:linear-gradient(180deg,#f0dfa4 0%, var(--gold) 45%, #8a6f24 100%);
+  box-shadow:0 6px 12px rgba(201,166,72,.3), 0 4px 8px rgba(0,0,0,.4),
+             inset 0 2px 3px rgba(255,255,255,.5), inset 0 -4px 6px rgba(70,55,0,.32);}
+#printHead{display:none;}
+
+@media print{
+  /* Print only the ticket. Everything else is hidden but keeps its
+     place in the layout, which is what makes this trick reliable. */
+  body{background:#fff !important;}
+  body *{visibility:hidden !important;}
+  #ticketWrap, #ticketWrap *{visibility:visible !important;}
+  #ticketWrap{position:absolute !important;left:0;top:0;width:100%;padding:0 6mm;}
+
+  /* Things that make no sense on paper */
+  #shareBlock, #printBtn, #waBtn2, .screenshot-note, .no-print{display:none !important;}
+
+  /* Ink-friendly: dark theme would print as a black rectangle */
+  #printHead{display:block !important;text-align:center;margin-bottom:8mm;}
+  #printHead .ph-brand{font-family:Tahoma,Arial,sans-serif;font-size:10pt;font-weight:bold;
+    letter-spacing:2px;color:#000 !important;}
+  #printHead .ph-sub{font-family:Tahoma,Arial,sans-serif;font-size:7pt;color:#444 !important;
+    letter-spacing:1px;margin-top:3px;}
+  #ticketWrap h3{color:#000 !important;text-shadow:none !important;text-align:center;}
+  .ticket{background:#fff !important;box-shadow:none !important;
+    border:2px solid #000 !important;border-radius:6px !important;padding:6mm !important;}
+  .ticket .t-ref{color:#000 !important;text-shadow:none !important;}
+  .ticket .t-row{color:#000 !important;}
+  .ticket .t-k{color:#555 !important;}
+  .ticket .t-v{color:#000 !important;}
+  .ticket .t-row + .t-row{box-shadow:inset 0 1px 0 #ccc !important;}
+  .pending-note{color:#000 !important;}
+  #printFoot{display:block !important;text-align:center;margin-top:6mm;
+    font-family:Tahoma,Arial,sans-serif;font-size:7pt;color:#444 !important;line-height:1.6;}
+}
 </style>
 
 <!-- ═══ GOOGLE ANALYTICS 4 — same property as the homepage ═══════ -->
@@ -320,6 +391,11 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
           </div>
 
           <div class="form-field">
+            <label for="fEmail">EMAIL <span class="opt">(OPTIONAL — WE'LL EMAIL YOUR TICKET)</span></label>
+            <input type="email" id="fEmail" inputmode="email" autocomplete="email" placeholder="you@example.com" maxlength="100">
+          </div>
+
+          <div class="form-field">
             <label for="fSeating">ANY REQUEST ON SEATING <span class="opt">(OPTIONAL)</span></label>
             <textarea id="fSeating" placeholder="Near the stage, wheelchair access, seating together…" maxlength="200"></textarea>
           </div>
@@ -363,6 +439,13 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 
         <!-- ═══ 5b. THE TICKET ═══ -->
         <div class="confirm" id="ticketWrap">
+
+          <!-- shown only on paper -->
+          <div id="printHead">
+            <div class="ph-brand">MOVING ARTS PROGRAM</div>
+            <div class="ph-sub">movingartsprogram.com</div>
+          </div>
+
           <h3>YOUR BOOKING</h3>
 
           <div class="ticket">
@@ -378,6 +461,29 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
           </div>
 
           <p class="pending-note">Payment being verified.<br>We'll confirm on WhatsApp shortly.</p>
+
+          <div id="printFoot" style="display:none;">
+            Every rupee goes to the artists and the volunteers. MAP keeps nothing.<br>
+            Please show this at the door.
+          </div>
+
+          <!-- ═══ 5c. TELL YOUR PEOPLE ═══ -->
+          <div class="share-block" id="shareBlock">
+            <div class="share-head">NOW TELL<br>YOUR PEOPLE</div>
+            <p class="share-sub">A gig is better with your people in the room.<br>Send this to someone who'd love it.</p>
+
+            <div class="share-msg" id="shareMsg">—<span class="share-link" id="shareLink">movingartsprogram.com/gig-bookings/</span></div>
+
+            <div class="share-row">
+              <button type="button" class="share-btn" id="shareWa">WHATSAPP</button>
+              <button type="button" class="share-btn" id="shareAny" hidden>SHARE&nbsp;TO…</button>
+              <button type="button" class="share-btn ghost" id="shareCopy">COPY</button>
+            </div>
+          </div>
+
+          <button type="button" class="cta cta-block cta-gold" id="printBtn">🎟&nbsp; PRINT / SAVE MY TICKET</button>
+          <p class="small">On a phone, choose "Save as PDF" to keep it in your files.</p>
+
           <p class="screenshot-note">📸 Please screenshot this — it's your booking record.</p>
 
           <a class="cta cta-block cta-pink" id="waBtn2" href="#" target="_blank" rel="noopener noreferrer">SEND US THIS BOOKING ON WHATSAPP</a>
@@ -409,7 +515,10 @@ var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwruu1tbiMhb421nFax18L
 /* Fallback event details — used in preview mode, and if the Sheet
    is ever unreachable. The Sheet overrides all of these. */
 var EVENT = {
-  name:   "ELVIS PRESLEY TRIBUTE",
+  name:   "ELVIS PRESLEY TRIBUTE FESTIVAL",
+  /* The casual version used in the share message. Comes from the
+     "Share name" row of the Event tab; falls back to name if blank. */
+  shareName: "Elvis Presley Tribute Festival",
   code:   "SHOOK",
   date:   "WED 2 SEPT",
   time:   "8 PM ONWARDS",
@@ -425,6 +534,7 @@ var EVENT = {
 var UPI_VPA  = "zimbo77-7@okhdfcbank";
 var UPI_NAME = "MAP support";
 var WA_NUMBER = "919849690077";
+var BOOK_URL = "https://movingartsprogram.com/gig-bookings/";
 
 /* ---------- render event details ---------- */
 function seatsLeft(){ return Math.max(0, EVENT.seats - (EVENT.booked || 0)); }
@@ -490,6 +600,7 @@ document.getElementById("submitBtn").addEventListener("click", function(){
   var seats  = parseInt(document.getElementById("fSeats").value, 10);
   var mobile = document.getElementById("fMobile").value.replace(/[^0-9]/g, "");
   var note   = document.getElementById("fSeating").value.trim();
+  var email  = document.getElementById("fEmail").value.trim();
   var trap   = document.getElementById("fWebsite").value;
 
   if(trap){ return; }
@@ -497,13 +608,19 @@ document.getElementById("submitBtn").addEventListener("click", function(){
   if(!seats || seats < 1){ showErr("Please choose how many seats you want."); return; }
   if(mobile.length === 12 && mobile.indexOf("91") === 0){ mobile = mobile.slice(2); }
   if(mobile.length !== 10){ showErr("Please enter a valid 10-digit mobile number."); return; }
+  /* Email is optional — but if they typed something, it has to look like an
+     address, otherwise their ticket would silently go nowhere. */
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+    showErr("That email address doesn't look right. Please check it, or leave the box empty.");
+    return;
+  }
 
   var btn = this;
   btn.disabled = true; btn.textContent = "SAVING YOUR BOOKING…";
 
   mapTrack("booking_submit", {event_name: EVENT.name, seats: seats});
 
-  var payload = {name:name, seats:seats, mobile:mobile, note:note};
+  var payload = {name:name, seats:seats, mobile:mobile, note:note, email:email};
 
   if(!SCRIPT_URL){
     /* PREVIEW MODE — nothing is saved anywhere */
@@ -528,7 +645,8 @@ document.getElementById("submitBtn").addEventListener("click", function(){
           "&name="   + encodeURIComponent(payload.name) +
           "&seats="  + encodeURIComponent(payload.seats) +
           "&mobile=" + encodeURIComponent(payload.mobile) +
-          "&note="   + encodeURIComponent(payload.note);
+          "&note="   + encodeURIComponent(payload.note) +
+          "&email="  + encodeURIComponent(payload.email);
   var s = document.createElement("script");
   s.src = SCRIPT_URL + q;
   s.onerror = function(){
@@ -632,12 +750,15 @@ document.getElementById("paidBtn").addEventListener("click", function(){
     document.getElementById("tTime").textContent   = EVENT.time;
     document.getElementById("tVenue").textContent  = EVENT.venue;
 
+    buildShare();
+
     document.getElementById("confirmWrap").classList.remove("show");
     document.getElementById("ticketWrap").classList.add("show");
     document.getElementById("ticketWrap").scrollIntoView({behavior:"smooth", block:"start"});
   }
 
   if(!SCRIPT_URL || LAST.preview){ setTimeout(done, 400); return; }
+
 
   var cb = "mapPd" + Date.now();
   var settled = false;
@@ -647,6 +768,82 @@ document.getElementById("paidBtn").addEventListener("click", function(){
   s.onerror = function(){ if(settled) return; settled = true; done(); };  /* never block the ticket */
   document.head.appendChild(s);
   setTimeout(function(){ if(!settled){ settled = true; done(); } }, 6000);
+});
+
+/* ══════════════════════════════════════════════════════════════
+   TELL YOUR PEOPLE — the share message
+   ──────────────────────────────────────────────────────────────
+   Nothing here is written per-gig. The event name, date and venue
+   all come from the Event tab of the Sheet, so this message keeps
+   itself correct forever without anyone editing this file.
+   ══════════════════════════════════════════════════════════════ */
+
+/* The Event tab is typed in CAPITALS because that's how it reads on
+   the page. Shouting in a WhatsApp message to a friend is a different
+   thing, so we soften it — but only if it IS all capitals. If PK ever
+   types normal case in the Sheet, we leave his wording alone. */
+function softCase(s){
+  s = String(s || "");
+  if(/[a-z]/.test(s)) return s;                 /* already mixed case — hands off */
+  return s.toLowerCase().replace(/\b([a-z])/g, function(m, c){ return c.toUpperCase(); });
+}
+
+function shareSentence(){
+  var nm    = EVENT.shareName || EVENT.name;
+  var when  = softCase(EVENT.date);
+  var where = softCase(EVENT.venue);
+  var txt = "Yesss I'm going to " + softCase(nm);
+  if(when)  txt += " on " + when;
+  if(where) txt += " at " + where;
+  return txt + ", come over, we'll have fun!";
+}
+
+function shareFull(){ return shareSentence() + "\n" + BOOK_URL; }
+
+function buildShare(){
+  var msg = document.getElementById("shareMsg");
+  if(!msg) return;
+  /* rebuild safely — no innerHTML with event data in it */
+  msg.textContent = shareSentence();
+  var link = document.createElement("span");
+  link.className = "share-link";
+  link.textContent = BOOK_URL.replace(/^https:\/\//, "");
+  msg.appendChild(link);
+
+  /* The native share sheet only exists on phones and a few desktops.
+     Where it doesn't, the button stays hidden and Copy does the job. */
+  var anyBtn = document.getElementById("shareAny");
+  if(navigator.share){ anyBtn.removeAttribute("hidden"); }
+}
+
+document.getElementById("shareWa").addEventListener("click", function(){
+  mapTrack("booking_share", {method: "whatsapp", event_name: EVENT.name, booking_id: LAST.id});
+  window.open("https://wa.me/?text=" + encodeURIComponent(shareFull()), "_blank", "noopener");
+});
+
+document.getElementById("shareAny").addEventListener("click", async function(){
+  mapTrack("booking_share", {method: "native", event_name: EVENT.name, booking_id: LAST.id});
+  try{
+    await navigator.share({title: EVENT.name, text: shareSentence(), url: BOOK_URL});
+  }catch(err){ /* guest closed the share sheet — nothing to do */ }
+});
+
+document.getElementById("shareCopy").addEventListener("click", async function(){
+  var btn = this, original = btn.textContent;
+  mapTrack("booking_share", {method: "copy", event_name: EVENT.name, booking_id: LAST.id});
+  try{
+    await navigator.clipboard.writeText(shareFull());
+    btn.textContent = "COPIED ✓";
+  }catch(err){
+    btn.textContent = "SELECT & COPY ABOVE";
+  }
+  setTimeout(function(){ btn.textContent = original; }, 1800);
+});
+
+/* ---------- print / save the ticket ---------- */
+document.getElementById("printBtn").addEventListener("click", function(){
+  mapTrack("booking_print", {event_name: EVENT.name, booking_id: LAST.id});
+  window.print();
 });
 </script>
 </body>
