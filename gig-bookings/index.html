@@ -447,13 +447,20 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 
         <!-- ═══ 5. CONFIRMATION + PAYMENT ═══ -->
         <div class="confirm" id="confirmWrap">
-          <h3>BOOKING RECEIVED — NOW PAY</h3>
+          <h3 id="confirmHead">BOOKING RECEIVED — NOW PAY</h3>
+          <p class="small" id="confirmLead"></p>
 
           <div class="booking-id">
             <span class="lbl">YOUR BOOKING REFERENCE</span>
             <span class="idv" id="bookingId">—</span>
             <span class="lbl">AMOUNT DUE</span><br>
             <span class="amt" id="amountDue">—</span>
+
+            <div id="rzpRetry" hidden>
+              <button type="button" class="cta cta-block" id="rzpRetryBtn">PAY SECURELY — UPI, CARD OR NETBANKING</button>
+              <div class="small">Handled by Razorpay. Your ticket is issued the moment it goes through.</div>
+              <div style="height:14px"></div>
+            </div>
 
             <a class="cta cta-block" id="upiPayBtn" href="#">PAY NOW VIA UPI</a>
             <div class="small" id="payNote">Opens your UPI app with the amount and your reference already filled in.</div>
@@ -489,6 +496,13 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
           <p class="small">Tap this once you've completed the payment.</p>
         </div>
 
+        <!-- ═══ 5a-ii. CONFIRMING (a second or two, after Razorpay) ═══ -->
+        <div class="confirm" id="verifyWrap">
+          <h3>CONFIRMING YOUR PAYMENT</h3>
+          <p class="fb-lead" style="text-align:center">One moment — we're checking it with the bank.<br>
+            Please don't close this page.</p>
+        </div>
+
         <!-- ═══ 5b. THE TICKET ═══ -->
         <div class="confirm" id="ticketWrap">
           <h3>YOUR BOOKING</h3>
@@ -510,7 +524,7 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
             </div>
           </div>
 
-          <p class="pending-note">Payment being verified.<br>We'll confirm on WhatsApp shortly.</p>
+          <p class="pending-note" id="tStatus">Payment being verified. We'll confirm on WhatsApp shortly.</p>
 
           <!-- ═══ 5c. TELL YOUR PEOPLE ═══ -->
           <div class="share-block" id="shareBlock">
@@ -550,6 +564,7 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 <div id="printArea"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════
    MAP BOOKINGS — configuration
@@ -683,7 +698,15 @@ document.getElementById("submitBtn").addEventListener("click", function(){
   window[cb] = function(data){
     delete window[cb];
     if(data && data.ok){
-      showConfirm(data.bookingId, seats, false, name, mobile);
+      LAST = {id: data.bookingId, seats: seats, amount: data.amount || (seats * EVENT.price),
+              name: name, mobile: mobile, email: email, preview: false,
+              orderId: data.orderId || null, keyId: data.rzpKeyId || ""};
+      if(LAST.orderId && LAST.keyId && window.Razorpay){
+        btn.textContent = "OPENING PAYMENT…";
+        openCheckout();
+      } else {
+        showConfirm(data.bookingId, seats, false, name, mobile);
+      }
     } else {
       btn.disabled = false;
       btn.textContent = "CONFIRM BOOKING & GET PAYMENT DETAILS";
@@ -711,8 +734,21 @@ document.getElementById("submitBtn").addEventListener("click", function(){
 var LAST = {};   /* what the guest just booked, for the ticket screen */
 
 function showConfirm(bookingId, seats, preview, name, mobile){
-  var amount = seats * EVENT.price;
-  LAST = {id: bookingId, seats: seats, amount: amount, name: name || "", mobile: mobile || "", preview: !!preview};
+  var amount = LAST.amount || (seats * EVENT.price);
+  LAST.id = bookingId; LAST.seats = seats; LAST.amount = amount;
+  LAST.name = name || ""; LAST.mobile = mobile || ""; LAST.preview = !!preview;
+
+  /* If a Razorpay order exists, offer the card/UPI/netbanking route first
+     and keep the manual UPI details below it as the backup. */
+  var retry = document.getElementById("rzpRetry");
+  if(LAST.orderId && LAST.keyId && window.Razorpay){
+    retry.removeAttribute("hidden");
+    document.getElementById("confirmHead").textContent = "PAYMENT NOT COMPLETED";
+    document.getElementById("confirmLead").textContent =
+      "Your seats are held for 24 hours. Finish the payment below.";
+  } else {
+    retry.setAttribute("hidden","");
+  }
 
   document.getElementById("formWrap").style.display = "none";
   document.getElementById("confirmWrap").classList.add("show");
@@ -791,31 +827,149 @@ document.getElementById("qrToggle").addEventListener("click", function(){
   else    { w.removeAttribute("hidden");  this.textContent = "HIDE QR ▴"; }
 });
 
-/* ---------- "I've paid" ---------- */
+/* ══════════════════════════════════════════════════════════════
+   THE TICKET SCREEN
+   Shared by both routes — the Razorpay one and the manual UPI one.
+   ══════════════════════════════════════════════════════════════ */
+function showTicket(confirmed){
+  document.getElementById("tRef").textContent    = LAST.id;
+  document.getElementById("tName").textContent   = LAST.name || "—";
+  document.getElementById("tSeats").textContent  = LAST.seats;
+  document.getElementById("tMobile").textContent = LAST.mobile || "—";
+  document.getElementById("tAmount").textContent = "₹" + LAST.amount;
+  document.getElementById("tEvent").textContent  = EVENT.name;
+  document.getElementById("tDate").textContent   = EVENT.date;
+  document.getElementById("tTime").textContent   = EVENT.time;
+  document.getElementById("tVenue").textContent  = EVENT.venue;
+
+  /* A Razorpay payment is confirmed the instant it lands. A manual UPI
+     payment still has to be eyeballed by PK, so the wording differs. */
+  var st = document.getElementById("tStatus");
+  if(st){
+    st.textContent = confirmed
+      ? "Payment confirmed. You're in — see you there."
+      : "Payment being verified. We'll confirm on WhatsApp shortly.";
+  }
+
+  buildShare();
+  renderTicketQr();
+
+  document.getElementById("formWrap").style.display = "none";
+  document.getElementById("confirmWrap").classList.remove("show");
+  document.getElementById("ticketWrap").classList.add("show");
+  document.getElementById("ticketWrap").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   RAZORPAY
+   ──────────────────────────────────────────────────────────────
+   The page never handles money and never sees the secret key. It
+   opens Razorpay's own window, and when that window reports success
+   the page passes the result back to the Apps Script, which checks
+   it against Razorpay's servers before believing a word of it.
+   ══════════════════════════════════════════════════════════════ */
+function openCheckout(){
+  if(!(LAST.orderId && LAST.keyId && window.Razorpay)){
+    showConfirm(LAST.id, LAST.seats, false, LAST.name, LAST.mobile);
+    return;
+  }
+
+  mapTrack("booking_checkout_open", {event_name: EVENT.name, booking_id: LAST.id, value: LAST.amount, currency: "INR"});
+
+  var opts = {
+    key:         LAST.keyId,
+    order_id:    LAST.orderId,
+    amount:      LAST.amount * 100,
+    currency:    "INR",
+    name:        "Moving Arts Program",
+    description: EVENT.name + " — " + LAST.seats + (LAST.seats === 1 ? " seat" : " seats"),
+    image:       "https://movingartsprogram.com/apple-touch-icon.png",
+    prefill:     {name: LAST.name, email: LAST.email || "", contact: LAST.mobile},
+    notes:       {booking_id: LAST.id},
+    theme:       {color: "#7CFC00"},
+    retry:       {enabled: true},
+    modal: {
+      ondismiss: function(){
+        mapTrack("booking_checkout_abandoned", {event_name: EVENT.name, booking_id: LAST.id});
+        resetSubmitBtn();
+        showConfirm(LAST.id, LAST.seats, false, LAST.name, LAST.mobile);
+      }
+    },
+    handler: function(resp){ verifyPayment(resp); }
+  };
+
+  try{
+    var rzp = new Razorpay(opts);
+    rzp.on("payment.failed", function(){
+      mapTrack("booking_payment_failed", {event_name: EVENT.name, booking_id: LAST.id});
+      resetSubmitBtn();
+      showConfirm(LAST.id, LAST.seats, false, LAST.name, LAST.mobile);
+    });
+    rzp.open();
+  }catch(e){
+    resetSubmitBtn();
+    showConfirm(LAST.id, LAST.seats, false, LAST.name, LAST.mobile);
+  }
+}
+
+
+function resetSubmitBtn(){
+  var b = document.getElementById("submitBtn");
+  if(b){ b.disabled = false; b.textContent = "CONFIRM BOOKING & GET PAYMENT DETAILS"; }
+}
+
+
+/* ---------- hand the result to the Sheet for checking ---------- */
+function verifyPayment(resp){
+  document.getElementById("formWrap").style.display = "none";
+  document.getElementById("confirmWrap").classList.remove("show");
+
+  var wait = document.getElementById("verifyWrap");
+  wait.classList.add("show");
+
+  mapTrack("booking_confirmed", {event_name: EVENT.name, seats: LAST.seats,
+    value: LAST.amount, currency: "INR", booking_id: LAST.id});
+
+  var settled = false;
+  function finish(ok){
+    if(settled) return; settled = true;
+    wait.classList.remove("show");
+    /* The money is already with Razorpay either way. If our own check
+       is slow or fails, we still show the ticket — the webhook will
+       tick the Sheet a moment later, and PK gets an email regardless. */
+    showTicket(true);
+  }
+
+  if(!SCRIPT_URL){ setTimeout(finish, 600); return; }
+
+  var cb = "mapVf" + Date.now();
+  window[cb] = function(){ delete window[cb]; finish(true); };
+  var s = document.createElement("script");
+  s.src = SCRIPT_URL + "?action=verify&callback=" + cb +
+          "&id="         + encodeURIComponent(LAST.id) +
+          "&order_id="   + encodeURIComponent(resp.razorpay_order_id || "") +
+          "&payment_id=" + encodeURIComponent(resp.razorpay_payment_id || "") +
+          "&signature="  + encodeURIComponent(resp.razorpay_signature || "");
+  s.onerror = function(){ finish(false); };
+  document.head.appendChild(s);
+  setTimeout(function(){ finish(false); }, 12000);
+}
+
+
+document.getElementById("rzpRetryBtn").addEventListener("click", function(){
+  openCheckout();
+});
+
+
+/* ---------- "I've paid" — the manual UPI route only ---------- */
 document.getElementById("paidBtn").addEventListener("click", function(){
   var btn = this;
   btn.disabled = true; btn.textContent = "ONE MOMENT…";
 
   mapTrack("booking_says_paid", {event_name: EVENT.name, booking_id: LAST.id, value: LAST.amount, currency: "INR"});
 
-  function done(){
-    document.getElementById("tRef").textContent    = LAST.id;
-    document.getElementById("tName").textContent   = LAST.name || "—";
-    document.getElementById("tSeats").textContent  = LAST.seats;
-    document.getElementById("tMobile").textContent = LAST.mobile || "—";
-    document.getElementById("tAmount").textContent = "₹" + LAST.amount;
-    document.getElementById("tEvent").textContent  = EVENT.name;
-    document.getElementById("tDate").textContent   = EVENT.date;
-    document.getElementById("tTime").textContent   = EVENT.time;
-    document.getElementById("tVenue").textContent  = EVENT.venue;
-
-    buildShare();
-    renderTicketQr();
-
-    document.getElementById("confirmWrap").classList.remove("show");
-    document.getElementById("ticketWrap").classList.add("show");
-    document.getElementById("ticketWrap").scrollIntoView({behavior:"smooth", block:"start"});
-  }
+  function done(){ showTicket(false); }
 
   if(!SCRIPT_URL || LAST.preview){ setTimeout(done, 400); return; }
 
