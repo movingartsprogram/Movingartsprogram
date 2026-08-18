@@ -201,6 +201,28 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
   box-shadow:inset 0 0 0 1.5px rgba(124,252,0,.18);cursor:pointer;
 }
 .qr-toggle:active{background:#0d2f0d;}
+.fallback{
+  margin-top:14px;padding:12px 12px 14px;border-radius:var(--r-md);
+  background:linear-gradient(180deg,#1b1608 0%, #0d0b04 100%);
+  box-shadow:inset 0 2px 3px rgba(255,225,53,.16), inset 0 -5px 8px rgba(0,0,0,.6);
+  text-align:left;
+}
+.fallback h4{font-family:Tahoma,Arial,sans-serif;font-size:9px;letter-spacing:1px;
+  color:var(--vu);margin:0 0 6px;text-align:center;}
+.fallback .fb-lead{font-family:'VT323',monospace;font-size:15px;line-height:1.25;
+  color:#c9c0a0;margin:0 0 10px;text-align:center;}
+.pay-copy{
+  display:block;width:100%;margin:0 0 6px;padding:7px 10px;
+  font-family:'VT323',monospace;font-size:16px;letter-spacing:.5px;color:var(--vu);
+  background:none;border:1.5px dashed #6b5a12;border-radius:var(--r-pill);
+  cursor:pointer;text-align:center;
+}
+.pay-copy:active{background:#241d05;}
+.pay-copy .pc-k{font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1px;
+  color:#8fae8f;display:block;margin-bottom:1px;}
+.fallback .fb-fields{font-family:'VT323',monospace;font-size:16px;line-height:1.35;
+  color:#c9c0a0;margin:8px 0 0;text-align:center;}
+.fallback .fb-fields b{color:var(--vu);}
 .cta-paid{color:#1a1400;background:linear-gradient(180deg,#fff29a 0%, var(--vu) 45%, #b39400 100%);
   box-shadow:0 6px 12px rgba(255,225,53,.28), 0 4px 8px rgba(0,0,0,.4),
              inset 0 2px 3px rgba(255,255,255,.55), inset 0 -4px 6px rgba(80,65,0,.32);}
@@ -436,11 +458,26 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
             <a class="cta cta-block" id="upiPayBtn" href="#">PAY NOW VIA UPI</a>
             <div class="small" id="payNote">Opens your UPI app with the amount and your reference already filled in.</div>
 
+            <div class="fallback">
+              <h4>BUTTON DIDN'T WORK? THAT'S NORMAL</h4>
+              <p class="fb-lead">Some UPI apps block one-tap links. Nothing is wrong with
+                your account or your money. Pay manually — it takes twenty seconds.</p>
+
+              <button type="button" class="pay-copy" id="upiCopy" title="Tap to copy">
+                <span class="pc-k">PAY TO THIS UPI ID</span>zimbo77-7@okhdfcbank</button>
+
+              <button type="button" class="pay-copy" id="mobCopy" title="Tap to copy">
+                <span class="pc-k">OR TO THIS MOBILE NUMBER</span>98496 90077</button>
+
+              <p class="fb-fields">Amount <b id="fbAmount">—</b><br>
+                Note / message <b id="fbRef">—</b></p>
+            </div>
+
             <button type="button" class="qr-toggle" id="qrToggle">PAYING FROM ANOTHER DEVICE? SHOW QR ▾</button>
             <div id="qrWrap" hidden>
               <div class="upi-qr" id="qrBox"></div>
-              <button type="button" class="upi-id" id="upiCopy" title="Tap to copy">UPI ID: zimbo77-7@okhdfcbank</button>
-              <div class="small">Scan with any UPI app · tap the ID to copy</div>
+              <div class="small">Scan with any UPI app. On this phone, save the code and use
+                your UPI app's "scan from gallery" option.</div>
             </div>
           </div>
 
@@ -544,6 +581,7 @@ var EVENT = {
 
 var UPI_VPA  = "zimbo77-7@okhdfcbank";
 var UPI_NAME = "MAP support";
+var UPI_MOBILE = "9849690077";   /* same account, for apps that block one-tap links */
 var WA_NUMBER = "919849690077";
 var BOOK_URL = "https://movingartsprogram.com/gig-bookings/";
 
@@ -686,11 +724,15 @@ function showConfirm(bookingId, seats, preview, name, mobile){
 
   var upiUri = "upi://pay?pa=" + encodeURIComponent(UPI_VPA) +
                "&pn=" + encodeURIComponent(UPI_NAME) +
-               "&am=" + amount +
+               "&am=" + amount.toFixed(2) +
                "&cu=INR" +
                "&tn=" + encodeURIComponent(bookingId);
 
   document.getElementById("upiPayBtn").href = upiUri;
+
+  /* manual fallback — always visible, for when the app blocks the one-tap link */
+  document.getElementById("fbAmount").textContent = "₹" + amount;
+  document.getElementById("fbRef").textContent = bookingId;
 
   /* QR with the amount and reference already inside it */
   var box = document.getElementById("qrBox");
@@ -712,20 +754,26 @@ function showConfirm(bookingId, seats, preview, name, mobile){
   document.getElementById("confirmWrap").scrollIntoView({behavior: "smooth", block: "start"});
 }
 
-/* ---------- tap the UPI ID to copy ---------- */
+/* ---------- tap the UPI ID or the mobile number to copy ---------- */
 (function(){
-  var btn = document.getElementById("upiCopy");
-  var original = btn.textContent;
-  btn.addEventListener("click", async function(){
-    try{
-      await navigator.clipboard.writeText(UPI_VPA);
-      btn.textContent = "COPIED ✓ " + UPI_VPA;
-    }catch(err){
-      btn.textContent = "LONG-PRESS TO COPY: " + UPI_VPA;
-    }
-    mapTrack("donate_upi_copy", {map_page: "gig-bookings"});
-    setTimeout(function(){ btn.textContent = original; }, 1800);
-  });
+  function wire(id, value, eventName){
+    var btn = document.getElementById(id);
+    if(!btn) return;
+    var original = btn.innerHTML;
+    var key = btn.querySelector(".pc-k");
+    var keyText = key ? key.textContent : "";
+    btn.addEventListener("click", async function(){
+      var ok = true;
+      try{ await navigator.clipboard.writeText(value); }
+      catch(err){ ok = false; }
+      btn.innerHTML = '<span class="pc-k">' + keyText + '</span>' +
+        (ok ? "COPIED ✓ " : "LONG-PRESS TO COPY: ") + value;
+      mapTrack(eventName, {map_page: "gig-bookings"});
+      setTimeout(function(){ btn.innerHTML = original; }, 2200);
+    });
+  }
+  wire("upiCopy", UPI_VPA, "donate_upi_copy");
+  wire("mobCopy", UPI_MOBILE, "booking_upi_manual");
 })();
 
 document.getElementById("upiPayBtn").addEventListener("click", function(){
