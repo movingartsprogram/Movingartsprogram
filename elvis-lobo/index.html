@@ -22,7 +22,7 @@
   --ch-hi:#525260; --ch:#3a3a44; --ch-lo:#26262e;
   --clay-drop:0 14px 28px rgba(0,0,0,.5), 0 4px 10px rgba(0,0,0,.35);
   --clay-in:inset 0 7px 16px rgba(0,0,0,.65), inset 0 -3px 8px rgba(255,255,255,.06);
-  --r-pill:999px;
+  --r-md:18px; --r-pill:999px;
 }
 *{box-sizing:border-box;}
 body{
@@ -158,10 +158,54 @@ p{max-width:66ch;margin:0 0 12px;}
 }
 
 /* ===== video grid ===== */
-.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:10px;}
-.video-card{display:block;text-decoration:none;color:#d8e8d8;}
-.video-card img{width:100%;border-radius:10px;display:block;border:1px solid #2a2a33;}
-.video-card .vt{font-size:14px;margin-top:6px;line-height:1.25;color:#c8ffc8;}
+/* ---------- playlist: identical tokens to the homepage's Boss Den list ---------- */
+.wa-playlist{margin-top:10px;overflow:hidden;
+  background:linear-gradient(180deg,#131313 0%, #050505 100%);
+  border:none;border-radius:var(--r-md);
+  box-shadow:0 10px 20px rgba(0,0,0,.45),
+             inset 0 2px 3px rgba(255,255,255,.08),
+             inset 0 -5px 9px rgba(0,0,0,.6);}
+.wa-pl-title{
+  background:linear-gradient(180deg,#1a7a1a 0%, #0d3d0d 100%);
+  border:none;
+  color:#c8ffc8;font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;
+  padding:6px 12px;
+  box-shadow:inset 0 2px 3px rgba(200,255,200,.26), inset 0 -4px 6px rgba(0,0,0,.5);
+  text-shadow:0 1px 2px rgba(0,0,0,.5);}
+.wa-embed-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
+.wa-embed-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;}
+/* Facade: a still frame until someone actually asks for a video, so the page
+   doesn't drag YouTube's player down on every single visit. */
+.pl-facade{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;cursor:pointer;
+  background:#000;display:block;}
+.pl-facade img{width:100%;height:100%;object-fit:cover;display:block;opacity:.72;transition:opacity .18s ease;}
+.pl-facade:hover img{opacity:.95;}
+.pl-facade::after{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:0;height:0;border-style:solid;border-width:19px 0 19px 32px;
+  border-color:transparent transparent transparent var(--phos);
+  filter:drop-shadow(0 0 10px rgba(124,252,0,.55));}
+.pl-nowplaying{font-family:'VT323',monospace;font-size:14px;color:#8fae8f;
+  padding:6px 12px 0;letter-spacing:.4px;}
+.pl-nowplaying b{color:var(--phos);font-weight:normal;}
+.wa-pl-list{list-style:none;margin:0;padding:5px;max-height:280px;overflow-y:auto;}
+.wa-pl-list::-webkit-scrollbar{width:10px;}
+.wa-pl-list::-webkit-scrollbar-track{background:transparent;}
+.wa-pl-list::-webkit-scrollbar-thumb{background:#2c6a2c;border-radius:var(--r-pill);border:3px solid #060606;}
+.wa-pl-list li{
+  color:var(--phos);padding:5px 8px;cursor:pointer;border-radius:10px;
+  display:flex;align-items:baseline;gap:8px;
+  font-family:'VT323',monospace;font-size:15px;}
+.wa-pl-list li .pl-name{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wa-pl-list li:hover{background:#0d2f0d;}
+.wa-pl-list li:active{background:#134a13;}
+.wa-pl-list li:focus-visible{outline:2px solid var(--vu);outline-offset:-2px;}
+.wa-pl-list li.active{
+  background:linear-gradient(180deg,#1c531c 0%, #123a12 100%);color:#fff;
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.5), inset 0 -2px 3px rgba(124,252,0,.16);}
+.wa-pl-list li.active .pl-name::before{content:'\25BA  ';}
+.pl-foot{font-family:'VT323',monospace;font-size:13px;color:#6f8f6f;padding:2px 12px 9px;}
+.pl-foot a{color:#8fae8f;}
 
 footer{margin-top:36px;font-size:13px;color:#6f8f6f;}
 </style>
@@ -243,21 +287,31 @@ function gtag(){dataLayer.push(arguments);}
     <blockquote class="pullquote">"One should try to be a better human being first, go with flow, music will take its course and fall in place."</blockquote>
 
     <h2>WATCH ELVIS LIVE</h2>
-    <div class="video-grid">
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=caYwXm5Rvwk"><img loading="lazy" src="https://img.youtube.com/vi/caYwXm5Rvwk/hqdefault.jpg" alt="Elvis Lobo — The Dark Knight Sessions"><div class="vt">The Dark Knight Sessions</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=u1aKt3anCXo"><img loading="lazy" src="https://img.youtube.com/vi/u1aKt3anCXo/hqdefault.jpg" alt="Elvis Lobo — Going Down, Jeff Beck Improvisation"><div class="vt">Going Down (Jeff Beck Improvisation)</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=CUMDop6xo2I"><img loading="lazy" src="https://img.youtube.com/vi/CUMDop6xo2I/hqdefault.jpg" alt="Elvis Lobo — The Limited Edition Promo"><div class="vt">The Limited Edition Promo</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=F2bAsne_GqI"><img loading="lazy" src="https://img.youtube.com/vi/F2bAsne_GqI/hqdefault.jpg" alt="Elvis Lobo — This Is Jazz Part 1, Silva Heritage"><div class="vt">This Is Jazz Pt 1 — Silva Heritage</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=POBsfozeKFQ"><img loading="lazy" src="https://img.youtube.com/vi/POBsfozeKFQ/hqdefault.jpg" alt="Elvis Lobo — This Is Jazz Part 2, Silva Heritage"><div class="vt">This Is Jazz Pt 2 — Silva Heritage</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=eyu928pd124"><img loading="lazy" src="https://img.youtube.com/vi/eyu928pd124/hqdefault.jpg" alt="Elvis Lobo — The Classics duet with Tatiyana, Part 1"><div class="vt">The Classics: Duet w/ Tatiyana Pt 1 — Saltamontes</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=uM-UgW_8Xrw"><img loading="lazy" src="https://img.youtube.com/vi/uM-UgW_8Xrw/hqdefault.jpg" alt="Elvis Lobo — The Classics duet with Tatiyana, Part 2"><div class="vt">The Classics: Duet w/ Tatiyana Pt 2 — Saltamontes</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=tsmKt7yXSAU"><img loading="lazy" src="https://img.youtube.com/vi/tsmKt7yXSAU/hqdefault.jpg" alt="Elvis Lobo — Birthday Bash, Part 1, Guru Bar"><div class="vt">Birthday Bash Pt 1 — Guru Bar</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=bXlf6LWi-aA"><img loading="lazy" src="https://img.youtube.com/vi/bXlf6LWi-aA/hqdefault.jpg" alt="Elvis Lobo — Birthday Bash, Part 2, Guru Bar"><div class="vt">Birthday Bash Pt 2 — Guru Bar</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=cKVD4ls2Qic"><img loading="lazy" src="https://img.youtube.com/vi/cKVD4ls2Qic/hqdefault.jpg" alt="Elvis Lobo — Solo with Nylon, Unaccompanied at Saltamontes"><div class="vt">Solo with Nylon — Unaccompanied at Saltamontes</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=1yQ4YYLpLRA"><img loading="lazy" src="https://img.youtube.com/vi/1yQ4YYLpLRA/hqdefault.jpg" alt="Elvis Lobo — The Classics with Karim, Tatiyana, Cliffy and Alex Yurushkin, Part 1"><div class="vt">The Classics w/ Karim, Tatiyana, Cliffy &amp; Alex Yurushkin Pt 1</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=c9TjLTc5KcA"><img loading="lazy" src="https://img.youtube.com/vi/c9TjLTc5KcA/hqdefault.jpg" alt="Elvis Lobo — The Classics with Karim, Tatiyana, Cliffy and Alex Yurushkin, Part 2"><div class="vt">The Classics w/ Karim, Tatiyana, Cliffy &amp; Alex Yurushkin Pt 2</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=U8jOlOFzcyc"><img loading="lazy" src="https://img.youtube.com/vi/U8jOlOFzcyc/hqdefault.jpg" alt="Elvis Lobo — Awake the Dead Sessions, Part 1"><div class="vt">Awake the Dead Sessions Pt 1</div></a>
-      <a class="video-card" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=Db7UhRLFh6U"><img loading="lazy" src="https://img.youtube.com/vi/Db7UhRLFh6U/hqdefault.jpg" alt="Elvis Lobo — Awake the Dead Sessions, Part 2"><div class="vt">Awake the Dead Sessions Pt 2</div></a>
+    <div class="wa-playlist">
+      <div class="wa-pl-title">ELVIS LOBO &mdash; LIVE AT MAP</div>
+      <div class="wa-embed-wrap" id="elvisStage">
+        <button class="pl-facade" id="elvisFacade" type="button" aria-label="Play The Dark Knight Sessions">
+          <img loading="lazy" id="elvisFacadeImg" src="https://img.youtube.com/vi/caYwXm5Rvwk/hqdefault.jpg" alt="Elvis Lobo performing live &mdash; The Dark Knight Sessions">
+        </button>
+      </div>
+      <div class="pl-nowplaying">NOW PLAYING &mdash; <b id="elvisNowPlaying">01. The Dark Knight Sessions</b></div>
+      <ul class="wa-pl-list" id="elvisPlaylist">
+            <li class="active" data-video="caYwXm5Rvwk" data-title="The Dark Knight Sessions" tabindex="0" role="button"><span class="pl-name">01. The Dark Knight Sessions</span></li>
+            <li data-video="u1aKt3anCXo" data-title="Going Down (Jeff Beck Improvisation)" tabindex="0" role="button"><span class="pl-name">02. Going Down (Jeff Beck Improvisation)</span></li>
+            <li data-video="CUMDop6xo2I" data-title="The Limited Edition Promo" tabindex="0" role="button"><span class="pl-name">03. The Limited Edition Promo</span></li>
+            <li data-video="F2bAsne_GqI" data-title="This Is Jazz Pt 1 - Silva Heritage" tabindex="0" role="button"><span class="pl-name">04. This Is Jazz Pt 1 &mdash; Silva Heritage</span></li>
+            <li data-video="POBsfozeKFQ" data-title="This Is Jazz Pt 2 - Silva Heritage" tabindex="0" role="button"><span class="pl-name">05. This Is Jazz Pt 2 &mdash; Silva Heritage</span></li>
+            <li data-video="eyu928pd124" data-title="The Classics: Duet w/ Tatiyana Pt 1 - Saltamontes" tabindex="0" role="button"><span class="pl-name">06. The Classics: Duet w/ Tatiyana Pt 1 &mdash; Saltamontes</span></li>
+            <li data-video="uM-UgW_8Xrw" data-title="The Classics: Duet w/ Tatiyana Pt 2 - Saltamontes" tabindex="0" role="button"><span class="pl-name">07. The Classics: Duet w/ Tatiyana Pt 2 &mdash; Saltamontes</span></li>
+            <li data-video="tsmKt7yXSAU" data-title="Birthday Bash Pt 1 - Guru Bar" tabindex="0" role="button"><span class="pl-name">08. Birthday Bash Pt 1 &mdash; Guru Bar</span></li>
+            <li data-video="bXlf6LWi-aA" data-title="Birthday Bash Pt 2 - Guru Bar" tabindex="0" role="button"><span class="pl-name">09. Birthday Bash Pt 2 &mdash; Guru Bar</span></li>
+            <li data-video="cKVD4ls2Qic" data-title="Solo with Nylon - Unaccompanied at Saltamontes" tabindex="0" role="button"><span class="pl-name">10. Solo with Nylon &mdash; Unaccompanied at Saltamontes</span></li>
+            <li data-video="1yQ4YYLpLRA" data-title="The Classics w/ Karim, Tatiyana, Cliffy and Alex Yurushkin Pt 1" tabindex="0" role="button"><span class="pl-name">11. The Classics w/ Karim, Tatiyana, Cliffy &amp; Alex Yurushkin Pt 1</span></li>
+            <li data-video="c9TjLTc5KcA" data-title="The Classics w/ Karim, Tatiyana, Cliffy and Alex Yurushkin Pt 2" tabindex="0" role="button"><span class="pl-name">12. The Classics w/ Karim, Tatiyana, Cliffy &amp; Alex Yurushkin Pt 2</span></li>
+            <li data-video="U8jOlOFzcyc" data-title="Awake the Dead Sessions Pt 1" tabindex="0" role="button"><span class="pl-name">13. Awake the Dead Sessions Pt 1</span></li>
+            <li data-video="Db7UhRLFh6U" data-title="Awake the Dead Sessions Pt 2" tabindex="0" role="button"><span class="pl-name">14. Awake the Dead Sessions Pt 2</span></li>
+      </ul>
+      <div class="pl-foot">14 nights, filmed at MAP gigs. Tap a title to play it here &mdash; or watch the lot on <a href="https://youtube.com/@movingartsprogramgoa" target="_blank" rel="noopener noreferrer">our YouTube channel</a>.</div>
     </div>
 
     <footer>
@@ -310,6 +364,92 @@ function gtag(){dataLayer.push(arguments);}
   lightbox.addEventListener('click', function(e){
     if (e.target === lightbox) closeLightbox();
   });
+})();
+
+/* ---------- the tracklist ---------- */
+(function(){
+  "use strict";
+  function mapTrack(name, params){
+    try{ if(typeof gtag === "function") gtag("event", name, params || {}); }catch(err){}
+  }
+
+  var stage      = document.getElementById('elvisStage');
+  var facade     = document.getElementById('elvisFacade');
+  var facadeImg  = document.getElementById('elvisFacadeImg');
+  var nowPlaying = document.getElementById('elvisNowPlaying');
+  var items      = Array.prototype.slice.call(document.querySelectorAll('#elvisPlaylist li'));
+  if(!stage || !items.length) return;
+
+  var frame = null;   /* the iframe is only built once someone asks for a video */
+
+  function srcFor(id){
+    return "https://www.youtube-nocookie.com/embed/" + id +
+           "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+  }
+
+  function play(li){
+    var id    = li.getAttribute('data-video');
+    var label = li.querySelector('.pl-name').textContent.trim();
+
+    items.forEach(function(x){ x.classList.remove('active'); });
+    li.classList.add('active');
+    nowPlaying.textContent = label;
+
+    if(!frame){
+      if(facade && facade.parentNode) facade.parentNode.removeChild(facade);
+      frame = document.createElement('iframe');
+      frame.id = 'elvisFrame';
+      frame.setAttribute('title', 'Elvis Lobo live at Moving Arts Program');
+      frame.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen');
+      frame.setAttribute('allowfullscreen', '');
+      frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+      stage.appendChild(frame);
+    }
+    frame.src = srcFor(id);
+
+    mapTrack("song_play", {series: "boss_den", song: label, video_id: id, map_page: "elvis_lobo"});
+  }
+
+  items.forEach(function(li){
+    li.addEventListener('click', function(){ play(li); });
+    li.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); play(li); }
+    });
+  });
+
+  /* the still frame is just track 01 waiting to be asked */
+  if(facade){
+    facade.addEventListener('click', function(){
+      play(items[0]);
+    });
+  }
+  if(facadeImg){
+    facadeImg.addEventListener('error', function(){
+      facadeImg.style.display = 'none';
+    });
+  }
+})();
+
+/* ---------- one delegated listener for everything else worth counting ---------- */
+(function(){
+  "use strict";
+  function mapTrack(name, params){
+    try{ if(typeof gtag === "function") gtag("event", name, params || {}); }catch(err){}
+  }
+  document.addEventListener('click', function(e){
+    var el = e.target.closest ? e.target.closest('a, .orbit-satellite') : null;
+    if(!el) return;
+    if(el.classList && el.classList.contains('orbit-satellite')){
+      mapTrack("photo_open", {map_page: "elvis_lobo"});
+    } else if(el.tagName === 'A' && el.getAttribute('href')){
+      var href = el.getAttribute('href');
+      if(href.charAt(0) === '/' || href.indexOf('movingartsprogram.com') > -1){
+        mapTrack("internal_click", {link_url: href, map_page: "elvis_lobo"});
+      } else {
+        mapTrack("outbound_click", {link_url: href, label: (el.textContent||"").trim().slice(0,60), map_page: "elvis_lobo"});
+      }
+    }
+  }, true);
 })();
 </script>
 </body>
