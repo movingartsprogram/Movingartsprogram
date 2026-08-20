@@ -418,9 +418,7 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 .wa-pl-list li.active .pl-dur{color:#cfe;}
 /* OUR PROGRAMS keeps the arcade face (5 short names)… */
 #waPlaylist li .pl-name{font-family:'Press Start 2P',monospace;font-size:9px;}
-/* …the 14 long Elvis titles get the readable terminal face */
-#bossPlaylist li{font-family:'VT323',monospace;font-size:15px;padding:4px 8px;}
-#bossPlaylist li.active .pl-name::before{content:'► ';}
+/* …the long Unaccompanied titles get the readable terminal face */
 #unaccompaniedPlaylist li{font-family:'VT323',monospace;font-size:15px;padding:4px 8px;}
 #unaccompaniedPlaylist li.active .pl-name::before{content:'► ';}
 
@@ -991,29 +989,9 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
         <h2 class="page-title">THE BOSS DEN</h2>
         <p class="page-kicker">Elvis Lobo aka "The Boss"</p>
         <p>Moving Arts Program is incredibly proud to have collaborated with the magician himself, Elvis Lobo — a true Goan legend whose genre-blending guitar work has been the beating heart of the Goa music scene for decades.</p>
-        <a class="cta" href="https://movingartsprogram.com/elvis-lobo/">ELVIS'S FULL STORY &amp; ARCHIVE →</a>
-        <p>Explore his live performances below:</p>
-
-        <div class="wa-playlist">
-          <div class="wa-pl-title">ELVIS LOBO — LIVE AT MAP</div>
-          <ul class="wa-pl-list" id="bossPlaylist">
-            <li class="active" data-video="caYwXm5Rvwk" tabindex="0"><span class="pl-name">01. The Dark Knight Sessions</span></li>
-            <li data-video="u1aKt3anCXo" tabindex="0"><span class="pl-name">02. Going Down (Jeff Beck Improvisation)</span></li>
-            <li data-video="CUMDop6xo2I" tabindex="0"><span class="pl-name">03. The Limited Edition Promo</span></li>
-            <li data-video="F2bAsne_GqI" tabindex="0"><span class="pl-name">04. This Is Jazz Part 1 — Silva Heritage</span></li>
-            <li data-video="POBsfozeKFQ" tabindex="0"><span class="pl-name">05. This Is Jazz Part 2 — Silva Heritage</span></li>
-            <li data-video="eyu928pd124" tabindex="0"><span class="pl-name">06. The Classics: Duet w/ Tatiyana Pt 1 — Saltamontes</span></li>
-            <li data-video="uM-UgW_8Xrw" tabindex="0"><span class="pl-name">07. The Classics: Duet w/ Tatiyana Pt 2 — Saltamontes</span></li>
-            <li data-video="tsmKt7yXSAU" tabindex="0"><span class="pl-name">08. Birthday Bash Part 1 — Guru Bar</span></li>
-            <li data-video="bXlf6LWi-aA" tabindex="0"><span class="pl-name">09. Birthday Bash Part 2 — Guru Bar</span></li>
-            <li data-video="cKVD4ls2Qic" tabindex="0"><span class="pl-name">10. Solo with Nylon — Unaccompanied at Saltamontes</span></li>
-            <li data-video="1yQ4YYLpLRA" tabindex="0"><span class="pl-name">11. The Classics w/ Karim, Tatiyana, Cliffy &amp; Alex Yurushkin Pt 1</span></li>
-            <li data-video="c9TjLTc5KcA" tabindex="0"><span class="pl-name">12. The Classics w/ Karim, Tatiyana, Cliffy &amp; Alex Yurushkin Pt 2</span></li>
-            <li data-video="U8jOlOFzcyc" tabindex="0"><span class="pl-name">13. Awake the Dead Sessions Part 1</span></li>
-            <li data-video="Db7UhRLFh6U" tabindex="0"><span class="pl-name">14. Awake the Dead Sessions Part 2</span></li>
-          </ul>
-        </div>
-        <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
+        <p>His full story, the photo album and every live performance we caught on film live in one place.</p>
+        <a class="cta" href="https://movingartsprogram.com/elvis-lobo/">ELVIS'S FULL STORY &amp; ARCHIVE &rarr;</a>
+        <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">&#8962;</button></div>
       </div>
 
       <div class="page" id="page-about">
@@ -1263,7 +1241,7 @@ const titles = {
   outcasts:"05. THE OUTCASTS",
   vinyl:"06. VINYL RESURRECTION WITH BOBBY",
   money:"SUPPORT THE MUSIC",
-  boss:"01. THE DARK KNIGHT SESSIONS",
+  boss:"THE BOSS DEN",
   about:"ABOUT US",
   privategigs:"CUSTOMISED PRIVATE GIGS"
 };
@@ -1535,10 +1513,7 @@ function showPage(id){
   const activeLi = document.querySelector('#waPlaylist li[data-page="'+id+'"]');
   if(activeLi) activeLi.classList.add("active");
 
-  if(id === "boss"){
-    const activeTrack = document.querySelector('#bossPlaylist li.active .pl-name');
-    document.getElementById("waTrackTitle").textContent = activeTrack ? activeTrack.textContent : titles.boss;
-  } else if(id === "unaccompanied"){
+  if(id === "unaccompanied"){
     const activeTrack = document.querySelector('#unaccompaniedPlaylist li.active .pl-name');
     document.getElementById("waTrackTitle").textContent = activeTrack ? activeTrack.textContent : titles.unaccompanied;
   } else {
@@ -1584,27 +1559,6 @@ document.querySelectorAll("#waPlaylist li").forEach(li=>{
   li.addEventListener("click", ()=>showPage(li.dataset.page));
 });
 
-/* ---------- Boss Den tracklist ---------- */
-const bossLis = Array.from(document.querySelectorAll("#bossPlaylist li"));
-function playBossTrack(li){
-  eventVideos.boss = li.dataset.video;
-  bossLis.forEach(x=>x.classList.remove("active"));
-  li.classList.add("active");
-  document.getElementById("waTrackTitle").textContent = li.querySelector('.pl-name').textContent;
-  mapTrack("song_play", {series: "boss_den", song: li.querySelector('.pl-name').textContent.trim(), video_id: li.dataset.video});
-  loadEventMedia("boss", true);   /* user picked a song — play with sound */
-  setMediaMode("video");
-  setPlayGlyph(true);
-}
-bossLis.forEach(li=>{
-  li.addEventListener("click", ()=>playBossTrack(li));
-});
-function stepBossTrack(dir){
-  const idx = bossLis.findIndex(li=>li.classList.contains('active'));
-  const next = (idx + dir + bossLis.length) % bossLis.length;
-  playBossTrack(bossLis[next]);
-}
-
 /* ---------- Unaccompanied tracklist ---------- */
 const unaccompaniedLis = Array.from(document.querySelectorAll("#unaccompaniedPlaylist li"));
 function playUnaccompaniedTrack(li){
@@ -1627,15 +1581,13 @@ function stepUnaccompaniedTrack(dir){
 }
 
 /* ◄◄ / ►► always move you through the site — pages are the tracks.
-   On the Boss Den and Unaccompanied they step through that page's
-   tracklist instead, matching the playlist on screen. */
+   On Unaccompanied they step through that page's tracklist
+   instead, matching the playlist on screen. */
 function nextPage(forcePage){
-  if(current === 'boss' && !forcePage){ stepBossTrack(1); return; }
   if(current === 'unaccompanied' && !forcePage){ stepUnaccompaniedTrack(1); return; }
   showPage(order[(order.indexOf(current)+1) % order.length]);
 }
 function prevPage(forcePage){
-  if(current === 'boss' && !forcePage){ stepBossTrack(-1); return; }
   if(current === 'unaccompanied' && !forcePage){ stepUnaccompaniedTrack(-1); return; }
   showPage(order[(order.indexOf(current)-1+order.length) % order.length]);
 }
@@ -1837,8 +1789,6 @@ document.addEventListener('keydown', e=>{
     dblBtn.setAttribute('aria-pressed', on);
   }
   dblBtn.addEventListener('click', toggleDouble);
-  const clutterD = document.getElementById('clutterD');
-  if(clutterD) clutterD.addEventListener('click', toggleDouble);
 
   const titleEl = document.getElementById('waTrackTitle');
   let flashTimer = null;
