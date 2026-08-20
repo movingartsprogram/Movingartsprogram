@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d0d12">
+<title>Policies — Moving Arts Program, Goa</title>
+<meta name="description" content="Terms, privacy, cancellation and refunds, pricing, ticket delivery and contact details for Moving Arts Program, a live music platform in Benaulim, South Goa.">
+<link rel="canonical" href="https://movingartsprogram.com/policies/">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Moving Arts Program">
+<meta property="og:title" content="Policies — Moving Arts Program">
+<meta property="og:description" content="Terms, privacy, refunds, pricing, ticket delivery and contact details.">
+<meta property="og:url" content="https://movingartsprogram.com/policies/">
+<meta property="og:image" content="https://movingartsprogram.com/map-og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Oswald:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- GA4 — same property as the homepage and the booking page.
+     This page DOES send its own page_view (the homepage suppresses it
+     because it fires one per virtual page instead). -->
+<script>
+window.MAP_GA_ID = "G-JMXNSRJPDD";
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+(function(){
+  if(!/^G-[A-Z0-9]{6,}$/.test(window.MAP_GA_ID)) return;
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + window.MAP_GA_ID;
+  document.head.appendChild(s);
+  gtag("js", new Date());
+  gtag("config", window.MAP_GA_ID, {transport_type:"beacon"});
+})();
+function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(e){} }
+</script>
+
+<style>
+:root{
+  --phos:#7CFC00;
+  --phos-dim:#2c6a2c;
+  --phos-line:#173d17;
+  --lcd:#0a1f0a;
+  --lcd-deep:#051105;
+  --mag:#ff2fb0;
+  --vu:#ffe135;
+  --gold:#c9a648;
+  --ch-hi:#525260;
+  --ch:#3a3a44;
+  --ch-lo:#26262e;
+  --line:#0b0b0f;
+  --r-lg:30px; --r-md:18px; --r-sm:12px; --r-pill:999px;
+  --clay-drop:0 14px 28px rgba(0,0,0,.5), 0 4px 10px rgba(0,0,0,.35);
+  --clay-face:inset 0 6px 10px rgba(255,255,255,.16), inset 0 -9px 16px rgba(0,0,0,.45);
+  --clay-in:inset 0 7px 16px rgba(0,0,0,.65), inset 0 -3px 8px rgba(255,255,255,.06);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:18px;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation:none !important;transition:none !important;}
+}
+body{
+  margin:0;padding:18px 12px 40px;
+  background:#0d0d12;
+  font-family:'VT323',monospace;
+  color:#cfe9cf;
+  -webkit-text-size-adjust:100%;
+}
+
+/* The chassis — same steel shell as the homepage, so this page reads
+   as part of the same machine rather than a legal afterthought. */
+.shell{
+  max-width:760px;margin:0 auto;
+  background:linear-gradient(180deg,var(--ch-hi),var(--ch),var(--ch-lo));
+  border:1px solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--clay-drop),var(--clay-face);
+  padding:16px;
+}
+.titlebar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:linear-gradient(180deg,#1a1a22,#0f0f16);
+  border:1px solid var(--line);border-radius:var(--r-md);
+  padding:10px 14px;margin-bottom:14px;
+  box-shadow:var(--clay-in);
+}
+.titlebar .tb-name{
+  font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.6;
+  color:var(--phos);text-shadow:0 0 8px rgba(124,252,0,.55);
+}
+.tb-home{
+  font-family:'VT323',monospace;font-size:19px;text-decoration:none;
+  color:#0d0d12;background:linear-gradient(180deg,var(--phos),#5bc400);
+  border:1px solid var(--line);border-radius:var(--r-pill);
+  padding:2px 14px;white-space:nowrap;
+  box-shadow:inset 0 2px 3px rgba(255,255,255,.35),0 2px 5px rgba(0,0,0,.5);
+}
+.tb-home:hover{filter:brightness(1.12);}
+.tb-home:focus-visible{outline:2px solid var(--vu);outline-offset:3px;}
+
+/* The LCD — every word of policy sits on the green screen. */
+.lcd{
+  background:radial-gradient(120% 100% at 50% 0%,var(--lcd),var(--lcd-deep));
+  border:1px solid var(--phos-line);border-radius:var(--r-md);
+  box-shadow:var(--clay-in);
+  padding:18px 18px 22px;
+}
+h1{
+  font-family:'Oswald',sans-serif;font-weight:600;
+  font-size:clamp(20px,5vw,28px);letter-spacing:.02em;line-height:1.1;
+  color:var(--phos);margin:0 0 3px;text-transform:uppercase;
+  text-shadow:0 0 10px rgba(124,252,0,.35);
+}
+.kicker{color:#8fc98f;font-size:18px;line-height:1.25;margin:0 0 2px;}
+.updated{color:var(--phos-dim);font-size:15px;line-height:1.25;margin:0 0 2px;}
+
+/* Jump strip — this page is six documents in one, so an index is
+   information, not decoration. Razorpay needs a distinct link per policy. */
+.jump{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;
+  padding:9px 0 10px;margin-bottom:2px;
+  border-top:1px dashed var(--phos-line);
+  border-bottom:1px dashed var(--phos-line);
+}
+.jump a{
+  font-size:16px;line-height:1.15;text-decoration:none;text-align:center;
+  color:var(--phos);border:1px solid var(--phos-line);
+  border-radius:var(--r-sm);padding:5px 6px;
+  background:rgba(124,252,0,.05);
+  overflow-wrap:anywhere;hyphens:none;
+}
+.jump a:hover{background:rgba(124,252,0,.14);}
+.jump a:focus-visible{outline:2px solid var(--phos);outline-offset:2px;}
+
+section{padding-top:16px;}
+section:first-of-type{padding-top:12px;}
+h2{
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(9px,2.4vw,12px);line-height:1.7;
+  color:var(--vu);margin:0 0 8px;text-shadow:0 0 8px rgba(255,225,53,.3);
+  overflow-wrap:anywhere;
+}
+h3{
+  font-family:'Oswald',sans-serif;font-weight:400;text-transform:uppercase;
+  letter-spacing:.06em;font-size:14px;color:var(--phos);
+  margin:12px 0 2px;
+}
+p,li{font-size:18px;line-height:1.4;margin:0 0 7px;color:#cfe9cf;}
+ul{margin:0 0 7px;padding-left:19px;}
+li{margin-bottom:2px;}
+li::marker{color:var(--phos-dim);}
+a{color:var(--phos);}
+a:focus-visible{outline:2px solid var(--phos);outline-offset:2px;}
+strong{color:var(--phos);font-weight:normal;}
+
+/* The one loud element: the refund promise. It is the single thing a
+   worried guest is scanning for, so it gets the magenta treatment and
+   nothing else on the page competes with it. */
+.headline-box{
+  border:1px solid var(--mag);border-radius:var(--r-sm);
+  background:rgba(255,47,176,.07);
+  padding:10px 12px;margin:8px 0 10px;
+}
+.headline-box p{margin:0;color:#ffd7ef;}
+.headline-box p + p{margin-top:8px;}
+
+.note{
+  border-left:3px solid var(--phos-line);
+  padding:2px 0 2px 10px;margin:8px 0;
+  color:#a8cba8;font-size:17px;line-height:1.4;
+}
+dl{margin:0;}
+dt{color:var(--phos);font-size:17px;line-height:1.3;margin-top:8px;}
+dd{margin:0;font-size:18px;line-height:1.4;color:#cfe9cf;}
+
+.foot{
+  margin-top:20px;padding-top:12px;
+  border-top:1px dashed var(--phos-line);
+  color:var(--phos-dim);font-size:16px;line-height:1.45;
+}
+@media (max-width:480px){
+  body{padding:8px 6px 24px;}
+  .shell{padding:8px;border-radius:var(--r-md);}
+  .lcd{padding:12px 11px 14px;}
+  .titlebar{padding:8px 10px;margin-bottom:10px;}
+  .titlebar .tb-name{font-size:9px;}
+}
+/* Wider screens: two columns for the contact details, so the page
+   doesn't run as one long thin ribbon on a laptop. */
+@media (min-width:620px){
+  #contact dl{
+    display:grid;grid-template-columns:auto 1fr;
+    column-gap:20px;row-gap:6px;align-items:baseline;
+  }
+  #contact dt{margin-top:0;}
+  .jump{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="titlebar">
+    <div class="tb-name">MAP &middot; POLICIES</div>
+    <a class="tb-home" href="/" onclick="mapTrack('policies_home_click')">&#8962; HOME</a>
+  </div>
+
+  <div class="lcd">
+
+    <h1>Policies</h1>
+    <p class="kicker">The plain-English version. No small print anywhere else.</p>
+    <p class="updated">Moving Arts Program &middot; Benaulim, South Goa &middot; Last updated 20 August 2026</p>
+
+    <nav class="jump" aria-label="Jump to a section">
+      <a href="#terms">Terms</a>
+      <a href="#refunds">Cancellation &amp; Refunds</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#delivery">Ticket Delivery</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- ============ TERMS ============ -->
+    <section id="terms">
+      <h2>TERMS &amp; CONDITIONS</h2>
+
+      <p>Moving Arts Program ("MAP", "we") is a sole proprietorship registered in Goa, India, run by Prashant Kumar. Udyam registration <strong>UDYAM-GA-02-0040677</strong>. We curate and produce live music events in Goa.</p>
+
+      <p>By booking a seat through this website you agree to what follows.</p>
+
+      <h3>What you are buying</h3>
+      <p>A seat at a specific live music event, on a specific date, at a specific venue. Every one of those details is shown to you on the booking page before you pay.</p>
+
+      <h3>Where your money goes</h3>
+      <p>MAP is a pro bono initiative. Payments made here go to the artists and the volunteers who make the event happen. MAP takes no cut. We call it art contribution — music support money.</p>
+
+      <h3>Your booking</h3>
+      <ul>
+        <li>A booking is confirmed only once payment is verified. Until then the seats are held temporarily and may be released.</li>
+        <li>Your ticket carries a booking reference and a QR code. It is valid for one entry and is scanned once at the door.</li>
+        <li>Please bring the ticket on your phone or printed. If neither is possible, the name and mobile number on the booking will do.</li>
+        <li>Tickets are for the named guest and their party. Please don't resell them.</li>
+      </ul>
+
+      <h3>At the venue</h3>
+      <ul>
+        <li>Venues set their own rules on age, entry and conduct. Where an event is 18+ or 21+, that will be stated on the booking page.</li>
+        <li>Right of admission is reserved. Anyone behaving in a way that endangers or seriously disrupts other guests, the artists or the venue may be asked to leave, without a refund.</li>
+        <li>Please arrive in good time. Seats are not held past the start of the performance on a busy night.</li>
+        <li>Photography for your own memories is welcome. Professional recording needs permission from us and the artists.</li>
+      </ul>
+
+      <h3>Changes we may have to make</h3>
+      <p>Live music is live. Line-ups, running order and set times can change, and occasionally a venue or start time changes. Where that happens we will tell you as early as we can, on the mobile number and email address you gave us. A change of line-up or running order is not on its own a cancellation.</p>
+
+      <h3>Our responsibility</h3>
+      <p>We take reasonable care to run safe, well-organised events. We are not responsible for personal belongings, for travel or accommodation you book around an event, or for circumstances genuinely outside our control — weather, power failure, illness, official restrictions or venue closure. Where an event cannot go ahead, the refund terms below apply.</p>
+
+      <h3>Governing law</h3>
+      <p>These terms are governed by the laws of India. Any dispute falls to the courts of Goa.</p>
+    </section>
+
+    <!-- ============ REFUNDS ============ -->
+    <section id="refunds">
+      <h2>CANCELLATION &amp; REFUNDS</h2>
+
+      <div class="headline-box">
+        <p><strong>If MAP cancels an event, you get every rupee back — in full, within 7 working days.</strong></p>
+        <p>If you simply can't make it, we can't refund you. Your seat was held, the artists were booked, and the money is already committed.</p>
+      </div>
+
+      <h3>When you get a refund</h3>
+      <ul>
+        <li><strong>We cancel the event.</strong> Full refund, automatically. You don't have to ask.</li>
+        <li><strong>We postpone the event and the new date doesn't suit you.</strong> Tell us within 7 days of the new date being announced and we'll refund you in full.</li>
+        <li><strong>You were charged twice, or charged for a booking that didn't complete.</strong> Full refund of the extra amount. Write to us and we'll sort it.</li>
+        <li><strong>You paid but no valid ticket was issued.</strong> Full refund.</li>
+      </ul>
+
+      <h3>When you don't</h3>
+      <ul>
+        <li>A change of plans, a change of mind, or not being able to travel.</li>
+        <li>Not turning up on the night.</li>
+        <li>Arriving after the event has finished, or leaving early.</li>
+        <li>Being refused entry or asked to leave for the reasons set out in the terms above.</li>
+        <li>A change of line-up, running order or set times where the event still goes ahead.</li>
+      </ul>
+
+      <h3>How the money reaches you</h3>
+      <p>Refunds are processed within <strong>7 working days</strong> of the cancellation being announced, or of us agreeing the refund.</p>
+      <ul>
+        <li><strong>If you paid through the payment window</strong> — card, UPI, net banking or wallet — the refund goes back automatically to that same account or card. Your bank then takes its own time to show it, usually 3&ndash;7 working days on top.</li>
+        <li><strong>If you paid by UPI manually</strong> — by scanning our QR or paying to our mobile number — we will refund you by UPI, GPay or bank transfer. We'll ask you which you prefer and confirm the details with you first.</li>
+      </ul>
+
+      <div class="note">We never ask for your card number, CVV, PIN, OTP or UPI PIN — not for a refund, not for anything. Anyone who does is not us.</div>
+
+      <h3>To ask about a refund</h3>
+      <p>Email <a href="mailto:movingartsp@gmail.com">movingartsp@gmail.com</a> or WhatsApp <a href="https://wa.me/919849690077">+91 98496 90077</a> with your booking reference. We reply within 2 working days.</p>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section id="pricing">
+      <h2>PRICING</h2>
+
+      <p>All prices are in <strong>Indian Rupees (INR / &#8377;)</strong>.</p>
+
+      <ul>
+        <li>Tickets are priced <strong>per seat</strong>. The price for the current event is shown in full on the <a href="/gig-bookings/">booking page</a> before you enter any payment details.</li>
+        <li><strong>The price you see is the price you pay.</strong> No booking fee, no convenience fee, no service charge, no payment-gateway surcharge added at checkout.</li>
+        <li>Ticket prices for MAP events are typically in the range of <strong>&#8377;500 per seat</strong>, and vary by event.</li>
+        <li>The total for your booking &mdash; price per seat multiplied by the number of seats &mdash; is shown before payment and again on your ticket.</li>
+        <li>Food and drink at the venue are separate, priced by the venue, and are not included in the ticket.</li>
+      </ul>
+
+      <p>Prices are set per event and may differ between events. The booking page is always the authority on the current price.</p>
+    </section>
+
+    <!-- ============ DELIVERY ============ -->
+    <section id="delivery">
+      <h2>TICKET DELIVERY</h2>
+
+      <p><strong>Nothing is shipped. There are no physical goods and no delivery charges.</strong> MAP sells admission to live events, delivered electronically.</p>
+
+      <ul>
+        <li>Your ticket appears <strong>on screen immediately</strong> once payment is verified — usually within a few seconds.</li>
+        <li>If you gave an email address, the same ticket is <strong>emailed to you at once</strong>. Email is optional; you don't need it to attend.</li>
+        <li>You can print the ticket from that screen if you'd rather carry paper.</li>
+        <li>Your ticket carries a booking reference and a QR code, scanned once on entry.</li>
+      </ul>
+
+      <p>If your ticket doesn't appear, or the email doesn't arrive, don't book again — WhatsApp <a href="https://wa.me/919849690077">+91 98496 90077</a> with your name and mobile number and we'll find your booking and re-send it.</p>
+
+      <p>Service area: our events are held in Goa, India. Anyone can book from anywhere.</p>
+    </section>
+
+    <!-- ============ PRIVACY ============ -->
+    <section id="privacy">
+      <h2>PRIVACY POLICY</h2>
+
+      <p>We collect as little as we can get away with, and we don't sell any of it.</p>
+
+      <h3>What we collect</h3>
+      <dl>
+        <dt>Your name and mobile number</dt>
+        <dd>Required, so we can identify your booking at the door and reach you if the event changes.</dd>
+        <dt>Your email address</dt>
+        <dd>Optional. Used only to send your ticket and, if necessary, event updates.</dd>
+        <dt>Your seating request</dt>
+        <dd>Optional, free text. Used to seat you sensibly.</dd>
+        <dt>Payment information</dt>
+        <dd><strong>We never see or store your card, UPI or bank details.</strong> Payments are handled entirely by Razorpay, a PCI-DSS compliant payment provider. We receive only a confirmation that a payment succeeded, plus a payment reference.</dd>
+        <dt>Website usage</dt>
+        <dd>Google Analytics tells us anonymously how many people visit, roughly where from, and which pages get used. We cannot identify you from it.</dd>
+      </dl>
+
+      <h3>Why we hold it, and for how long</h3>
+      <p>Booking details are held to run the event, to admit you at the door, and to keep an accurate record of what was paid. We keep booking records for as long as we need them for accounting and tax purposes, and no longer than the law requires.</p>
+
+      <h3>Who can see it</h3>
+      <ul>
+        <li>MAP — Prashant Kumar, and the volunteer on the door on the night.</li>
+        <li><strong>Razorpay</strong>, for processing your payment.</li>
+        <li><strong>Google</strong>, whose Sheets and Workspace tools store the booking record and send your ticket email.</li>
+      </ul>
+      <p>That is the whole list. We do not sell, rent, trade or share your details with anyone else, and we do not use your number for marketing you didn't ask for.</p>
+
+      <h3>Security</h3>
+      <p>The site runs over HTTPS. The booking record is held in a private Google account and is never shared publicly. Payment credentials never touch our systems.</p>
+
+      <h3>Your choices</h3>
+      <p>You can ask us what we hold about you, ask us to correct it, or ask us to delete it, by writing to <a href="mailto:movingartsp@gmail.com">movingartsp@gmail.com</a>. We'll act within 30 days. Where a record is needed for accounting, we'll tell you and keep only that.</p>
+
+      <h3>Children</h3>
+      <p>Bookings should be made by someone aged 18 or over. We don't knowingly collect information from children.</p>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact">
+      <h2>CONTACT US</h2>
+
+      <dl>
+        <dt>Business name</dt>
+        <dd>Moving Arts Program (sole proprietorship)</dd>
+        <dt>Proprietor</dt>
+        <dd>Prashant Kumar</dd>
+        <dt>Udyam / MSME registration</dt>
+        <dd>UDYAM-GA-02-0040677</dd>
+        <dt>Registered address</dt>
+        <dd>02, Celebrity Kingdom Palace, Behind Laxmi Temple,<br>Benaulim, Margao, South Goa, Goa 403716, India<br>
+        <a href="https://maps.app.goo.gl/KZ19W3V3oH6jdVAt5" target="_blank" rel="noopener noreferrer" onclick="mapTrack('policies_map_click')">View on Google Maps</a></dd>
+        <dt>Email</dt>
+        <dd><a href="mailto:movingartsp@gmail.com" onclick="mapTrack('email_click',{location:'policies'})">movingartsp@gmail.com</a></dd>
+        <dt>Phone / WhatsApp</dt>
+        <dd><a href="https://wa.me/919849690077" onclick="mapTrack('policies_whatsapp')">+91 98496 90077</a></dd>
+        <dt>Hours</dt>
+        <dd>Monday to Saturday, 10:00 to 19:00 IST</dd>
+        <dt>Response time</dt>
+        <dd>Within 2 working days. Usually the same day.</dd>
+      </dl>
+
+      <p>For anything about a booking, please include your booking reference — it looks like <strong>SHOOK-QFM</strong> and is on your ticket.</p>
+    </section>
+
+    <div class="foot">
+      Moving Arts Program &middot; Benaulim, South Goa, India<br>
+      Artists get paid. MAP keeps nothing.<br><br>
+      <a href="/">Home</a> &middot; <a href="/gig-bookings/">Book a gig</a> &middot; <a href="/elvis-lobo/">The Boss Den</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
