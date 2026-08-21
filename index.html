@@ -561,12 +561,20 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 }
 .wa-embed-wrap{padding:10px;background:#000;border-radius:14px;box-shadow:var(--clay-in-sm);}
 .wa-embed-wrap iframe{display:block;border:0;border-radius:10px;}
-.upi-qr{width:170px;height:170px;display:block;margin:12px auto;border-radius:18px;background:#fff;padding:8px;box-shadow:0 8px 16px rgba(0,0,0,.5), 0 3px 6px rgba(0,0,0,.35);}
-.upi-id{
-  font-family:'VT323',monospace;font-size:15px;letter-spacing:.5px;color:var(--phos);
-  background:none;border:1.5px dashed #1e5c1e;border-radius:var(--r-pill);padding:4px 12px;cursor:pointer;
+/* ---------- Razorpay donate link + trust strip ---------- */
+.donate .cta{margin-top:14px;}
+.rzp-note{font-family:'VT323',monospace;font-size:14px;color:#8fae8f;margin-top:6px;}
+.rzp-trust{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  margin:12px auto 2px;padding:7px 14px;
+  background:rgba(51,149,255,.07);border-radius:var(--r-pill);
+  box-shadow:inset 0 0 0 1.5px rgba(51,149,255,.28);
+  font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1.2px;color:#8fa8c8;
 }
-.upi-id:active{background:#0d2f0d;}
+.rzp-trust svg{flex:0 0 auto;display:block;}
+.rzp-trust .rzp-mark{font-size:11px;letter-spacing:.2px;color:#3395FF;font-weight:bold;}
+.rzp-methods{font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1.2px;
+  color:#5f7a5f;margin-top:7px;}
 
 /* ---------- a11y & motion ---------- */
 button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid rgba(124,252,0,.8);outline-offset:3px;}
@@ -1033,10 +1041,28 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
         <h3>DONATE</h3>
         <div class="donate">
           MAP is a pro bono initiative — artists get paid, MAP keeps nothing. Your contribution goes straight to fees, venues, and gear.<br><br>
-          <img class="upi-qr" src="data:image/png;base64,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" alt="UPI QR code for donating to MAP">
-          <button type="button" class="upi-id" id="upiCopy" title="Tap to copy">UPI ID: zimbo77-7@okhdfcbank</button>
-          <div style="font-size:12px;color:#8fae8f;margin-top:4px;">Scan with any UPI app · tap the ID to copy</div>
-          <a class="cta" href="upi://pay?pa=zimbo77-7@okhdfcbank&pn=MAP%20support&cu=INR&tn=Support%20MAP">DONATE NOW — PAY VIA UPI</a>
+
+          <!-- ═══ RAZORPAY — ART CONTRIBUTION LINK ══════════════════════
+               Points at MAP's razorpay.me handle. Public and safe to sit
+               in the page — it is not a key and not a secret.
+               ⚠ This link is for art contributions ONLY. Never send it to
+               someone buying seats — a ticket paid here creates no booking
+               row, holds no seat and sends no ticket. Seats go through
+               /gig-bookings/ and nowhere else.
+               ═══════════════════════════════════════════════════════════ -->
+          <a class="cta" id="donateBtn"
+             href="https://razorpay.me/@movingartsprogram"
+             target="_blank" rel="noopener noreferrer">ART CONTRIBUTION</a>
+          <div class="rzp-note">Give any amount you like. Opens in a new tab.</div>
+
+          <div class="rzp-trust">
+            <svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true">
+              <path d="M5.5 0.5 A3 3 0 0 0 2.5 3.5 V5 H1.5 V12.5 H9.5 V5 H8.5 V3.5 A3 3 0 0 0 5.5 0.5 Z M5.5 2 A1.6 1.6 0 0 1 7.1 3.5 V5 H3.9 V3.5 A1.6 1.6 0 0 1 5.5 2 Z"
+                    fill="none" stroke="#3395FF" stroke-width="1.1" stroke-linejoin="round"/>
+            </svg>
+            <span>PAYMENTS SECURED BY</span><span class="rzp-mark">Razorpay</span>
+          </div>
+          <div class="rzp-methods">UPI · CARDS · NETBANKING · WALLETS</div>
         </div>
         <div class="page-home-end"><button type="button" class="wa-btn" onclick="showPage('home')" aria-label="Home" title="Home">⌂</button></div>
       </div>
@@ -1756,22 +1782,6 @@ document.addEventListener('keydown', e=>{
   }
 });
 
-/* ---------- UPI: tap the ID to copy ---------- */
-(function(){
-  const btn = document.getElementById('upiCopy');
-  if(!btn) return;
-  const original = btn.textContent;
-  btn.addEventListener('click', async ()=>{
-    try{
-      await navigator.clipboard.writeText('zimbo77-7@okhdfcbank');
-      btn.textContent = 'COPIED ✓ zimbo77-7@okhdfcbank';
-    }catch(err){
-      btn.textContent = 'LONG-PRESS TO COPY: zimbo77-7@okhdfcbank';
-    }
-    setTimeout(()=>{ btn.textContent = original; }, 1800);
-  });
-})();
-
 /* ---------- titlebar: every control does something ---------- */
 (function(){
   const main = document.getElementById('waMain');
@@ -1808,10 +1818,10 @@ document.addEventListener("click", function(e){
   const txt = (el.textContent || "").trim().slice(0, 60);
   if(el.matches(".wa-chip")){
     mapTrack("social_click", {platform: el.title || txt, link_url: el.href || "", map_page: current});
+  } else if(el.id === "donateBtn"){
+    mapTrack("donate_click", {map_page: current});
   } else if(el.matches(".cta")){
     mapTrack("cta_click", {label: txt, link_url: el.href || "", map_page: current});
-  } else if(el.matches(".upi-id")){
-    mapTrack("donate_upi_copy", {map_page: current});
   } else if(el.matches(".poster img")){
     mapTrack("poster_zoom", {map_page: current});
   } else if(el.matches(".page-home-end .wa-btn")){
