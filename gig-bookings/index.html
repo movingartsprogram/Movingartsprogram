@@ -188,6 +188,19 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .booking-id .amt{font-family:'VT323',monospace;font-size:20px;color:var(--vu);}
 .small{font-size:12px;color:#8fae8f;margin-top:6px;}
 
+/* ---------- Razorpay trust strip ---------- */
+.rzp-trust{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  margin:12px auto 2px;padding:7px 14px;
+  background:rgba(51,149,255,.07);border-radius:var(--r-pill);
+  box-shadow:inset 0 0 0 1.5px rgba(51,149,255,.28);
+  font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1.2px;color:#8fa8c8;
+}
+.rzp-trust svg{flex:0 0 auto;display:block;}
+.rzp-trust .rzp-mark{font-size:11px;letter-spacing:.2px;color:#3395FF;font-weight:bold;}
+.rzp-methods{font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1.2px;
+  color:#5f7a5f;text-align:center;margin-top:7px;}
+
 .ticket{
   background:linear-gradient(180deg,#101c10 0%, #070d07 100%);
   border-radius:var(--r-md);padding:16px;margin-top:6px;
@@ -404,6 +417,15 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 
           <button type="button" class="cta cta-block" id="submitBtn">CONFIRM BOOKING &amp; GET PAYMENT DETAILS</button>
           <p class="small">Your name and number are used only to manage this booking. We don't share them with anyone.</p>
+
+          <div class="rzp-trust">
+            <svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true">
+              <path d="M5.5 0.5 A3 3 0 0 0 2.5 3.5 V5 H1.5 V12.5 H9.5 V5 H8.5 V3.5 A3 3 0 0 0 5.5 0.5 Z M5.5 2 A1.6 1.6 0 0 1 7.1 3.5 V5 H3.9 V3.5 A1.6 1.6 0 0 1 5.5 2 Z"
+                    fill="none" stroke="#3395FF" stroke-width="1.1" stroke-linejoin="round"/>
+            </svg>
+            <span>PAYMENTS SECURED BY</span><span class="rzp-mark">Razorpay</span>
+          </div>
+          <div class="rzp-methods">UPI · CARDS · NETBANKING · WALLETS</div>
         </div>
 
         <!-- ═══ 5. CONFIRMATION + PAYMENT ═══ -->
@@ -425,6 +447,15 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 
             <p class="small" id="orderFailNote" hidden>Couldn't open the payment window just now. Please refresh this page and try again, or message us on WhatsApp and we'll sort your booking out personally.</p>
           </div>
+
+          <div class="rzp-trust">
+            <svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true">
+              <path d="M5.5 0.5 A3 3 0 0 0 2.5 3.5 V5 H1.5 V12.5 H9.5 V5 H8.5 V3.5 A3 3 0 0 0 5.5 0.5 Z M5.5 2 A1.6 1.6 0 0 1 7.1 3.5 V5 H3.9 V3.5 A1.6 1.6 0 0 1 5.5 2 Z"
+                    fill="none" stroke="#3395FF" stroke-width="1.1" stroke-linejoin="round"/>
+            </svg>
+            <span>PAYMENTS SECURED BY</span><span class="rzp-mark">Razorpay</span>
+          </div>
+          <div class="rzp-methods">UPI · CARDS · NETBANKING · WALLETS</div>
 
           <p class="small" id="seatNote"></p>
         </div>
@@ -476,10 +507,10 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
           <button type="button" class="cta cta-block cta-gold" id="printBtn">🎟&nbsp; PRINT / SAVE MY TICKET</button>
           <p class="small">On a phone, choose "Save as PDF" to keep it in your files.</p>
 
-          <p class="thanks-note">🎶 Thank you so much for supporting live music — booking your seat means the world to us.<br>Your ticket's on its way to your email now, and you can send it to us on WhatsApp too, just below.</p>
+          <p class="thanks-note" id="thanksNote">🎶 Thank you so much for supporting live music — booking your seat means the world to us.</p>
 
           <a class="cta cta-block cta-pink" id="waBtn2" href="#" target="_blank" rel="noopener noreferrer">SEND US THIS BOOKING ON WHATSAPP</a>
-          <p class="small">Sending it on WhatsApp gives us a second copy and speeds up confirmation.</p>
+          <p class="small" id="waNote">Sending it on WhatsApp gives us a second copy and speeds up confirmation.</p>
         </div>
 
         <!-- ═══ 6. BACK TO HOME ═══ -->
@@ -619,6 +650,7 @@ document.getElementById("submitBtn").addEventListener("click", function(){
   if(!SCRIPT_URL){
     /* PREVIEW MODE — nothing is saved anywhere */
     setTimeout(function(){
+      LAST.email = email;
       showConfirm(EVENT.code + "-001", seats, true, name, mobile);
     }, 500);
     return;
@@ -739,6 +771,49 @@ function showTicket(confirmed){
 
   buildShare();
   renderTicketQr();
+
+  /* ── The WhatsApp ticket copy ──────────────────────────────────
+     This used to be built only in showConfirm(), which never runs
+     when a payment goes through first time — so the button sat on
+     href="#" and did nothing for exactly the guests who had the
+     smoothest experience. It is built here instead, so it is always
+     ready by the time the ticket is on screen.
+
+     The message carries the whole ticket, not just a reference. A
+     guest who gave no email taps this, and the message they send
+     sits in their own WhatsApp thread as their copy — while giving
+     MAP a copy at the same time. It is not automated delivery
+     (that needs the WhatsApp Business API), but it is one tap and
+     it leaves the guest holding something.
+     ────────────────────────────────────────────────────────────── */
+  var waTicket =
+    "🎟 MY MAP TICKET\n" +
+    "Ref: " + (LAST.id || "—") + "\n" +
+    "Name: " + (LAST.name || "—") + "\n" +
+    "Seats: " + (LAST.seats || "—") + "\n" +
+    "Paid: ₹" + (LAST.amount || 0) + "\n\n" +
+    EVENT.name + "\n" +
+    EVENT.date + ", " + EVENT.time + "\n" +
+    EVENT.venue;
+
+  var waBtn = document.getElementById("waBtn2");
+  waBtn.href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waTicket);
+
+  /* No email given — WhatsApp is now this guest's only copy, so say so
+     plainly and make it the thing they act on. */
+  var hasEmail = !!(LAST.email && String(LAST.email).trim());
+  var thanks = document.getElementById("thanksNote");
+  var waNote = document.getElementById("waNote");
+
+  if(hasEmail){
+    thanks.innerHTML = "🎶 Thank you so much for supporting live music — booking your seat means the world to us.<br>Your ticket is on its way to your email right now.";
+    waBtn.textContent = "SEND US THIS BOOKING ON WHATSAPP";
+    waNote.textContent = "Sending it on WhatsApp gives us a second copy and speeds up confirmation.";
+  } else {
+    thanks.innerHTML = "🎶 Thank you so much for supporting live music — booking your seat means the world to us.<br>You didn't give us an email, so tap below and your ticket lands in your WhatsApp.";
+    waBtn.textContent = "📲 SEND MY TICKET TO WHATSAPP";
+    waNote.textContent = "Your ticket opens as a ready-made message. Send it, and it stays in your WhatsApp as your copy — we get one too.";
+  }
 
   document.getElementById("formWrap").style.display = "none";
   document.getElementById("confirmWrap").classList.remove("show");
