@@ -120,7 +120,7 @@ p{margin:0 0 12px;}
   100% { transform:translate(-50%,-50%) scale(1);      box-shadow:0 6px 14px rgba(0,0,0,.5), 0 0 10px 2px rgba(124,252,0,.25); }
 }
 .orbit-satellite{
-  --ox:0px; --oy:0px;
+  --ox:0px; --oy:0px; --orbit-scale:1;
   position:absolute;left:50%;top:50%;z-index:4;cursor:pointer;
   width:62px;height:62px;border-radius:50%;overflow:hidden;padding:0;background:none;
   border:1.5px solid var(--phos);box-shadow:0 4px 10px rgba(0,0,0,.5), 0 0 12px rgba(124,252,0,.55);
@@ -132,7 +132,7 @@ p{margin:0 0 12px;}
 .album-orbit:hover .orbit-satellite,
 .album-orbit.active .orbit-satellite{
   opacity:1;pointer-events:auto;
-  transform:translate(calc(-50% + var(--ox)), calc(-50% + var(--oy))) scale(1);
+  transform:translate(calc(-50% + var(--ox) * var(--orbit-scale)), calc(-50% + var(--oy) * var(--orbit-scale))) scale(1);
 }
 .album-hint{
   margin:14px 0 0;font-family:Tahoma,Arial,sans-serif;font-size:12px;font-weight:bold;
@@ -141,7 +141,7 @@ p{margin:0 0 12px;}
 @media (max-width:420px){
   .album-orbit{width:220px;height:220px;}
   .orbit-center{width:104px;height:104px;}
-  .orbit-satellite{width:52px;height:52px;}
+  .orbit-satellite{width:52px;height:52px; --orbit-scale:.846;}
 }
 
 /* ===== lightbox ===== */
