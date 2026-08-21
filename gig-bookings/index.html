@@ -186,46 +186,8 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .booking-id .idv{font-family:'Press Start 2P',monospace;font-size:16px;color:var(--phos);
   display:block;margin:10px 0 6px;text-shadow:0 0 10px rgba(124,252,0,.6);word-break:break-all;}
 .booking-id .amt{font-family:'VT323',monospace;font-size:20px;color:var(--vu);}
-.upi-qr{width:180px;height:180px;display:flex;align-items:center;justify-content:center;
-  margin:14px auto 8px;border-radius:18px;background:#fff;padding:8px;
-  box-shadow:0 8px 16px rgba(0,0,0,.5), 0 3px 6px rgba(0,0,0,.35);}
-.upi-qr img,.upi-qr canvas{width:100%;height:100%;display:block;}
-.upi-id{font-family:'VT323',monospace;font-size:15px;letter-spacing:.5px;color:var(--phos);
-  background:none;border:1.5px dashed #1e5c1e;border-radius:var(--r-pill);padding:4px 12px;cursor:pointer;}
-.upi-id:active{background:#0d2f0d;}
 .small{font-size:12px;color:#8fae8f;margin-top:6px;}
-.qr-toggle{
-  display:block;width:100%;margin-top:12px;padding:8px 10px;
-  font-family:Tahoma,Arial,sans-serif;font-size:9px;letter-spacing:.5px;
-  color:#8fae8f;background:none;border:none;border-radius:var(--r-pill);
-  box-shadow:inset 0 0 0 1.5px rgba(124,252,0,.18);cursor:pointer;
-}
-.qr-toggle:active{background:#0d2f0d;}
-.fallback{
-  margin-top:14px;padding:12px 12px 14px;border-radius:var(--r-md);
-  background:linear-gradient(180deg,#1b1608 0%, #0d0b04 100%);
-  box-shadow:inset 0 2px 3px rgba(255,225,53,.16), inset 0 -5px 8px rgba(0,0,0,.6);
-  text-align:left;
-}
-.fallback h4{font-family:Tahoma,Arial,sans-serif;font-size:9px;letter-spacing:1px;
-  color:var(--vu);margin:0 0 6px;text-align:center;}
-.fallback .fb-lead{font-family:'VT323',monospace;font-size:15px;line-height:1.25;
-  color:#c9c0a0;margin:0 0 10px;text-align:center;}
-.pay-copy{
-  display:block;width:100%;margin:0 0 6px;padding:7px 10px;
-  font-family:'VT323',monospace;font-size:16px;letter-spacing:.5px;color:var(--vu);
-  background:none;border:1.5px dashed #6b5a12;border-radius:var(--r-pill);
-  cursor:pointer;text-align:center;
-}
-.pay-copy:active{background:#241d05;}
-.pay-copy .pc-k{font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1px;
-  color:#8fae8f;display:block;margin-bottom:1px;}
-.fallback .fb-fields{font-family:'VT323',monospace;font-size:16px;line-height:1.35;
-  color:#c9c0a0;margin:8px 0 0;text-align:center;}
-.fallback .fb-fields b{color:var(--vu);}
-.cta-paid{color:#1a1400;background:linear-gradient(180deg,#fff29a 0%, var(--vu) 45%, #b39400 100%);
-  box-shadow:0 6px 12px rgba(255,225,53,.28), 0 4px 8px rgba(0,0,0,.4),
-             inset 0 2px 3px rgba(255,255,255,.55), inset 0 -4px 6px rgba(80,65,0,.32);}
+
 .ticket{
   background:linear-gradient(180deg,#101c10 0%, #070d07 100%);
   border-radius:var(--r-md);padding:16px;margin-top:6px;
@@ -252,8 +214,8 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .tq-box img,.tq-box canvas{width:100%;height:100%;display:block;}
 .tq-cap{font-family:Tahoma,Arial,sans-serif;font-size:8px;letter-spacing:1.5px;
   color:#8fae8f;margin-top:8px;}
-.screenshot-note{
-  font-family:'VT323',monospace;font-size:17px;line-height:1.2;color:var(--vu);
+.thanks-note{
+  font-family:'VT323',monospace;font-size:17px;line-height:1.3;color:var(--vu);
   text-align:center;margin:14px 0 4px;padding:10px 12px;
   border:1.5px dashed rgba(255,225,53,.5);border-radius:var(--r-md);
   text-shadow:0 0 8px rgba(255,225,53,.45);
@@ -461,38 +423,10 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
               <div style="height:14px"></div>
             </div>
 
-            <a class="cta cta-block" id="upiPayBtn" href="#">PAY NOW VIA UPI</a>
-            <div class="small" id="payNote">Opens your UPI app with the amount and your reference already filled in.</div>
-
-            <div class="fallback">
-              <h4>BUTTON DIDN'T WORK? THAT'S NORMAL</h4>
-              <p class="fb-lead">Some UPI apps block one-tap links. Nothing is wrong with
-                your account or your money. Pay manually — it takes twenty seconds.</p>
-
-              <button type="button" class="pay-copy" id="upiCopy" title="Tap to copy">
-                <span class="pc-k">PAY TO THIS UPI ID</span>zimbo77-7@okhdfcbank</button>
-
-              <button type="button" class="pay-copy" id="mobCopy" title="Tap to copy">
-                <span class="pc-k">OR TO THIS MOBILE NUMBER</span>98497 60077</button>
-
-              <p class="fb-fields">Amount <b id="fbAmount">—</b><br>
-                Note / message <b id="fbRef">—</b></p>
-            </div>
-
-            <button type="button" class="qr-toggle" id="qrToggle">PAYING FROM ANOTHER DEVICE? SHOW QR ▾</button>
-            <div id="qrWrap" hidden>
-              <div class="upi-qr" id="qrBox"></div>
-              <div class="small">Scan with any UPI app. On this phone, save the code and use
-                your UPI app's "scan from gallery" option.</div>
-            </div>
+            <p class="small" id="orderFailNote" hidden>Couldn't open the payment window just now. Please refresh this page and try again, or message us on WhatsApp and we'll sort your booking out personally.</p>
           </div>
 
-          <p class="screenshot-note">📸 Please screenshot this screen — it's your booking record.</p>
-
           <p class="small" id="seatNote"></p>
-
-          <button type="button" class="cta cta-block cta-paid" id="paidBtn">I'VE PAID — SHOW MY TICKET</button>
-          <p class="small">Tap this once you've completed the payment.</p>
         </div>
 
         <!-- ═══ 5a-ii. CONFIRMING (a second or two, after Razorpay) ═══ -->
@@ -523,7 +457,7 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
             </div>
           </div>
 
-          <p class="pending-note" id="tStatus">Payment being verified. We'll confirm on WhatsApp shortly.</p>
+          <p class="pending-note" id="tStatus">Payment confirmed. You're in — see you there.</p>
 
           <!-- ═══ 5c. TELL YOUR PEOPLE ═══ -->
           <div class="share-block" id="shareBlock">
@@ -542,7 +476,7 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
           <button type="button" class="cta cta-block cta-gold" id="printBtn">🎟&nbsp; PRINT / SAVE MY TICKET</button>
           <p class="small">On a phone, choose "Save as PDF" to keep it in your files.</p>
 
-          <p class="screenshot-note">📸 Please screenshot this — it's your booking record.</p>
+          <p class="thanks-note">🎶 Thank you so much for supporting live music — booking your seat means the world to us.<br>Your ticket's on its way to your email now, and you can send it to us on WhatsApp too, just below.</p>
 
           <a class="cta cta-block cta-pink" id="waBtn2" href="#" target="_blank" rel="noopener noreferrer">SEND US THIS BOOKING ON WHATSAPP</a>
           <p class="small">Sending it on WhatsApp gives us a second copy and speeds up confirmation.</p>
@@ -593,11 +527,6 @@ var EVENT = {
   posterVersion: 1
 };
 
-var UPI_VPA  = "zimbo77-7@okhdfcbank";
-var UPI_NAME = "MAP support";
-/* The UPI-payable number (the one linked to the bank account). This is
-   NOT the same as MAP's WhatsApp contact number below — don't merge them. */
-var UPI_MOBILE = "9849760077";
 var WA_NUMBER = "919849690077";
 var BOOK_URL = "https://movingartsprogram.com/gig-bookings/";
 
@@ -739,16 +668,23 @@ function showConfirm(bookingId, seats, preview, name, mobile){
   LAST.id = bookingId; LAST.seats = seats; LAST.amount = amount;
   LAST.name = name || ""; LAST.mobile = mobile || ""; LAST.preview = !!preview;
 
-  /* If a Razorpay order exists, offer the card/UPI/netbanking route first
-     and keep the manual UPI details below it as the backup. */
+  /* Razorpay is the only payment route now. If an order exists, offer the
+     retry button; if it doesn't (Razorpay itself couldn't be reached when
+     the booking was created), say so plainly rather than showing nothing. */
   var retry = document.getElementById("rzpRetry");
+  var failNote = document.getElementById("orderFailNote");
   if(LAST.orderId && LAST.keyId && window.Razorpay){
     retry.removeAttribute("hidden");
+    failNote.setAttribute("hidden","");
     document.getElementById("confirmHead").textContent = "PAYMENT NOT COMPLETED";
     document.getElementById("confirmLead").textContent =
       "Your seats are held for 24 hours. Finish the payment below.";
   } else {
     retry.setAttribute("hidden","");
+    failNote.removeAttribute("hidden");
+    document.getElementById("confirmHead").textContent = "COULDN'T START PAYMENT";
+    document.getElementById("confirmLead").textContent =
+      "Your seats are held for 24 hours while we sort this out.";
   }
 
   document.getElementById("formWrap").style.display = "none";
@@ -759,82 +695,25 @@ function showConfirm(bookingId, seats, preview, name, mobile){
     ? "PREVIEW MODE — this booking has not been saved anywhere."
     : "";
 
-  var upiUri = "upi://pay?pa=" + encodeURIComponent(UPI_VPA) +
-               "&pn=" + encodeURIComponent(UPI_NAME) +
-               "&am=" + amount.toFixed(2) +
-               "&cu=INR" +
-               "&tn=" + encodeURIComponent(bookingId);
-
-  document.getElementById("upiPayBtn").href = upiUri;
-
-  /* manual fallback — always visible, for when the app blocks the one-tap link */
-  document.getElementById("fbAmount").textContent = "₹" + amount;
-  document.getElementById("fbRef").textContent = bookingId;
-
-  /* QR with the amount and reference already inside it */
-  var box = document.getElementById("qrBox");
-  box.innerHTML = "";
-  try{
-    new QRCode(box, {text: upiUri, width: 164, height: 164,
-      colorDark: "#000000", colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.M});
-  }catch(e){
-    box.innerHTML = '<div style="font-family:Tahoma,Arial,sans-serif;font-size:9px;color:#333;text-align:center;padding:8px;">' +
-      'Pay ₹' + amount + ' to<br><b>' + UPI_VPA + '</b><br>Note: ' + bookingId + '</div>';
-  }
-
   var waText = "Hi MAP! Booking " + bookingId + " — " + seats +
                (seats === 1 ? " seat" : " seats") + " for " + EVENT.name + ". Paid ₹" + amount + ".";
   document.getElementById("waBtn2").href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waText);
 
   /* NOT booking_confirmed — at this point the money has not arrived. This
      screen is reached when someone abandons the Razorpay window, or when
-     Razorpay is unreachable and we fall back to manual UPI. Counting it as
-     a conversion would inflate revenue in GA4. */
+     the order itself couldn't be created. Counting it as a conversion
+     would inflate revenue in GA4. */
   mapTrack("booking_payment_pending", {event_name: EVENT.name, seats: seats, value: amount, currency: "INR", booking_id: bookingId});
   document.getElementById("confirmWrap").scrollIntoView({behavior: "smooth", block: "start"});
 }
 
-/* ---------- tap the UPI ID or the mobile number to copy ---------- */
-(function(){
-  function wire(id, value, eventName){
-    var btn = document.getElementById(id);
-    if(!btn) return;
-    var original = btn.innerHTML;
-    var key = btn.querySelector(".pc-k");
-    var keyText = key ? key.textContent : "";
-    btn.addEventListener("click", async function(){
-      var ok = true;
-      try{ await navigator.clipboard.writeText(value); }
-      catch(err){ ok = false; }
-      btn.innerHTML = '<span class="pc-k">' + keyText + '</span>' +
-        (ok ? "COPIED ✓ " : "LONG-PRESS TO COPY: ") + value;
-      mapTrack(eventName, {map_page: "gig-bookings"});
-      setTimeout(function(){ btn.innerHTML = original; }, 2200);
-    });
-  }
-  wire("upiCopy", UPI_VPA, "donate_upi_copy");
-  wire("mobCopy", UPI_MOBILE, "booking_upi_manual");
-})();
-
-document.getElementById("upiPayBtn").addEventListener("click", function(){
-  mapTrack("booking_upi_pay", {event_name: EVENT.name});
-});
 document.getElementById("waBtn2").addEventListener("click", function(){
   mapTrack("booking_whatsapp", {event_name: EVENT.name});
 });
 
-/* ---------- show / hide the QR ---------- */
-document.getElementById("qrToggle").addEventListener("click", function(){
-  var w = document.getElementById("qrWrap");
-  var open = !w.hasAttribute("hidden");
-  if(open){ w.setAttribute("hidden",""); this.textContent = "PAYING FROM ANOTHER DEVICE? SHOW QR ▾"; }
-  else    { w.removeAttribute("hidden");  this.textContent = "HIDE QR ▴"; }
-});
-
 /* ══════════════════════════════════════════════════════════════
    THE TICKET SCREEN
-   Shared by both routes — the Razorpay one and the manual UPI one.
+   Reached the instant Razorpay verifies a payment.
    ══════════════════════════════════════════════════════════════ */
 function showTicket(confirmed){
   document.getElementById("tRef").textContent    = LAST.id;
@@ -847,8 +726,10 @@ function showTicket(confirmed){
   document.getElementById("tTime").textContent   = EVENT.time;
   document.getElementById("tVenue").textContent  = EVENT.venue;
 
-  /* A Razorpay payment is confirmed the instant it lands. A manual UPI
-     payment still has to be eyeballed by PK, so the wording differs. */
+  /* showTicket() is only ever called with confirmed=true now (from
+     verifyPayment()'s finish()) — the manual-claim route that used to
+     call showTicket(false) has been removed. The branch below is kept
+     rather than deleted, in case a future release needs it again. */
   var st = document.getElementById("tStatus");
   if(st){
     st.textContent = confirmed
@@ -966,28 +847,6 @@ document.getElementById("rzpRetryBtn").addEventListener("click", function(){
   openCheckout();
 });
 
-
-/* ---------- "I've paid" — the manual UPI route only ---------- */
-document.getElementById("paidBtn").addEventListener("click", function(){
-  var btn = this;
-  btn.disabled = true; btn.textContent = "ONE MOMENT…";
-
-  mapTrack("booking_says_paid", {event_name: EVENT.name, booking_id: LAST.id, value: LAST.amount, currency: "INR"});
-
-  function done(){ showTicket(false); }
-
-  if(!SCRIPT_URL || LAST.preview){ setTimeout(done, 400); return; }
-
-
-  var cb = "mapPd" + Date.now();
-  var settled = false;
-  window[cb] = function(){ if(settled) return; settled = true; delete window[cb]; done(); };
-  var s = document.createElement("script");
-  s.src = SCRIPT_URL + "?action=paid&callback=" + cb + "&id=" + encodeURIComponent(LAST.id);
-  s.onerror = function(){ if(settled) return; settled = true; done(); };  /* never block the ticket */
-  document.head.appendChild(s);
-  setTimeout(function(){ if(!settled){ settled = true; done(); } }, 6000);
-});
 
 /* ══════════════════════════════════════════════════════════════
    TELL YOUR PEOPLE — the share message
