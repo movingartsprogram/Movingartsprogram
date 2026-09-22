@@ -155,7 +155,7 @@ p{font-family:'VT323',monospace;font-size:15px;line-height:1.3;color:#d8e8d8;mar
 .form-field label{display:block;font-family:Tahoma,Arial,sans-serif;font-size:9px;color:#c8ffc8;
   letter-spacing:.5px;margin-bottom:5px;}
 .form-field .opt{color:var(--phos-dim);}
-input[type=text],input[type=tel],input[type=number],select,textarea{
+input[type=text],input[type=tel],input[type=email],input[type=number],select,textarea{
   width:100%;font-family:'VT323',monospace;font-size:17px;color:var(--phos);
   background:linear-gradient(180deg,#061006,#0b1c0b);
   border:none;border-radius:var(--r-sm);padding:10px 12px;
@@ -564,18 +564,21 @@ var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwruu1tbiMhb421nFax18L
 /* Fallback event details — used in preview mode, and if the Sheet
    is ever unreachable. The Sheet overrides all of these. */
 var EVENT = {
-  name:   "ELVIS PRESLEY TRIBUTE FESTIVAL",
+  /* Fallback only — shown if the Google Sheet can't be reached. Real
+     details always come from the Sheet. Neutral on purpose, and CLOSED so
+     nobody can try to book a gig that didn't load. */
+  name:   "COULDN'T LOAD THE GIG — PLEASE REFRESH",
   /* The casual version used in the share message. Comes from the
      "Share name" row of the Event tab; falls back to name if blank. */
-  shareName: "Elvis Presley Tribute Festival",
-  code:   "SHOOK",
-  date:   "WED 2 SEPT",
-  time:   "8 PM ONWARDS",
-  venue:  "SILVA HERITAGE, BENAULIM",
-  price:  500,
-  seats:  50,
+  shareName: "",
+  code:   "MAP",
+  date:   "—",
+  time:   "—",
+  venue:  "—",
+  price:  0,
+  seats:  0,
   booked: 0,
-  status: "OPEN",
+  status: "CLOSED",
   maxPerBooking: 10,
   posterVersion: 1
 };
@@ -602,7 +605,7 @@ function renderEvent(){
   document.getElementById("evDate").textContent  = EVENT.date;
   document.getElementById("evTime").textContent  = EVENT.time;
   document.getElementById("evVenue").textContent = EVENT.venue;
-  document.getElementById("evPrice").textContent = "₹" + EVENT.price;
+  document.getElementById("evPrice").textContent = EVENT.price ? "₹" + EVENT.price : "—";
   document.getElementById("posterCap").textContent = EVENT.name;
   document.getElementById("eventPoster").src = "current-event-poster.jpg?v=" + (EVENT.posterVersion || 1);
 
