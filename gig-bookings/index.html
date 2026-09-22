@@ -135,6 +135,21 @@ p{font-family:'VT323',monospace;font-size:15px;line-height:1.3;color:#d8e8d8;mar
 .wa-pl-list li .pl-name{color:#8fae8f;letter-spacing:.5px;}
 .wa-pl-list li .pl-dur{color:var(--phos);text-align:right;}
 
+/* ---------- venue picker (only shown when the Sheet has a gig in column C) ---------- */
+.venue-pick{margin-top:14px;}
+.vp-head{font-family:Tahoma,Arial,sans-serif;font-size:9px;color:#c8ffc8;letter-spacing:.5px;margin-bottom:6px;}
+.vp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.vp-opt{display:block;width:100%;text-align:left;cursor:pointer;border:none;border-radius:var(--r-sm);
+  padding:10px 12px;font-family:'VT323',monospace;color:var(--phos);
+  background:linear-gradient(180deg,#061006,#0b1c0b);box-shadow:var(--clay-in-sm);}
+.vp-opt .vp-venue{display:block;font-size:17px;line-height:1.1;}
+.vp-opt .vp-date{display:block;font-size:14px;color:#8fae8f;margin-top:3px;}
+.vp-opt .vp-price{display:block;font-size:18px;color:var(--vu);margin-top:4px;}
+.vp-opt[aria-pressed="true"]{background:linear-gradient(180deg,#0b1c0b,#164016);
+  box-shadow:var(--clay-in-sm), 0 0 0 2px var(--vu);}
+.vp-opt[disabled]{opacity:.45;cursor:not-allowed;}
+@media (max-width:340px){.vp-grid{grid-template-columns:1fr;}}
+
 /* ---------- form ---------- */
 .form-field{margin-bottom:12px;}
 .form-field label{display:block;font-family:Tahoma,Arial,sans-serif;font-size:9px;color:#c8ffc8;
@@ -371,6 +386,13 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
           <div class="poster-cap" id="posterCap">CURRENT EVENT</div>
         </div>
 
+        <!-- ═══ 2b. VENUE PICKER — appears only when the Event tab has a
+             second gig in column C. Buttons are built by JavaScript. ═══ -->
+        <div class="venue-pick" id="venuePick" hidden>
+          <div class="vp-head">CHOOSE YOUR GIG</div>
+          <div class="vp-grid" id="venueGrid"></div>
+        </div>
+
         <!-- ═══ 3. EVENT DETAILS — driven by the Google Sheet ═══ -->
         <div class="wa-playlist">
           <div class="wa-pl-title" id="eventName">LOADING EVENT…</div>
@@ -558,6 +580,16 @@ var EVENT = {
   posterVersion: 1
 };
 
+/* ---------- two gigs at once ----------
+   When the Event tab has a second gig in column C, the Sheet sends both
+   and the guest picks one. Picking copies that gig into EVENT, so every
+   screen after it (payment, ticket, QR, share, print) uses the right
+   venue, date and price without any other change. */
+var EVENTS = [];      /* both gigs, when there are two */
+var PICKED = -1;      /* which one the guest chose; -1 = not chosen yet */
+var PICK_LOCKED = false;  /* frozen once a booking is being made */
+function multiGig(){ return EVENTS.length > 1; }
+
 var WA_NUMBER = "919849690077";
 var BOOK_URL = "https://movingartsprogram.com/gig-bookings/";
 
@@ -565,6 +597,7 @@ var BOOK_URL = "https://movingartsprogram.com/gig-bookings/";
 function seatsLeft(){ return Math.max(0, EVENT.seats - (EVENT.booked || 0)); }
 
 function renderEvent(){
+  if(multiGig()){ renderMulti(); return; }
   document.getElementById("eventName").textContent = EVENT.name;
   document.getElementById("evDate").textContent  = EVENT.date;
   document.getElementById("evTime").textContent  = EVENT.time;
@@ -594,12 +627,109 @@ function renderEvent(){
   }
 }
 
+/* ---------- two-gig version of the details panel ---------- */
+function renderMulti(){
+  document.getElementById("posterCap").textContent = EVENT.name;
+  document.getElementById("eventPoster").src = "current-event-poster.jpg?v=" + (EVENT.posterVersion || 1);
+
+  var chosen = PICKED >= 0;
+  document.getElementById("eventName").textContent = chosen ? EVENT.name : "CHOOSE YOUR GIG ABOVE ↑";
+  document.getElementById("evDate").textContent  = chosen ? EVENT.date  : "—";
+  document.getElementById("evTime").textContent  = chosen ? EVENT.time  : "—";
+  document.getElementById("evVenue").textContent = chosen ? EVENT.venue : "—";
+  document.getElementById("evPrice").textContent = chosen ? "₹" + EVENT.price : "—";
+
+  /* A sold-out or closed gig can't be picked (its button is disabled),
+     so the submit button only needs disabling when nothing is bookable. */
+  var btn = document.getElementById("submitBtn");
+  var anyOpen = false;
+  for(var i = 0; i < EVENTS.length; i++){ if(gigOpen(EVENTS[i])) anyOpen = true; }
+  if(!anyOpen){
+    btn.disabled = true; btn.textContent = "SOLD OUT";
+  }
+
+  var sel = document.getElementById("fSeats");
+  var keep = parseInt(sel.value, 10) || 1;
+  var max = chosen ? Math.min(EVENT.maxPerBooking || 10, seatsLeft() || 1) : 10;
+  sel.innerHTML = "";
+  for(var n = 1; n <= max; n++){
+    var o = document.createElement("option");
+    o.value = n;
+    o.textContent = n + (n === 1 ? " seat" : " seats") + (chosen ? "  —  ₹" + (n * EVENT.price) : "");
+    sel.appendChild(o);
+  }
+  if(keep <= max) sel.value = keep;
+}
+
+function gigOpen(ev){
+  var left = Math.max(0, (ev.seats || 0) - (ev.booked || 0));
+  return ev.status !== "CLOSED" && ev.status !== "SOLD OUT" && left > 0;
+}
+
+/* Builds one button per gig. Text goes in with textContent only. */
+function buildVenuePicker(){
+  var grid = document.getElementById("venueGrid");
+  grid.textContent = "";
+  for(var i = 0; i < EVENTS.length; i++){
+    var ev = EVENTS[i];
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "vp-opt";
+    b.setAttribute("aria-pressed", "false");
+    b.setAttribute("data-i", i);
+
+    var v = document.createElement("span"); v.className = "vp-venue"; v.textContent = ev.venue;
+    var d = document.createElement("span"); d.className = "vp-date";  d.textContent = ev.date + (ev.time ? " · " + ev.time : "");
+    var p = document.createElement("span"); p.className = "vp-price";
+    if(gigOpen(ev)){
+      p.textContent = "₹" + ev.price + " / SEAT";
+    } else {
+      p.textContent = (ev.status === "CLOSED") ? "BOOKINGS CLOSED" : "SOLD OUT";
+      b.disabled = true;
+    }
+    b.appendChild(v); b.appendChild(d); b.appendChild(p);
+    b.addEventListener("click", function(){ pickVenue(parseInt(this.getAttribute("data-i"), 10)); });
+    grid.appendChild(b);
+  }
+  document.getElementById("venuePick").removeAttribute("hidden");
+}
+
+function pickVenue(i){
+  if(PICK_LOCKED || !EVENTS[i] || !gigOpen(EVENTS[i])) return;
+  PICKED = i;
+  var src = EVENTS[i];
+  var fields = ["name","shareName","code","date","time","venue","price","seats","booked","status","maxPerBooking"];
+  for(var f = 0; f < fields.length; f++){ EVENT[fields[f]] = src[fields[f]]; }
+  /* posterVersion is deliberately left alone — one poster, column B's number */
+
+  var btns = document.querySelectorAll("#venueGrid .vp-opt");
+  for(var k = 0; k < btns.length; k++){
+    btns[k].setAttribute("aria-pressed", k === i ? "true" : "false");
+  }
+  clearErr();
+  renderEvent();
+  mapTrack("booking_venue_pick", {event_name: EVENT.name, event_code: EVENT.code, venue: EVENT.venue});
+}
+
+function lockPicker(on){
+  PICK_LOCKED = on;
+  var btns = document.querySelectorAll("#venueGrid .vp-opt");
+  for(var k = 0; k < btns.length; k++){
+    if(on){ btns[k].disabled = true; }
+    else  { btns[k].disabled = !gigOpen(EVENTS[k]); }
+  }
+}
+
 /* ---------- pull live event details from the Sheet ---------- */
 function loadEvent(){
   if(!SCRIPT_URL){ renderEvent(); return; }
   var cb = "mapCfg" + Date.now();
   window[cb] = function(data){
     if(data && data.ok && data.event){ for(var k in data.event){ EVENT[k] = data.event[k]; } }
+    if(data && data.ok && data.events && data.events.length > 1){
+      EVENTS = data.events;
+      buildVenuePicker();
+    }
     renderEvent();
     delete window[cb];
   };
@@ -629,6 +759,11 @@ document.getElementById("submitBtn").addEventListener("click", function(){
   var trap   = document.getElementById("fWebsite").value;
 
   if(trap){ return; }
+  if(multiGig() && PICKED < 0){
+    showErr("Please choose your gig first — tap a venue above.");
+    document.getElementById("venuePick").scrollIntoView({behavior: "smooth", block: "center"});
+    return;
+  }
   if(name.length < 2){ showErr("Please enter your name."); return; }
   if(!seats || seats < 1){ showErr("Please choose how many seats you want."); return; }
   if(mobile.length === 12 && mobile.indexOf("91") === 0){ mobile = mobile.slice(2); }
@@ -643,7 +778,9 @@ document.getElementById("submitBtn").addEventListener("click", function(){
   var btn = this;
   btn.disabled = true; btn.textContent = "SAVING YOUR BOOKING…";
 
-  mapTrack("booking_submit", {event_name: EVENT.name, seats: seats});
+  if(multiGig()){ lockPicker(true); }
+
+  mapTrack("booking_submit", {event_name: EVENT.name, event_code: EVENT.code, seats: seats});
 
   var payload = {name:name, seats:seats, mobile:mobile, note:note, email:email};
 
@@ -672,6 +809,7 @@ document.getElementById("submitBtn").addEventListener("click", function(){
     } else {
       btn.disabled = false;
       btn.textContent = "CONFIRM BOOKING & GET PAYMENT DETAILS";
+      if(multiGig()){ lockPicker(false); }
       showErr((data && data.message) || "Couldn't save that — please check your connection and try again.");
     }
   };
@@ -680,13 +818,15 @@ document.getElementById("submitBtn").addEventListener("click", function(){
           "&seats="  + encodeURIComponent(payload.seats) +
           "&mobile=" + encodeURIComponent(payload.mobile) +
           "&note="   + encodeURIComponent(payload.note) +
-          "&email="  + encodeURIComponent(payload.email);
+          "&email="  + encodeURIComponent(payload.email) +
+          (multiGig() ? "&ev=" + encodeURIComponent(EVENT.code) : "");
   var s = document.createElement("script");
   s.src = SCRIPT_URL + q;
   s.onerror = function(){
     delete window[cb];
     btn.disabled = false;
     btn.textContent = "CONFIRM BOOKING & GET PAYMENT DETAILS";
+    if(multiGig()){ lockPicker(false); }
     showErr("Couldn't reach the booking system. Please message us on WhatsApp instead.");
   };
   document.head.appendChild(s);
@@ -836,7 +976,7 @@ function openCheckout(){
     return;
   }
 
-  mapTrack("booking_checkout_open", {event_name: EVENT.name, booking_id: LAST.id, value: LAST.amount, currency: "INR"});
+  mapTrack("booking_checkout_open", {event_name: EVENT.name, event_code: EVENT.code, booking_id: LAST.id, value: LAST.amount, currency: "INR"});
 
   var opts = {
     key:         LAST.keyId,
@@ -889,7 +1029,7 @@ function verifyPayment(resp){
   var wait = document.getElementById("verifyWrap");
   wait.classList.add("show");
 
-  mapTrack("booking_confirmed", {event_name: EVENT.name, seats: LAST.seats,
+  mapTrack("booking_confirmed", {event_name: EVENT.name, event_code: EVENT.code, seats: LAST.seats,
     value: LAST.amount, currency: "INR", booking_id: LAST.id});
 
   var settled = false;
