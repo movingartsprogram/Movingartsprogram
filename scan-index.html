@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<!-- MAP GATE SCANNER — build: scan-v1. Volunteers only. Not in the sitemap, not indexed. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0d12">
+<title>MAP Gate</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --phos:#7CFC00; --phos-dim:#2c6a2c; --lcd:#0a1f0a; --lcd-deep:#051105;
+  --mag:#ff2fb0; --vu:#ffe135; --ch:#3a3a44; --ch-lo:#26262e;
+  --ok:#0f9d3a; --bad:#c62828; --warn:#e08a00;
+  --clay-in-sm:inset 0 3px 8px rgba(0,0,0,.6), inset 0 -2px 5px rgba(255,255,255,.08);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;background:#0d0d12;color:#d8e8d8;font-family:'VT323',monospace;}
+body{min-height:100vh;padding:env(safe-area-inset-top,0px) 8px env(safe-area-inset-bottom,0px);display:flex;justify-content:center;}
+.app{width:100%;max-width:460px;padding:8px 0 24px;}
+h1{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--phos);margin:6px 0 12px;text-shadow:0 0 8px rgba(124,252,0,.4);}
+.card{background:linear-gradient(180deg,#101c10,#070d07);border-radius:18px;padding:14px;margin-bottom:10px;
+  box-shadow:0 8px 14px rgba(0,0,0,.45), inset 0 2px 3px rgba(124,252,0,.14), inset 0 -5px 8px rgba(0,0,0,.6);}
+label{display:block;font-family:Tahoma,Arial,sans-serif;font-size:10px;color:#c8ffc8;letter-spacing:.5px;margin-bottom:5px;}
+input,select{width:100%;font-family:'VT323',monospace;font-size:22px;color:var(--phos);
+  background:linear-gradient(180deg,#061006,#0b1c0b);border:none;border-radius:12px;padding:11px 12px;box-shadow:var(--clay-in-sm);
+  -webkit-appearance:none;appearance:none;color-scheme:dark;}
+input::placeholder{color:#2c6a2c;}
+button{font-family:Tahoma,Arial,sans-serif;font-weight:bold;font-size:12px;border:none;cursor:pointer;border-radius:999px;padding:13px 16px;color:#0a1f0a;
+  background:linear-gradient(180deg,#b8ff66 0%,var(--phos) 45%,#57bd00 100%);
+  box-shadow:0 5px 10px rgba(0,0,0,.4), inset 0 2px 3px rgba(255,255,255,.55), inset 0 -4px 6px rgba(0,60,0,.3);}
+button:active{filter:brightness(1.1);transform:translateY(1px);}
+button[disabled]{opacity:.5;}
+button.pink{color:#1a0010;background:linear-gradient(180deg,#ff9fdc,var(--mag) 45%,#b3006f);}
+button.ghost{color:#c8ffc8;background:none;box-shadow:inset 0 0 0 1.5px rgba(124,252,0,.4);}
+button.block{display:block;width:100%;margin-top:10px;}
+.row{display:flex;gap:8px;}
+.row>*{flex:1 1 0;}
+.err{color:var(--mag);font-size:18px;min-height:22px;margin:8px 0 0;}
+.hide{display:none !important;}
+.small{font-size:16px;color:#8fae8f;}
+
+/* top bar */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+.who{font-size:19px;color:#c8ffc8;}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--phos);margin-right:6px;box-shadow:0 0 8px var(--phos);vertical-align:middle;}
+.dot.off{background:var(--bad);box-shadow:0 0 8px var(--bad);}
+.count{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--vu);text-align:center;line-height:1.6;}
+.count small{display:block;font-family:'VT323',monospace;font-size:17px;color:#8fae8f;}
+.tabs{display:flex;gap:8px;margin-bottom:10px;}
+.tabs button{flex:1;padding:11px 6px;}
+.tabs button.off{color:#c8ffc8;background:none;box-shadow:inset 0 0 0 1.5px rgba(124,252,0,.4);}
+
+/* camera */
+.cam{position:relative;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:1/1;}
+.cam video{width:100%;height:100%;object-fit:cover;display:block;}
+.frame{position:absolute;inset:14%;border:3px solid rgba(124,252,0,.9);border-radius:18px;box-shadow:0 0 0 999px rgba(0,0,0,.35);pointer-events:none;}
+.camnote{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:18px;color:#fff;text-shadow:0 1px 3px #000;}
+
+/* full-screen result */
+#result{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:24px;color:#fff;}
+#result.ok{background:var(--ok);}
+#result.bad{background:var(--bad);}
+#result.warn{background:var(--warn);}
+#result.wait{background:#33333c;}
+#result .big{font-family:'Press Start 2P',monospace;font-size:24px;line-height:1.4;margin-bottom:18px;}
+#result .name{font-size:40px;line-height:1.05;margin-bottom:8px;word-break:break-word;}
+#result .sub{font-size:26px;line-height:1.15;}
+#result .tag{margin-top:16px;font-family:Tahoma,Arial,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.35);}
+#result .tap{position:absolute;bottom:26px;font-size:20px;opacity:.85;}
+
+/* lists */
+.log div{font-size:19px;padding:6px 2px;box-shadow:inset 0 1px 0 rgba(124,252,0,.09);display:flex;justify-content:space-between;gap:8px;}
+.log .g{color:var(--phos);} .log .r{color:#ff8a8a;} .log .y{color:var(--vu);}
+.hit{padding:10px 0;box-shadow:inset 0 1px 0 rgba(124,252,0,.12);}
+.hit b{color:#fff;font-weight:normal;font-size:22px;}
+.tk{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;font-size:19px;}
+.tk button{padding:8px 12px;font-size:11px;}
+.st-used{color:#ff8a8a;} .st-valid{color:var(--phos);}
+.conflict{background:var(--bad);color:#fff;border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:19px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ═══ LOGIN ═══ -->
+  <div id="loginView">
+    <h1>MAP GATE</h1>
+    <div class="card">
+      <label for="pin">YOUR PIN</label>
+      <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="6-digit PIN" maxlength="12">
+      <p class="err" id="loginErr"></p>
+      <button class="block" id="loginBtn" type="button">START</button>
+      <p class="small">Volunteers only. Your PIN is given to you by MAP.</p>
+    </div>
+  </div>
+
+  <!-- ═══ MAIN ═══ -->
+  <div id="mainView" class="hide">
+    <div class="bar">
+      <div class="who"><span class="dot" id="netDot"></span><span id="whoName">—</span></div>
+      <button class="ghost" id="logoutBtn" type="button" style="padding:8px 12px;font-size:11px">LOG OUT</button>
+    </div>
+
+    <div class="card" id="evCard">
+      <label for="evSel">EVENT</label>
+      <select id="evSel"></select>
+    </div>
+
+    <div class="card count" id="countBox">IN 0 / 0<small id="countSub">—</small></div>
+    <div class="conflict hide" id="conflictBox"></div>
+
+    <div class="tabs">
+      <button type="button" id="tabScan">SCAN</button>
+      <button type="button" id="tabDesk" class="off hide">DESK</button>
+    </div>
+
+    <!-- SCAN TAB -->
+    <div id="scanTab">
+      <div class="cam">
+        <video id="video" playsinline muted></video>
+        <div class="frame"></div>
+        <div class="camnote" id="camNote">Starting camera…</div>
+      </div>
+      <button class="ghost block" id="camBtn" type="button">📷 START CAMERA</button>
+
+      <div class="card" style="margin-top:10px">
+        <label for="manual">CAN'T SCAN? TYPE THE CODE ON THE TICKET</label>
+        <div class="row">
+          <input id="manual" type="text" autocapitalize="characters" autocomplete="off" placeholder="10-character code" maxlength="80">
+          <button type="button" id="manualBtn" style="flex:0 0 auto">CHECK</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <label>LAST SCANS</label>
+        <div class="log" id="log"><span class="small">Nothing scanned yet.</span></div>
+      </div>
+    </div>
+
+    <!-- DESK TAB -->
+    <div id="deskTab" class="hide">
+      <div class="card">
+        <label for="q">FIND A BOOKING — NAME, MOBILE OR REFERENCE</label>
+        <div class="row">
+          <input id="q" type="text" autocomplete="off" placeholder="at least 3 characters">
+          <button type="button" id="qBtn" style="flex:0 0 auto">FIND</button>
+        </div>
+        <p class="err" id="qErr"></p>
+        <div id="qOut"></div>
+      </div>
+
+      <div class="card">
+        <label>CASH SALE AT THE GATE</label>
+        <div class="small" id="gsPrice">—</div>
+        <div class="row" style="margin-top:8px">
+          <input id="gsName" type="text" autocomplete="off" placeholder="Name (optional)">
+          <select id="gsQty" style="flex:0 0 96px"></select>
+        </div>
+        <input id="gsMobile" type="tel" inputmode="numeric" autocomplete="off" placeholder="Mobile (optional)" style="margin-top:8px">
+        <p class="err" id="gsErr"></p>
+        <button class="pink block" id="gsBtn" type="button">CASH RECEIVED — ADMIT</button>
+        <p class="small">Collect the amount shown first. Every person is admitted straight away — put on the wristbands.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- full-screen result -->
+<div id="result" class="hide" role="alert"></div>
+
+<!-- QR reader for phones without a built-in one (iPhones). Android Chrome reads QRs natively. -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"
+        onerror="var f=document.createElement('script');f.src='https://unpkg.com/jsqr@1.4.0/dist/jsQR.js';document.head.appendChild(f);"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════
+   MAP GATE SCANNER
+   ──────────────────────────────────────────────────────────────
+   First scan of a ticket admits and voids it. Any later scan is
+   refused and shows when and by whom it was first scanned.
+   If the signal drops, the phone keeps checking against its own
+   copy of the guest list and syncs the moment signal returns.
+   (Two phones both offline could each accept the same ticket —
+   the sync flags any such clash in red at the top.)
+   ══════════════════════════════════════════════════════════════ */
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwruu1tbiMhb421nFax18Lr_1HH62C0rMsNAhmehdVlh3CDfTntP86LY8JcqeLhYzpe/exec";
+
+var PIN = "", STAFF = null, EV = "", ONLINE = true;
+var ROSTER = {};            /* token -> {n:name, no, of, s:'V'|'U'} */
+var QUEUE = [];             /* scans made offline, waiting to sync */
+var locked = false, lastCode = "", lastAt = 0, stream = null, detector = null, camOn = false;
+var resultTimer = null, wakeLock = null, audioCtx = null;
+var RECENT = {};            /* token -> time this phone admitted it (last 60 seconds) */
+var detecting = false;
+
+function $(id){ return document.getElementById(id); }
+function el(tag, cls, text){ var n = document.createElement(tag); if(cls) n.className = cls; if(text !== undefined) n.textContent = text; return n; }
+
+/* ---------- talking to the Sheet ---------- */
+function api(action, params, ok, fail, timeoutMs){
+  var cb = "mg" + Date.now() + Math.floor(Math.random() * 1000);
+  var done = false;
+  var s = document.createElement("script");
+  var timer = setTimeout(function(){ finish(null); }, timeoutMs || 8000);
+  function finish(data){
+    if(done) return; done = true;
+    clearTimeout(timer);
+    window[cb] = function(){};          /* a late answer arriving after a timeout is ignored quietly */
+    if(data === null){ setNet(false); if(fail) fail(); }
+    else { setNet(true); if(ok) ok(data); }
+  }
+  window[cb] = function(d){ finish(d); };
+  var q = "?action=" + encodeURIComponent(action) + "&callback=" + cb + "&pin=" + encodeURIComponent(PIN) + "&_=" + Date.now();
+  for(var k in params){ if(params[k] !== undefined && params[k] !== null) q += "&" + k + "=" + encodeURIComponent(params[k]); }
+  s.src = SCRIPT_URL + q;
+  s.onerror = function(){ finish(null); };
+  document.head.appendChild(s);
+}
+function setNet(on){
+  ONLINE = on;
+  $("netDot").className = on ? "dot" : "dot off";
+}
+
+/* ---------- sound + buzz ---------- */
+function beep(freq, ms){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.frequency.value = freq; o.type = "square"; g.gain.value = 0.15;
+    o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + ms / 1000);
+  }catch(e){}
+}
+function buzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+
+/* ---------- login ---------- */
+function login(pin, silent){
+  $("loginErr").textContent = "";
+  PIN = pin;
+  api("login", {}, function(d){
+    if(d && d.ok){
+      STAFF = d;
+      try{ localStorage.setItem("mapgate_pin", pin); }catch(e){}
+      showMain();
+    } else {
+      PIN = "";
+      try{ localStorage.removeItem("mapgate_pin"); }catch(e){}
+      if(!silent) $("loginErr").textContent = (d && d.message) || "That PIN isn't recognised.";
+      $("loginBtn").disabled = false;
+    }
+  }, function(){
+    /* no signal at login: if this phone has logged in before, carry on offline */
+    var saved = null;
+    try{ saved = JSON.parse(localStorage.getItem("mapgate_staff") || "null"); }catch(e){}
+    if(saved && saved.pin === pin){ STAFF = saved.staff; showMain(); }
+    else { PIN = ""; $("loginErr").textContent = "No signal. Try again when you're online."; $("loginBtn").disabled = false; }
+  });
+}
+$("loginBtn").addEventListener("click", function(){
+  var p = $("pin").value.trim();
+  if(!p){ $("loginErr").textContent = "Enter your PIN."; return; }
+  this.disabled = true;
+  try{ audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
+  login(p, false);
+});
+$("pin").addEventListener("keydown", function(e){ if(e.key === "Enter") $("loginBtn").click(); });
+$("logoutBtn").addEventListener("click", function(){
+  try{ localStorage.removeItem("mapgate_pin"); localStorage.removeItem("mapgate_staff"); }catch(e){}
+  stopCam(); location.reload();
+});
+
+function showMain(){
+  try{ localStorage.setItem("mapgate_staff", JSON.stringify({pin: PIN, staff: STAFF})); }catch(e){}
+  $("loginView").classList.add("hide");
+  $("mainView").classList.remove("hide");
+  $("whoName").textContent = STAFF.name + (STAFF.role === "DESK" ? " · DESK" : "");
+  if(STAFF.role === "DESK") $("tabDesk").classList.remove("hide");
+
+  var sel = $("evSel"); sel.textContent = "";
+  var evs = STAFF.events || [];
+  for(var i = 0; i < evs.length; i++){
+    var o = document.createElement("option"); o.value = evs[i].code; o.textContent = evs[i].name; sel.appendChild(o);
+  }
+  var saved = ""; try{ saved = localStorage.getItem("mapgate_ev") || ""; }catch(e){}
+  if(saved && evs.some(function(e){ return e.code === saved; })) sel.value = saved;
+  EV = sel.value;
+  if(evs.length < 2) $("evCard").classList.add("hide");
+  sel.addEventListener("change", function(){ EV = sel.value; try{ localStorage.setItem("mapgate_ev", EV); }catch(e){} loadRoster(); refreshStats(); loadGatePrice(); });
+
+  loadRoster(); refreshStats(); loadGatePrice();
+  setInterval(refreshStats, 15000);
+  setInterval(loadRoster, 60000);
+  setInterval(syncQueue, 8000);
+  keepAwake();
+  startCam();
+}
+
+/* ---------- counts + offline roster ---------- */
+function refreshStats(){
+  api("stats", {ev: EV}, function(d){
+    if(!d || !d.ok) return;
+    $("countBox").firstChild.nodeValue = "IN " + d.entered + " / " + d.total;
+    $("countSub").textContent = (d.total - d.entered) + " still to come";
+  });
+}
+function loadRoster(){
+  if(QUEUE.length) return;           /* don't overwrite local marks that haven't synced */
+  api("roster", {ev: EV}, function(d){
+    if(!d || !d.ok) return;
+    var r = {};
+    for(var i = 0; i < d.roster.length; i++){ var x = d.roster[i]; r[x[0]] = {n: x[1], no: x[2], of: x[3], s: x[4]}; }
+    ROSTER = r;
+    try{ localStorage.setItem("mapgate_roster_" + EV, JSON.stringify(r)); }catch(e){}
+  });
+  if(!Object.keys(ROSTER).length){
+    try{ ROSTER = JSON.parse(localStorage.getItem("mapgate_roster_" + EV) || "{}"); }catch(e){}
+  }
+}
+try{ QUEUE = JSON.parse(localStorage.getItem("mapgate_queue") || "[]"); }catch(e){ QUEUE = []; }
+function saveQueue(){ try{ localStorage.setItem("mapgate_queue", JSON.stringify(QUEUE)); }catch(e){} }
+
+function syncQueue(){
+  if(!QUEUE.length || !PIN) return;
+  var item = QUEUE[0];
+  api("scan", {t: item.t, ev: EV, at: item.at, off: 1}, function(d){
+    QUEUE.shift(); saveQueue();
+    var mine = d && d.by && String(d.by).indexOf(STAFF.name) === 0;
+    if(d && d.result === "USED" && !mine){
+      var box = $("conflictBox");
+      box.classList.remove("hide");
+      box.appendChild(el("div", "", "⚠ CLASH: " + d.name + " (ticket " + d.no + "/" + d.of + ") was already scanned " + (d.at || "") + " by " + (d.by || "another phone") + ". They were let in offline — check with them."));
+    }
+    if(!QUEUE.length){ loadRoster(); refreshStats(); }
+    else syncQueue();
+  }, function(){ /* still offline — try again next tick */ });
+}
+
+/* ---------- result screen ---------- */
+function showResult(kind, big, name, sub, tag, autoMs){
+  var r = $("result");
+  r.className = kind;
+  r.textContent = "";
+  r.appendChild(el("div", "big", big));
+  if(name) r.appendChild(el("div", "name", name));
+  if(sub)  r.appendChild(el("div", "sub", sub));
+  if(tag)  r.appendChild(el("div", "tag", tag));
+  if(!autoMs) r.appendChild(el("div", "tap", "TAP TO SCAN THE NEXT ONE"));
+  clearTimeout(resultTimer);
+  if(autoMs){ resultTimer = setTimeout(closeResult, autoMs); }
+}
+function closeResult(){
+  clearTimeout(resultTimer);
+  $("result").className = "hide";
+  locked = false;
+}
+$("result").addEventListener("click", closeResult);
+
+function addLog(cls, text){
+  var log = $("log");
+  if(log.firstChild && log.firstChild.className === "small") log.textContent = "";
+  var row = el("div", cls);
+  row.appendChild(el("span", "", text));
+  row.appendChild(el("span", "", new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})));
+  log.insertBefore(row, log.firstChild);
+  while(log.children.length > 6) log.removeChild(log.lastChild);
+}
+
+/* ---------- checking one ticket ---------- */
+function tokenFrom(text){
+  text = String(text || "");
+  var m = text.match(/[?&]t=([A-Za-z0-9]+)/);
+  var t = (m ? m[1] : text.replace(/[^A-Za-z0-9]/g, "")).toUpperCase();
+  return t;
+}
+
+function handleCode(raw){
+  if(locked) return;
+  var tok = tokenFrom(raw);
+  var now = Date.now();
+  if(tok === lastCode && now - lastAt < 3000) return;   /* the same QR still in view */
+  lastCode = tok; lastAt = now;
+
+  if(tok.length !== 10){
+    locked = true; beep(200, 350); buzz([120, 80, 120]);
+    showResult("bad", "NOT A MAP TICKET", "", "This QR isn't one of ours.", "", 0);
+    addLog("r", "Not a MAP ticket");
+    return;
+  }
+  /* The volunteer is still pointing at a QR this phone let in moments ago —
+     not a second person. Say so calmly instead of a red alarm. */
+  if(RECENT[tok] && now - RECENT[tok] < 60000){
+    locked = true;
+    beep(440, 120);
+    var who = (ROSTER[tok] && ROSTER[tok].n) ? ROSTER[tok].n : "";
+    showResult("warn", "ALREADY SCANNED — BY YOU, JUST NOW", who,
+               "Same person still in front of you? Fine. Anyone else: this QR is used up.",
+               "NEW PERSON? DO NOT ADMIT — NO WRISTBAND, NO ENTRY", 2600);
+    return;
+  }
+  locked = true;
+  showResult("wait", "CHECKING…", "", "", "", 0);
+
+  api("scan", {t: tok, ev: EV}, function(d){
+    if(d && d.denied){ closeResult(); logoutHard(); return; }
+    if(!d || !d.ok){ showResult("bad", "TRY AGAIN", "", (d && d.message) || "Couldn't check that one.", "", 0); return; }
+    if(ROSTER[tok]){ ROSTER[tok].s = "U"; }
+    var who = d.name || "";
+    var num = "Ticket " + d.no + " of " + d.of;
+    if(d.result === "OK"){
+      RECENT[tok] = Date.now();
+      beep(880, 140); buzz(60);
+      showResult("ok", "ENTRY OK", who, num, "PUT A WRISTBAND ON", 1300);
+      addLog("g", who + " · " + d.no + "/" + d.of);
+      refreshStatsSoon();
+    } else if(d.result === "USED"){
+      beep(180, 450); buzz([150, 90, 150, 90, 150]);
+      showResult("bad", "ALREADY USED", who, num + " — scanned " + (d.at || "earlier") + (d.by ? " by " + d.by : ""), "DO NOT ADMIT — CHECK THEIR WRISTBAND", 0);
+      addLog("r", "USED again: " + who);
+    } else if(d.result === "VOID"){
+      beep(180, 450); buzz([150, 90, 150]);
+      showResult("bad", "TICKET CANCELLED", who, "This QR was replaced by a new one.", "ASK FOR THEIR NEW TICKET", 0);
+      addLog("r", "Cancelled QR: " + who);
+    } else if(d.result === "WRONG_EVENT"){
+      beep(300, 400); buzz([200]);
+      showResult("warn", "WRONG EVENT", who, "This ticket is for a different event.", "", 0);
+      addLog("y", "Wrong event: " + who);
+    } else {
+      beep(180, 450); buzz([150, 90, 150]);
+      showResult("bad", "NOT VALID", "", "That code isn't in our list.", "", 0);
+      addLog("r", "Invalid code");
+    }
+  }, function(){
+    offlineCheck(tok);
+  });
+}
+
+/* No signal: check against this phone's own copy of the list. */
+function offlineCheck(tok){
+  var t = ROSTER[tok];
+  if(!t){
+    beep(180, 450); buzz([150, 90, 150]);
+    showResult("bad", "NOT FOUND", "", "No signal, and this code isn't in the saved list.", "TRY AGAIN WHEN ONLINE", 0);
+    return;
+  }
+  if(t.s === "U"){
+    beep(180, 450); buzz([150, 90, 150, 90, 150]);
+    showResult("bad", "ALREADY USED", t.n, "Ticket " + t.no + " of " + t.of + " — used earlier", "DO NOT ADMIT — CHECK THEIR WRISTBAND", 0);
+    addLog("r", "USED again: " + t.n);
+    return;
+  }
+  t.s = "U";
+  RECENT[tok] = Date.now();
+  QUEUE.push({t: tok, at: Date.now()}); saveQueue();
+  try{ localStorage.setItem("mapgate_roster_" + EV, JSON.stringify(ROSTER)); }catch(e){}
+  beep(880, 140); buzz(60);
+  showResult("ok", "ENTRY OK", t.n, "Ticket " + t.no + " of " + t.of, "OFFLINE — WILL SYNC · WRISTBAND ON", 1500);
+  addLog("g", t.n + " · " + t.no + "/" + t.of + " (offline)");
+}
+
+var statsTimer = null;
+function refreshStatsSoon(){ clearTimeout(statsTimer); statsTimer = setTimeout(refreshStats, 1200); }
+
+function logoutHard(){
+  try{ localStorage.removeItem("mapgate_pin"); localStorage.removeItem("mapgate_staff"); }catch(e){}
+  location.reload();
+}
+
+$("manualBtn").addEventListener("click", function(){
+  var v = $("manual").value.trim(); if(!v) return;
+  $("manual").value = ""; lastCode = ""; handleCode(v);
+});
+$("manual").addEventListener("keydown", function(e){ if(e.key === "Enter") $("manualBtn").click(); });
+
+/* ---------- camera ---------- */
+function keepAwake(){
+  try{ if(navigator.wakeLock){ navigator.wakeLock.request("screen").then(function(l){ wakeLock = l; }).catch(function(){}); } }catch(e){}
+}
+document.addEventListener("visibilitychange", function(){ if(!document.hidden){ keepAwake(); if(STAFF && !camOn) startCam(); } });
+
+function stopCam(){
+  camOn = false;
+  if(stream){ stream.getTracks().forEach(function(t){ t.stop(); }); stream = null; }
+}
+function startCam(){
+  if(camOn) return;
+  $("camNote").textContent = "Starting camera…";
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    $("camNote").textContent = "Camera not available — type the code instead.";
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({video: {facingMode: {ideal: "environment"}, width: {ideal: 1280}}, audio: false}).then(function(s){
+    stream = s; camOn = true;
+    var v = $("video"); v.srcObject = s;
+    return v.play();
+  }).then(function(){
+    $("camNote").textContent = "Point at the guest's QR";
+    if("BarcodeDetector" in window){
+      try{ detector = new BarcodeDetector({formats: ["qr_code"]}); }catch(e){ detector = null; }
+    }
+    if(!detector && !window.jsQR){
+      $("camNote").textContent = "QR reader still loading… if this stays, type codes below.";
+      setTimeout(function(){ if(window.jsQR) $("camNote").textContent = "Point at the guest's QR"; }, 4000);
+    }
+    scanLoop();
+  }).catch(function(){
+    camOn = false;
+    $("camNote").textContent = "Camera blocked — allow it in the browser, then tap START CAMERA.";
+  });
+}
+$("camBtn").addEventListener("click", function(){ stopCam(); startCam(); });
+
+var canvas = document.createElement("canvas"), ctx2d = canvas.getContext("2d", {willReadFrequently: true});
+function scanLoop(){
+  if(!camOn) return;
+  var v = $("video");
+  if(!locked && v.readyState >= 2 && v.videoWidth){
+    if(detector){
+      if(!detecting){
+        detecting = true;
+        detector.detect(v).then(function(codes){
+          detecting = false;
+          if(codes && codes.length && !locked) handleCode(codes[0].rawValue);
+        }).catch(function(){ detecting = false; });
+      }
+    } else if(window.jsQR){
+      /* Read the centre of the picture (where the green frame is) at full
+         sharpness, rather than shrinking the whole picture — a QR held a
+         little far away still reads. */
+      var side = Math.round(Math.min(v.videoWidth, v.videoHeight) * 0.8);
+      var sx = Math.round((v.videoWidth - side) / 2), sy = Math.round((v.videoHeight - side) / 2);
+      var out = Math.min(side, 720);
+      canvas.width = out; canvas.height = out;
+      ctx2d.drawImage(v, sx, sy, side, side, 0, 0, out, out);
+      var img = ctx2d.getImageData(0, 0, out, out);
+      var code = jsQR(img.data, out, out, {inversionAttempts: "dontInvert"});
+      if(code && code.data) handleCode(code.data);
+    }
+  }
+  setTimeout(scanLoop, 140);
+}
+
+/* ---------- tabs ---------- */
+function tab(which){
+  var desk = which === "desk";
+  $("scanTab").classList.toggle("hide", desk);
+  $("deskTab").classList.toggle("hide", !desk);
+  $("tabScan").className = desk ? "off" : "";
+  $("tabDesk").className = desk ? "" : "off" + ($("tabDesk").classList.contains("hide") ? " hide" : "");
+  if(desk) stopCam(); else startCam();
+}
+$("tabScan").addEventListener("click", function(){ tab("scan"); });
+$("tabDesk").addEventListener("click", function(){ tab("desk"); });
+
+/* ══════════════════════════════════════════════════════════════
+   DESK — find a booking, admit by hand, reissue, cash sale
+   ══════════════════════════════════════════════════════════════ */
+function findBookings(){
+  var q = $("q").value.trim(), out = $("qOut"), err = $("qErr");
+  err.textContent = ""; out.textContent = "";
+  if(q.length < 3){ err.textContent = "Type at least 3 characters."; return; }
+  api("search", {q: q}, function(d){
+    if(!d || !d.ok){ err.textContent = (d && d.message) || "Couldn't search."; return; }
+    if(!d.results.length){ err.textContent = "No booking found."; return; }
+    for(var i = 0; i < d.results.length; i++){ out.appendChild(bookingHit(d.results[i])); }
+  }, function(){ err.textContent = "No signal — desk tools need internet."; });
+}
+function bookingHit(b){
+  var box = el("div", "hit");
+  var line = el("div"); var nm = el("b", "", b.name); line.appendChild(nm);
+  line.appendChild(document.createTextNode("  " + b.bookingId));
+  box.appendChild(line);
+  box.appendChild(el("div", "small", (b.mobile ? b.mobile + " · " : "") + b.seats + " ticket(s) · " + (b.paid ? "PAID" : "NOT PAID (" + (b.paidText || "—") + ")")));
+  for(var i = 0; i < b.tickets.length; i++){
+    (function(t){
+      var row = el("div", "tk");
+      row.appendChild(el("span", t.s === "USED" ? "st-used" : "st-valid", "Ticket " + t.no + "/" + t.of + " — " + (t.s === "USED" ? "IN" : "not yet")));
+      if(t.s !== "USED"){
+        var bt = el("button", "", "ADMIT"); bt.type = "button";
+        bt.addEventListener("click", function(){
+          bt.disabled = true;
+          api("admit", {t: t.t, ev: EV}, function(d){
+            if(d && d.result === "OK"){ row.firstChild.textContent = "Ticket " + t.no + "/" + t.of + " — IN"; row.firstChild.className = "st-used"; bt.remove(); refreshStats(); }
+            else { bt.disabled = false; bt.textContent = "RETRY"; }
+          }, function(){ bt.disabled = false; bt.textContent = "NO SIGNAL"; });
+        });
+        row.appendChild(bt);
+      }
+      box.appendChild(row);
+    })(b.tickets[i]);
+  }
+  if(b.paid && b.tickets.length){
+    var re = el("button", "pink block", "LOST / FORWARDED QR — ISSUE NEW ONES"); re.type = "button";
+    re.addEventListener("click", function(){
+      if(!confirm("Cancel every unused QR for " + b.name + " and issue new ones?\nAnyone already inside stays inside.")) return;
+      re.disabled = true;
+      api("reissue", {booking: b.bookingId}, function(d){
+        if(d && d.ok){
+          re.textContent = "DONE — " + d.replaced + " NEW QR(S)" + (d.mailed ? " · EMAILED" : "") + ". ASK THEM TO USE \"FIND MY TICKET\" ON THE SITE.";
+          re.disabled = true;
+        } else { re.disabled = false; alert((d && d.message) || "Couldn't reissue."); }
+      }, function(){ re.disabled = false; alert("No signal."); });
+    });
+    box.appendChild(re);
+  }
+  return box;
+}
+$("qBtn").addEventListener("click", findBookings);
+$("q").addEventListener("keydown", function(e){ if(e.key === "Enter") findBookings(); });
+
+/* cash sale */
+var GATE_PRICE = 0;
+(function(){ var s = $("gsQty"); for(var i = 1; i <= 10; i++){ var o = document.createElement("option"); o.value = i; o.textContent = i; s.appendChild(o); } })();
+function loadGatePrice(){
+  var cb = "mgc" + Date.now();
+  window[cb] = function(d){
+    delete window[cb];
+    var ev = null;
+    if(d && d.events){ for(var i = 0; i < d.events.length; i++){ if(d.events[i].code === EV) ev = d.events[i]; } }
+    if(!ev && d && d.event) ev = d.event;
+    GATE_PRICE = ev ? ev.price : 0;
+    updateGsPrice();
+  };
+  var s = document.createElement("script");
+  s.src = SCRIPT_URL + "?action=config&callback=" + cb + "&_=" + Date.now();
+  s.onerror = function(){ delete window[cb]; };
+  document.head.appendChild(s);
+}
+function updateGsPrice(){
+  var n = parseInt($("gsQty").value, 10) || 1;
+  $("gsPrice").textContent = GATE_PRICE ? "₹" + GATE_PRICE + " each — COLLECT ₹" + (GATE_PRICE * n) : "Price not loaded — check signal";
+}
+$("gsQty").addEventListener("change", updateGsPrice);
+$("gsBtn").addEventListener("click", function(){
+  var btn = this, err = $("gsErr"); err.textContent = "";
+  var n = parseInt($("gsQty").value, 10) || 1;
+  if(!confirm("Cash received: ₹" + (GATE_PRICE * n) + " for " + n + " ticket(s)?")) return;
+  btn.disabled = true;
+  api("gatesale", {ev: EV, seats: n, name: $("gsName").value.trim(), mobile: $("gsMobile").value.trim()}, function(d){
+    btn.disabled = false;
+    if(d && d.ok){
+      $("gsName").value = ""; $("gsMobile").value = ""; refreshStats();
+      showResult("ok", "SOLD ✓", d.seats + " ticket(s)", "₹" + d.amount + " · " + d.bookingId, "WRISTBANDS ON — ALREADY ADMITTED", 0);
+      locked = true;
+    } else { err.textContent = (d && d.message) || "Couldn't complete that sale."; }
+  }, function(){ btn.disabled = false; err.textContent = "No signal — cash sales need internet. Note it on paper."; });
+});
+
+/* ---------- start: auto-login on this phone if it has logged in before ---------- */
+(function(){
+  var saved = ""; try{ saved = localStorage.getItem("mapgate_pin") || ""; }catch(e){}
+  if(saved){ $("pin").value = ""; login(saved, true); }
+})();
+</script>
+</body>
+</html>
