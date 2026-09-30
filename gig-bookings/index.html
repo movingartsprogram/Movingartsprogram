@@ -118,6 +118,23 @@ p{font-family:'VT323',monospace;font-size:15px;line-height:1.3;color:#d8e8d8;mar
   box-shadow:0 6px 14px rgba(0,0,0,.6);}
 .poster-cap{font-family:Tahoma,Arial,sans-serif;font-size:7px;color:var(--phos-dim);text-align:center;letter-spacing:1px;margin-top:6px;}
 
+/* poster stage: holds the tape loader until the new poster is fully loaded */
+.poster-stage{position:relative;width:100%;aspect-ratio:4/5;border-radius:var(--r-sm);overflow:hidden;
+  background:radial-gradient(ellipse at 50% 45%,#0c1a0c 0%,#050905 100%);}
+.poster-wrap .poster-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .6s ease;}
+.poster-stage.ready img{opacity:1;}
+.tape-load{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;transition:opacity .4s ease;}
+.poster-stage.ready .tape-load{opacity:0;pointer-events:none;}
+.tape-load svg{width:72%;max-width:260px;height:auto;filter:drop-shadow(0 0 8px rgba(124,252,0,.35));}
+.tape-txt{font-family:'VT323',monospace;font-size:18px;letter-spacing:2px;color:var(--phos);
+  text-shadow:0 0 8px rgba(124,252,0,.45);animation:wa-pulse 1.6s ease-in-out infinite;}
+@keyframes reel-spin{to{transform:rotate(360deg);}}
+.reel{transform-box:fill-box;transform-origin:center;animation:reel-spin 2.2s linear infinite;}
+.poster-stage.stalled .reel,.poster-stage.stalled .tape-txt{animation:none;}
+@media (prefers-reduced-motion:reduce){.reel,.tape-txt{animation:none;}}
+
 /* ---------- event detail strip (playlist rows) ---------- */
 .wa-playlist{margin-top:14px;overflow:hidden;
   background:linear-gradient(180deg,#131313 0%, #050505 100%);
@@ -416,7 +433,29 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
 
         <!-- ═══ 2. THE POSTER — swap this file each gig, name stays the same ═══ -->
         <div class="poster-wrap">
-          <img id="eventPoster" src="current-event-poster.jpg" alt="Current Moving Arts Program event poster">
+          <div class="poster-stage" id="posterStage">
+            <div class="tape-load" aria-hidden="true">
+              <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="4" width="192" height="122" rx="10" fill="#0a1f0a" stroke="#7CFC00" stroke-width="3"/>
+                <rect x="22" y="14" width="156" height="34" rx="4" fill="#051105" stroke="#2c6a2c" stroke-width="2"/>
+                <text x="100" y="37" text-anchor="middle" font-family="VT323,monospace" font-size="20" fill="#7CFC00" letter-spacing="3">M.A.P.</text>
+                <rect x="26" y="58" width="148" height="44" rx="22" fill="#051105" stroke="#2c6a2c" stroke-width="2"/>
+                <g class="reel"><circle cx="62" cy="80" r="15" fill="none" stroke="#7CFC00" stroke-width="3"/>
+                  <line x1="62" y1="65" x2="62" y2="95" stroke="#7CFC00" stroke-width="3"/>
+                  <line x1="47" y1="80" x2="77" y2="80" stroke="#7CFC00" stroke-width="3"/>
+                  <line x1="51.4" y1="69.4" x2="72.6" y2="90.6" stroke="#7CFC00" stroke-width="3"/>
+                  <line x1="72.6" y1="69.4" x2="51.4" y2="90.6" stroke="#7CFC00" stroke-width="3"/></g>
+                <g class="reel"><circle cx="138" cy="80" r="15" fill="none" stroke="#7CFC00" stroke-width="3"/>
+                  <line x1="138" y1="65" x2="138" y2="95" stroke="#7CFC00" stroke-width="3"/>
+                  <line x1="123" y1="80" x2="153" y2="80" stroke="#7CFC00" stroke-width="3"/>
+                  <line x1="127.4" y1="69.4" x2="148.6" y2="90.6" stroke="#7CFC00" stroke-width="3"/>
+                  <line x1="148.6" y1="69.4" x2="127.4" y2="90.6" stroke="#7CFC00" stroke-width="3"/></g>
+                <path d="M40 126 L52 108 H148 L160 126" fill="#131313" stroke="#2c6a2c" stroke-width="2"/>
+              </svg>
+              <div class="tape-txt" id="tapeTxt">LOADING TRACK…</div>
+            </div>
+            <img id="eventPoster" alt="Current Moving Arts Program event poster">
+          </div>
           <div class="poster-cap" id="posterCap">CURRENT EVENT</div>
         </div>
 
@@ -664,6 +703,40 @@ var BUSY = false;                          /* true while a booking is being made
 var CONFIRM_TXT = "CONFIRM BOOKING & GET PAYMENT DETAILS";
 var HOW_TEXT = "Each person needs their own QR. Show it at the gate — it is scanned once and you get a wristband. After that, the wristband is your pass, so keep it on. A QR that has already been scanned will not work again.";
 
+/* ---------- poster: show the tape until the NEW poster is fully loaded ----------
+   The poster is only requested once the Sheet has answered (so the right
+   ?v= number is known) and is only revealed once it has downloaded. The
+   guest never sees a cached old poster flip to the new one. */
+var EVENT_LIVE = false;   /* true once the Sheet has sent real event details */
+var POSTER_WANT = "";
+function loadPoster(src){
+  if(POSTER_WANT === src) return;
+  POSTER_WANT = src;
+  var stage = document.getElementById("posterStage");
+  var img = document.getElementById("eventPoster");
+  var pre = new Image();
+  pre.onload = function(){
+    if(POSTER_WANT !== src) return;
+    img.src = src;
+    stage.className = "poster-stage ready";
+  };
+  pre.onerror = function(){
+    if(POSTER_WANT !== src) return;
+    stage.className = "poster-stage stalled";
+    document.getElementById("tapeTxt").textContent = "POSTER COMING SOON";
+  };
+  pre.src = src;
+}
+function showPoster(){
+  if(EVENT_LIVE) loadPoster("current-event-poster.jpg?v=" + (EVENT.posterVersion || 1));
+}
+/* If the Sheet is very slow or unreachable, don't leave the tape spinning for ever. */
+setTimeout(function(){
+  if(!EVENT_LIVE && !/ready/.test(document.getElementById("posterStage").className)){
+    loadPoster("current-event-poster.jpg");
+  }
+}, 10000);
+
 /* ---------- render event details ---------- */
 function seatsLeft(){ return Math.max(0, EVENT.seats - (EVENT.booked || 0)); }
 
@@ -689,7 +762,7 @@ function renderEvent(){
   document.getElementById("evVenue").textContent = EVENT.venue;
   document.getElementById("evPrice").textContent = tierLine();
   document.getElementById("posterCap").textContent = EVENT.name;
-  document.getElementById("eventPoster").src = "current-event-poster.jpg?v=" + (EVENT.posterVersion || 1);
+  showPoster();
 
   var left = seatsLeft();
   var btn = document.getElementById("submitBtn");
@@ -720,7 +793,7 @@ function renderEvent(){
 /* ---------- two-gig version of the details panel ---------- */
 function renderMulti(){
   document.getElementById("posterCap").textContent = EVENT.name;
-  document.getElementById("eventPoster").src = "current-event-poster.jpg?v=" + (EVENT.posterVersion || 1);
+  showPoster();
 
   var chosen = PICKED >= 0;
   document.getElementById("eventName").textContent = chosen ? EVENT.name : "CHOOSE YOUR GIG ABOVE ↑";
@@ -819,7 +892,7 @@ function loadEvent(){
   var answered = false;
   window[cb] = function(data){
     answered = true;
-    if(data && data.ok && data.event){ CFG_TRIES = 0; for(var k in data.event){ EVENT[k] = data.event[k]; } }
+    if(data && data.ok && data.event){ CFG_TRIES = 0; EVENT_LIVE = true; for(var k in data.event){ EVENT[k] = data.event[k]; } }
     if(data && data.ok && data.events && data.events.length > 1){
       EVENTS = data.events;
       buildVenuePicker();
