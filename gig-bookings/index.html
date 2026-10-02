@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- MAP GIG BOOKINGS — build: bookings-v1 -->
+<!-- MAP GIG BOOKINGS — build: bookings-v4.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -511,8 +511,9 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
 
           <p class="err" id="formErr"></p>
 
-          <button type="button" class="cta cta-block" id="submitBtn">CONFIRM BOOKING &amp; GET PAYMENT DETAILS</button>
+          <button type="button" class="cta cta-block" id="submitBtn">BOOK &amp; PAY SECURELY</button>
           <p class="small">Your name and number are used only to manage this booking. We don't share them with anyone.</p>
+          <p class="small">Refunds are given only if MAP cancels or postpones the gig. <a href="/policies/#refunds" style="color:var(--vu)">Read our policies</a></p>
 
           <div class="rzp-trust">
             <svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true">
@@ -700,7 +701,7 @@ var WA_NUMBER = "919849690077";
 var BOOK_URL = "https://movingartsprogram.com/gig-bookings/";
 var TICKET_BASE = BOOK_URL + "?t=";       /* a ticket's own link; its QR carries this */
 var BUSY = false;                          /* true while a booking is being made */
-var CONFIRM_TXT = "CONFIRM BOOKING & GET PAYMENT DETAILS";
+var CONFIRM_TXT = "BOOK & PAY SECURELY";
 var HOW_TEXT = "Each person needs their own QR. Show it at the gate — it is scanned once and you get a wristband. After that, the wristband is your pass, so keep it on. A QR that has already been scanned will not work again.";
 
 /* ---------- poster: show the tape until the NEW poster is fully loaded ----------
@@ -745,7 +746,7 @@ function tierLine(){
 }
 function tierBtnText(){
   if(EVENT.tierMode === "wait")    return "BOOKINGS OPEN SOON";
-  if(EVENT.tierMode === "soldout") return "SOLD OUT";
+  if(EVENT.tierMode === "soldout") return EVENT.tierName ? EVENT.tierName + " SOLD OUT" : "SOLD OUT";
   return "BOOKINGS CLOSED";
 }
 function showNotice(txt){
@@ -911,7 +912,7 @@ function loadEvent(){
 function retryLoad(){
   if(CFG_TRIES >= 3) return;
   CFG_TRIES++;
-  document.getElementById("eventName").textContent = "LOADING EVENT…";
+  if(!EVENT_LIVE) document.getElementById("eventName").textContent = "LOADING EVENT…";
   setTimeout(loadEvent, 2000 * Math.pow(2, CFG_TRIES - 1));
 }
 var TICKET_MODE = /[?&]t=[A-Za-z0-9]+/.test(location.search);
@@ -997,7 +998,7 @@ document.getElementById("submitBtn").addEventListener("click", function(){
       if(multiGig()){ lockPicker(false); }
       showErr((data && data.message) || "Couldn't save that — please check your connection and try again.");
       /* the price or tier may have moved — refresh so the page tells the truth */
-      if(data && data.message && /price has just changed|sales open|sold out|closed|not open/i.test(data.message)){ loadEvent(); }
+      if(data && data.message && /price has just changed|sales open|sold out|closed|not open|left/i.test(data.message)){ loadEvent(); }
     }
   };
   var q = "?action=book&callback=" + cb +
@@ -1039,7 +1040,7 @@ function checkThenBack(){
     if(data && data.ok && data.paid){
       LAST.paid = true;
       if(data.tickets && data.tickets.length){ LAST.tickets = data.tickets; }
-      mapTrack("booking_confirmed_late", {event_name: EVENT.name, booking_id: LAST.id});
+      trackConfirmed(true);
       showTicket(true);
     } else {
       backToForm(MSG);
@@ -1128,6 +1129,16 @@ document.getElementById("waBtn2").addEventListener("click", function(){
   mapTrack("booking_whatsapp", {event_name: EVENT.name});
 });
 
+/* booking_confirmed = money verified by the Apps Script (never the browser's
+   word alone). Fires once per booking, whichever route confirms it first:
+   the verify reply, the ticket poll, or the late-UPI check (late: 1). */
+function trackConfirmed(late){
+  if(!LAST || LAST.gaDone) return;
+  LAST.gaDone = true;
+  mapTrack("booking_confirmed", {event_name: EVENT.name, event_code: EVENT.code, seats: LAST.seats,
+    value: LAST.amount, currency: "INR", booking_id: LAST.id, tier: EVENT.tierName || "", late: late ? 1 : 0});
+}
+
 /* ══════════════════════════════════════════════════════════════
    THE TICKET SCREEN
    Reached the instant Razorpay verifies a payment.
@@ -1143,15 +1154,13 @@ function showTicket(confirmed){
   document.getElementById("tTime").textContent   = EVENT.time;
   document.getElementById("tVenue").textContent  = EVENT.venue;
 
-  /* showTicket() is only ever called with confirmed=true now (from
-     verifyPayment()'s finish()) — the manual-claim route that used to
-     call showTicket(false) has been removed. The branch below is kept
-     rather than deleted, in case a future release needs it again. */
+  /* confirmed=false means Razorpay said paid but the Script hasn't agreed yet
+     (slow, or still checking). The ticket poll below flips it to confirmed. */
   var st = document.getElementById("tStatus");
   if(st){
     st.textContent = confirmed
       ? "Payment confirmed. You're in — see you there."
-      : "Payment being verified. We'll confirm on WhatsApp shortly.";
+      : "Payment received — we're confirming it with the bank. Your tickets will appear below in a moment.";
   }
 
   buildShare();
@@ -1274,8 +1283,8 @@ function verifyPayment(resp){
   var wait = document.getElementById("verifyWrap");
   wait.classList.add("show");
 
-  mapTrack("booking_confirmed", {event_name: EVENT.name, event_code: EVENT.code, seats: LAST.seats,
-    value: LAST.amount, currency: "INR", booking_id: LAST.id});
+  /* Razorpay's window says paid. Not counted in GA4 until the Script agrees. */
+  mapTrack("booking_payment_reported", {event_name: EVENT.name, booking_id: LAST.id});
 
   var settled = false;
   function finish(ok){
@@ -1284,15 +1293,16 @@ function verifyPayment(resp){
     /* The money is already with Razorpay either way. If our own check
        is slow or fails, we still show the ticket — the webhook will
        tick the Sheet a moment later, and PK gets an email regardless. */
-    showTicket(true);
+    showTicket(ok === true && !LAST.unverified);
   }
 
-  if(!SCRIPT_URL){ setTimeout(finish, 600); return; }
+  if(!SCRIPT_URL){ setTimeout(function(){ finish(true); }, 600); return; }
 
   LAST.paymentId = resp.razorpay_payment_id || "";
   var cb = "mapVf" + Date.now();
   window[cb] = function(data){
     window[cb] = function(){};
+    if(data && data.ok){ trackConfirmed(false); } else { LAST.unverified = true; }
     if(data && data.tickets && data.tickets.length){ LAST.tickets = data.tickets; }
     finish(true);
   };
@@ -1468,7 +1478,7 @@ function renderTicketList(box, tickets, ev){
       box.appendChild(card);
     })(tickets[i]);
   }
-  box.appendChild(el("p", "tk-note", "Tip: turn your screen brightness up at the gate."));
+  box.appendChild(el("p", "tk-note", "Tip: take a screenshot of your QR now — signal at the venue can be weak. Turn your screen brightness up at the gate."));
 }
 
 /* If the confirmation reply was slow, fetch the tickets by payment ID. */
@@ -1489,6 +1499,9 @@ function pollTickets(n){
     delete window[cb];
     if(data && data.ok && data.tickets && data.tickets.length){
       LAST.tickets = data.tickets;
+      trackConfirmed(false);
+      var stx = document.getElementById("tStatus");
+      if(stx) stx.textContent = "Payment confirmed. You're in — see you there.";
       renderTicketList(document.getElementById("ticketList"), LAST.tickets, EVENT);
       document.getElementById("waBtn2").href = ownWaLink(LAST.mobile, EVENT, LAST.tickets, LAST.id);
     } else {
