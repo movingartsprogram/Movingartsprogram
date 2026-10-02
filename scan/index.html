@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- MAP GATE SCANNER — build: scan-v1. Volunteers only. Not in the sitemap, not indexed. -->
+<!-- MAP GATE SCANNER — build: scan-v2-offline. Volunteers only. Not in the sitemap, not indexed. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -8,6 +8,11 @@
 <meta name="theme-color" content="#0d0d12">
 <title>MAP Gate</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MAP Gate">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -97,6 +102,7 @@ button.block{display:block;width:100%;margin-top:10px;}
       <p class="err" id="loginErr"></p>
       <button class="block" id="loginBtn" type="button">START</button>
       <p class="small">Volunteers only. Your PIN is given to you by MAP.</p>
+      <p class="small" id="buildTag"></p>
     </div>
   </div>
 
@@ -113,6 +119,7 @@ button.block{display:block;width:100%;margin-top:10px;}
     </div>
 
     <div class="card count" id="countBox">IN 0 / 0<small id="countSub">—</small></div>
+    <div class="small" id="listNote" style="margin:-4px 0 10px;text-align:center"></div>
     <div class="conflict hide" id="conflictBox"></div>
 
     <div class="tabs">
@@ -197,6 +204,9 @@ var locked = false, lastCode = "", lastAt = 0, stream = null, detector = null, c
 var resultTimer = null, wakeLock = null, audioCtx = null;
 var RECENT = {};            /* token -> time this phone admitted it (last 60 seconds) */
 var detecting = false;
+var BUILD = "scan-v2-offline";
+var SYNCING = false;        /* one offline-sync request at a time */
+var APP_SAVED = false;      /* true once this phone has saved the page for offline use */
 
 function $(id){ return document.getElementById(id); }
 function el(tag, cls, text){ var n = document.createElement(tag); if(cls) n.className = cls; if(text !== undefined) n.textContent = text; return n; }
@@ -241,6 +251,21 @@ function buzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
 function login(pin, silent){
   $("loginErr").textContent = "";
   PIN = pin;
+  /* A phone that has logged in before opens straight to the camera from its
+     saved details — no waiting for signal. The PIN is re-checked quietly in
+     the background; if it has been revoked, the phone logs itself out. */
+  if(silent){
+    var sv = null;
+    try{ sv = JSON.parse(localStorage.getItem("mapgate_staff") || "null"); }catch(e){}
+    if(sv && sv.pin === pin && sv.staff){
+      STAFF = sv.staff; showMain();
+      api("login", {}, function(d){
+        if(d && d.denied){ logoutHard(); return; }
+        if(d && d.ok){ STAFF = d; try{ localStorage.setItem("mapgate_staff", JSON.stringify({pin: PIN, staff: STAFF})); }catch(e){} }
+      }, function(){});
+      return;
+    }
+  }
   api("login", {}, function(d){
     if(d && d.ok){
       STAFF = d;
@@ -295,6 +320,7 @@ function showMain(){
   setInterval(refreshStats, 15000);
   setInterval(loadRoster, 60000);
   setInterval(syncQueue, 8000);
+  setInterval(loadGatePrice, 300000);
   keepAwake();
   startCam();
 }
@@ -307,36 +333,57 @@ function refreshStats(){
     $("countSub").textContent = (d.total - d.entered) + " still to come";
   });
 }
+function showListNote(){
+  var n = Object.keys(ROSTER).length, at = 0;
+  try{ at = Number(localStorage.getItem("mapgate_rosterat_" + EV) || 0); }catch(e){}
+  var t = at ? new Date(at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}) : "";
+  $("listNote").textContent = (APP_SAVED ? "APP SAVED ✓ · " : "") +
+    "OFFLINE LIST: " + n + " ticket" + (n === 1 ? "" : "s") + (at ? " · saved " + t : " · not saved yet");
+}
 function loadRoster(){
+  /* Always bring back this phone's own saved copy first — it holds any scans
+     that haven't synced yet, even after the page was closed and reopened. */
+  if(!Object.keys(ROSTER).length){
+    try{ ROSTER = JSON.parse(localStorage.getItem("mapgate_roster_" + EV) || "{}"); }catch(e){ ROSTER = {}; }
+  }
+  showListNote();
   if(QUEUE.length) return;           /* don't overwrite local marks that haven't synced */
   api("roster", {ev: EV}, function(d){
     if(!d || !d.ok) return;
     var r = {};
     for(var i = 0; i < d.roster.length; i++){ var x = d.roster[i]; r[x[0]] = {n: x[1], no: x[2], of: x[3], s: x[4]}; }
     ROSTER = r;
-    try{ localStorage.setItem("mapgate_roster_" + EV, JSON.stringify(r)); }catch(e){}
+    try{ localStorage.setItem("mapgate_roster_" + EV, JSON.stringify(r)); localStorage.setItem("mapgate_rosterat_" + EV, String(Date.now())); }catch(e){}
+    showListNote();
   });
-  if(!Object.keys(ROSTER).length){
-    try{ ROSTER = JSON.parse(localStorage.getItem("mapgate_roster_" + EV) || "{}"); }catch(e){}
-  }
 }
 try{ QUEUE = JSON.parse(localStorage.getItem("mapgate_queue") || "[]"); }catch(e){ QUEUE = []; }
 function saveQueue(){ try{ localStorage.setItem("mapgate_queue", JSON.stringify(QUEUE)); }catch(e){} }
 
 function syncQueue(){
-  if(!QUEUE.length || !PIN) return;
+  if(SYNCING || !QUEUE.length || !PIN || !STAFF) return;
+  SYNCING = true;
   var item = QUEUE[0];
-  api("scan", {t: item.t, ev: EV, at: item.at, off: 1}, function(d){
+  api("scan", {t: item.t, ev: item.ev || EV, at: item.at, off: 1}, function(d){
+    SYNCING = false;
+    if(!d) return;
+    if(d.denied){ logoutHard(); return; }          /* the queue stays saved on the phone */
+    if(!d.ok) return;                              /* "busy" etc. — keep it queued, try again next tick */
     QUEUE.shift(); saveQueue();
-    var mine = d && d.by && String(d.by).indexOf(STAFF.name) === 0;
-    if(d && d.result === "USED" && !mine){
-      var box = $("conflictBox");
+    var by = String(d.by || ""), nm = String(STAFF.name || "");
+    var mine = (by === nm || by.indexOf(nm + " (") === 0);
+    var box = $("conflictBox");
+    if(d.result === "USED" && !mine){
       box.classList.remove("hide");
       box.appendChild(el("div", "", "⚠ CLASH: " + d.name + " (ticket " + d.no + "/" + d.of + ") was already scanned " + (d.at || "") + " by " + (d.by || "another phone") + ". They were let in offline — check with them."));
+    } else if(d.result === "VOID" || d.result === "INVALID" || d.result === "WRONG_EVENT"){
+      box.classList.remove("hide");
+      box.appendChild(el("div", "", "⚠ CHECK: a ticket let in offline " + (d.name ? "(" + d.name + " " + d.no + "/" + d.of + ") " : "") + "is " +
+        (d.result === "VOID" ? "cancelled or re-issued" : d.result === "WRONG_EVENT" ? "for a different event" : "not in the list") + " — check with them."));
     }
     if(!QUEUE.length){ loadRoster(); refreshStats(); }
     else syncQueue();
-  }, function(){ /* still offline — try again next tick */ });
+  }, function(){ SYNCING = false; /* still offline — try again next tick */ });
 }
 
 /* ---------- result screen ---------- */
@@ -404,6 +451,9 @@ function handleCode(raw){
   locked = true;
   showResult("wait", "CHECKING…", "", "", "", 0);
 
+  /* The phone itself says it has no connection: don't wait, use the saved list. */
+  if(navigator.onLine === false){ offlineCheck(tok); return; }
+
   api("scan", {t: tok, ev: EV}, function(d){
     if(d && d.denied){ closeResult(); logoutHard(); return; }
     if(!d || !d.ok){ showResult("bad", "TRY AGAIN", "", (d && d.message) || "Couldn't check that one.", "", 0); return; }
@@ -435,7 +485,18 @@ function handleCode(raw){
     }
   }, function(){
     offlineCheck(tok);
-  });
+  }, ONLINE ? 6000 : 2000);
+}
+
+/* Mark a ticket as in, on this phone, and queue it to tell the Sheet when signal returns. */
+function offlineAdmit(tok){
+  var t = ROSTER[tok];
+  if(!t || t.s === "U") return false;
+  t.s = "U";
+  RECENT[tok] = Date.now();
+  QUEUE.push({t: tok, at: Date.now(), ev: EV}); saveQueue();
+  try{ localStorage.setItem("mapgate_roster_" + EV, JSON.stringify(ROSTER)); }catch(e){}
+  return true;
 }
 
 /* No signal: check against this phone's own copy of the list. */
@@ -452,10 +513,7 @@ function offlineCheck(tok){
     addLog("r", "USED again: " + t.n);
     return;
   }
-  t.s = "U";
-  RECENT[tok] = Date.now();
-  QUEUE.push({t: tok, at: Date.now()}); saveQueue();
-  try{ localStorage.setItem("mapgate_roster_" + EV, JSON.stringify(ROSTER)); }catch(e){}
+  offlineAdmit(tok);
   beep(880, 140); buzz(60);
   showResult("ok", "ENTRY OK", t.n, "Ticket " + t.no + " of " + t.of, "OFFLINE — WILL SYNC · WRISTBAND ON", 1500);
   addLog("g", t.n + " · " + t.no + "/" + t.of + " (offline)");
@@ -566,7 +624,49 @@ function findBookings(){
     if(!d || !d.ok){ err.textContent = (d && d.message) || "Couldn't search."; return; }
     if(!d.results.length){ err.textContent = "No booking found."; return; }
     for(var i = 0; i < d.results.length; i++){ out.appendChild(bookingHit(d.results[i])); }
-  }, function(){ err.textContent = "No signal — desk tools need internet."; });
+  }, function(){ offlineFind(q); });
+}
+
+/* No signal: search this phone's saved list. Names only — the saved list has
+   no mobile numbers or booking references, and re-issuing needs internet. */
+function offlineFind(q){
+  var out = $("qOut"), err = $("qErr");
+  err.textContent = ""; out.textContent = "";
+  if(!Object.keys(ROSTER).length){ err.textContent = "No signal — and this phone has no saved guest list."; return; }
+  if(/^[0-9 +\-]+$/.test(q)){ err.textContent = "No signal — mobile search needs internet. Try the guest's NAME."; return; }
+  var ql = q.toLowerCase(), groups = {}, order = [];
+  for(var tok in ROSTER){
+    var r = ROSTER[tok];
+    if(String(r.n).toLowerCase().indexOf(ql) < 0) continue;
+    var key = r.n + "|" + r.of;
+    if(!groups[key]){ groups[key] = {name: r.n, tickets: []}; order.push(key); }
+    groups[key].tickets.push({t: tok, no: r.no, of: r.of, s: r.s});
+  }
+  if(!order.length){ err.textContent = "No signal. Nothing on the saved list matches that name."; return; }
+  out.appendChild(el("div", "small", "OFFLINE LIST — names only. Re-issue and mobile search need signal."));
+  for(var g = 0; g < order.length && g < 8; g++){
+    (function(grp){
+      var box = el("div", "hit");
+      var line = el("div"); line.appendChild(el("b", "", grp.name)); box.appendChild(line);
+      grp.tickets.sort(function(a, b){ return a.no - b.no; });
+      for(var i = 0; i < grp.tickets.length; i++){
+        (function(t){
+          var row = el("div", "tk");
+          var lab = el("span", t.s === "U" ? "st-used" : "st-valid", "Ticket " + t.no + "/" + t.of + " — " + (t.s === "U" ? "IN" : "not yet"));
+          row.appendChild(lab);
+          if(t.s !== "U"){
+            var bt = el("button", "", "ADMIT"); bt.type = "button";
+            bt.addEventListener("click", function(){
+              if(offlineAdmit(t.t)){ lab.textContent = "Ticket " + t.no + "/" + t.of + " — IN (offline)"; lab.className = "st-used"; bt.remove(); }
+            });
+            row.appendChild(bt);
+          }
+          box.appendChild(row);
+        })(grp.tickets[i]);
+      }
+      out.appendChild(box);
+    })(groups[order[g]]);
+  }
 }
 function bookingHit(b){
   var box = el("div", "hit");
@@ -583,9 +683,13 @@ function bookingHit(b){
         bt.addEventListener("click", function(){
           bt.disabled = true;
           api("admit", {t: t.t, ev: EV}, function(d){
-            if(d && d.result === "OK"){ row.firstChild.textContent = "Ticket " + t.no + "/" + t.of + " — IN"; row.firstChild.className = "st-used"; bt.remove(); refreshStats(); }
+            if(d && (d.result === "OK" || d.result === "USED")){ row.firstChild.textContent = "Ticket " + t.no + "/" + t.of + " — IN"; row.firstChild.className = "st-used"; bt.remove(); refreshStats(); }
             else { bt.disabled = false; bt.textContent = "RETRY"; }
-          }, function(){ bt.disabled = false; bt.textContent = "NO SIGNAL"; });
+          }, function(){
+            /* no reply: if the saved list knows this ticket, admit it from the phone and sync later */
+            if(ROSTER[t.t] && offlineAdmit(t.t)){ row.firstChild.textContent = "Ticket " + t.no + "/" + t.of + " — IN (offline)"; row.firstChild.className = "st-used"; bt.remove(); }
+            else { bt.disabled = false; bt.textContent = "NO SIGNAL"; }
+          });
         });
         row.appendChild(bt);
       }
@@ -602,7 +706,7 @@ function bookingHit(b){
           re.textContent = "DONE — " + d.replaced + " NEW QR(S)" + (d.mailed ? " · EMAILED" : "") + ". ASK THEM TO USE \"FIND MY TICKET\" ON THE SITE.";
           re.disabled = true;
         } else { re.disabled = false; alert((d && d.message) || "Couldn't reissue."); }
-      }, function(){ re.disabled = false; alert("No signal."); });
+      }, function(){ re.disabled = false; alert("No reply. It may have gone through — search the booking again to check before retrying."); }, 20000);
     });
     box.appendChild(re);
   }
@@ -612,7 +716,7 @@ $("qBtn").addEventListener("click", findBookings);
 $("q").addEventListener("keydown", function(e){ if(e.key === "Enter") findBookings(); });
 
 /* cash sale */
-var GATE_PRICE = 0;
+var GATE_PRICE = 0, GATE_TIER = "", GATE_MODE = "";
 (function(){ var s = $("gsQty"); for(var i = 1; i <= 10; i++){ var o = document.createElement("option"); o.value = i; o.textContent = i; s.appendChild(o); } })();
 function loadGatePrice(){
   var cb = "mgc" + Date.now();
@@ -622,6 +726,8 @@ function loadGatePrice(){
     if(d && d.events){ for(var i = 0; i < d.events.length; i++){ if(d.events[i].code === EV) ev = d.events[i]; } }
     if(!ev && d && d.event) ev = d.event;
     GATE_PRICE = ev ? ev.price : 0;
+    GATE_TIER = ev ? (ev.tierName || "") : "";
+    GATE_MODE = ev ? (ev.tierMode || "") : "";
     updateGsPrice();
   };
   var s = document.createElement("script");
@@ -631,12 +737,16 @@ function loadGatePrice(){
 }
 function updateGsPrice(){
   var n = parseInt($("gsQty").value, 10) || 1;
-  $("gsPrice").textContent = GATE_PRICE ? "₹" + GATE_PRICE + " each — COLLECT ₹" + (GATE_PRICE * n) : "Price not loaded — check signal";
+  var txt = GATE_PRICE ? "₹" + GATE_PRICE + " each" + (GATE_TIER ? " (" + GATE_TIER + ")" : "") + " — COLLECT ₹" + (GATE_PRICE * n) : "Price not loaded — check signal";
+  if(GATE_PRICE && GATE_MODE && GATE_MODE !== "active") txt += "  ⚠ ONLINE TIER IS NOT LIVE — CHECK THE PRICE WITH PK BEFORE TAKING CASH";
+  $("gsPrice").textContent = txt;
 }
 $("gsQty").addEventListener("change", updateGsPrice);
 $("gsBtn").addEventListener("click", function(){
   var btn = this, err = $("gsErr"); err.textContent = "";
   var n = parseInt($("gsQty").value, 10) || 1;
+  if(navigator.onLine === false){ err.textContent = "No signal — cash sales need internet. Note it on paper."; return; }
+  if(!GATE_PRICE){ err.textContent = "Price not loaded yet — wait for signal, then try again."; loadGatePrice(); return; }
   if(!confirm("Cash received: ₹" + (GATE_PRICE * n) + " for " + n + " ticket(s)?")) return;
   btn.disabled = true;
   api("gatesale", {ev: EV, seats: n, name: $("gsName").value.trim(), mobile: $("gsMobile").value.trim()}, function(d){
@@ -646,8 +756,29 @@ $("gsBtn").addEventListener("click", function(){
       showResult("ok", "SOLD ✓", d.seats + " ticket(s)", "₹" + d.amount + " · " + d.bookingId, "WRISTBANDS ON — ALREADY ADMITTED", 0);
       locked = true;
     } else { err.textContent = (d && d.message) || "Couldn't complete that sale."; }
-  }, function(){ btn.disabled = false; err.textContent = "No signal — cash sales need internet. Note it on paper."; });
+  }, function(){
+    /* No reply is NOT the same as "didn't happen": the sale may have been saved. Never invite a blind retry. */
+    err.textContent = "No reply from the system — the sale MAY have gone through. Use FIND (above) to search the guest's name before taking cash again.";
+    setTimeout(function(){ btn.disabled = false; }, 15000);
+  }, 15000);
 });
+
+/* ---------- coming back online / going offline ---------- */
+window.addEventListener("online", function(){ setNet(true); if(STAFF){ syncQueue(); loadRoster(); refreshStats(); loadGatePrice(); } });
+window.addEventListener("offline", function(){ setNet(false); });
+
+/* ---------- save this page on the phone so it opens with no signal ---------- */
+$("buildTag").textContent = "build " + BUILD;
+updateGsPrice();
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+if("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js", {scope: "./"})
+      .then(function(){ return navigator.serviceWorker.ready; })
+      .then(function(){ APP_SAVED = true; showListNote(); })
+      .catch(function(){});
+  });
+}
 
 /* ---------- start: auto-login on this phone if it has logged in before ---------- */
 (function(){

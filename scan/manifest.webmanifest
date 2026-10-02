@@ -1,0 +1,15 @@
+{
+  "name": "MAP Gate",
+  "short_name": "MAP Gate",
+  "description": "Door scanner for Moving Arts Program volunteers",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0d12",
+  "theme_color": "#0d0d12",
+  "icons": [
+    {"src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}
