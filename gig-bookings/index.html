@@ -731,10 +731,14 @@ function loadPoster(src){
 function showPoster(){
   if(EVENT_LIVE) loadPoster("current-event-poster.jpg?v=" + (EVENT.posterVersion || 1));
 }
-/* If the Sheet is very slow or unreachable, don't leave the tape spinning for ever. */
+/* If the Sheet is slow, the tape keeps spinning and the page keeps asking.
+   It NEVER loads a poster without the Sheet's version number — an un-numbered
+   poster address is exactly what a phone/GitHub has cached from the last gig,
+   which is how the old poster used to flash up before the new one. */
 setTimeout(function(){
-  if(!EVENT_LIVE && !/ready/.test(document.getElementById("posterStage").className)){
-    loadPoster("current-event-poster.jpg");
+  if(!EVENT_LIVE){
+    var t = document.getElementById("tapeTxt");
+    if(t) t.textContent = "STILL LOADING…";
   }
 }, 10000);
 
@@ -910,10 +914,17 @@ function loadEvent(){
 /* On a busy launch morning Google can be slow to answer. Try again by
    itself (after 2, 4 and 8 seconds) instead of leaving a dead page. */
 function retryLoad(){
-  if(CFG_TRIES >= 3) return;
+  if(CFG_TRIES >= 8){
+    /* Every try failed: stop the tape and say so, rather than spin for ever. */
+    if(!EVENT_LIVE){
+      document.getElementById("posterStage").className = "poster-stage stalled";
+      document.getElementById("tapeTxt").textContent = "PLEASE REFRESH THE PAGE";
+    }
+    return;
+  }
   CFG_TRIES++;
   if(!EVENT_LIVE) document.getElementById("eventName").textContent = "LOADING EVENT…";
-  setTimeout(loadEvent, 2000 * Math.pow(2, CFG_TRIES - 1));
+  setTimeout(loadEvent, Math.min(8000, 2000 * Math.pow(2, CFG_TRIES - 1)));
 }
 var TICKET_MODE = /[?&]t=[A-Za-z0-9]+/.test(location.search);
 if(!TICKET_MODE){
