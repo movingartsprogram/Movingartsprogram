@@ -85,7 +85,16 @@ p{margin:0 0 12px;color:var(--cream-dim);}
   width:220px;margin:0 auto 22px;padding:16px 22px;border-radius:22px;
   border:1px solid var(--gold-line);background:rgba(5,12,8,.75);
 }
-.partners{width:300px;margin:0 auto 34px;border-radius:10px;}
+.partners-wrap{position:relative;width:300px;margin:0 auto 34px;}
+.partners{width:100%;border-radius:10px;}
+/* two invisible hit areas over the logo strip: left = Dudhsagar, right = Ouro */
+.partners-wrap a{position:absolute;top:0;bottom:0;}
+.partners-wrap .to-dudhsagar{left:0;width:60%;}
+.partners-wrap .to-ouro{right:0;width:40%;}
+a.inline{color:inherit;text-decoration:underline;text-decoration-color:var(--gold-line);text-underline-offset:3px;}
+a.inline:hover{text-decoration-color:var(--gold);}
+.interest{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:clamp(22px,6vw,30px);color:var(--cream);margin:26px 0 0;}
+.btn.wa{font-size:13px;padding:14px 24px;}
 .hero h1{font-size:clamp(52px,14vw,96px);margin:6px 0 0;}
 .date{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:28px;color:var(--gold);margin:0 0 10px;}
 .hero p{color:var(--cream);font-size:21px;max-width:34ch;margin-left:auto;margin-right:auto;}
@@ -165,6 +174,7 @@ p{margin:0 0 12px;color:var(--cream-dim);}
 }
 .btn.ghost{background:transparent;color:var(--gold);}
 .btn:hover{filter:brightness(1.1);}
+.frame:not(.center) .btn{margin-left:0;}
 
 footer{
   display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:11px;
@@ -206,7 +216,11 @@ function gtag(){dataLayer.push(arguments);}
   <section class="frame hero center">
     <p class="kicker">A Moving Arts Program original</p>
     <img class="map-logo" src="/map-logo-arts-and-beyond.png" width="320" height="182" alt="Moving Arts Program — Arts &amp; Beyond">
-    <img class="partners" src="img/partners.jpg" width="515" height="107" alt="Dudhsagar Plantation and Ouro De Goa spiced premium cashew feni">
+    <div class="partners-wrap">
+      <img class="partners" src="img/partners.jpg" width="515" height="107" alt="Dudhsagar Plantation and Ouro De Goa spiced premium cashew feni">
+      <a class="to-dudhsagar" href="https://www.dudhsagarplantation.com" target="_blank" rel="noopener noreferrer" aria-label="Dudhsagar Plantation website" title="Dudhsagar Plantation"></a>
+      <a class="to-ouro" href="https://ourodegoa.in/" target="_blank" rel="noopener noreferrer" aria-label="Ouro De Goa website" title="Ouro De Goa"></a>
+    </div>
     <p class="kicker">The Feni Trail &nbsp;·&nbsp; For a selected few</p>
     <p class="date">17 October</p>
     <h1>Sorry.<br>We're full.</h1>
@@ -217,7 +231,7 @@ function gtag(){dataLayer.push(arguments);}
 
   <!-- 02 — the plan -->
   <section class="frame plan">
-    <p class="kicker">Dudhsagar Plantation &nbsp;·&nbsp; One day, one night</p>
+    <p class="kicker"><a class="inline" href="https://www.dudhsagarplantation.com" target="_blank" rel="noopener noreferrer">Dudhsagar Plantation</a> &nbsp;·&nbsp; One day, one night</p>
     <h2>The plan.</h2>
     <p class="sub">A selected few, one farm, nothing to organise.</p>
     <p class="day">SATURDAY 17 OCTOBER</p>
@@ -251,7 +265,7 @@ function gtag(){dataLayer.push(arguments);}
       <figure class="tile" style="margin:0"><img src="img/still.jpg" width="434" height="466" loading="lazy" alt="Illustration of a wood-fired copper still"><span>THE STILL</span></figure>
     </div>
     <p class="kicker">Saturday &nbsp;·&nbsp; Afternoon</p>
-    <h2>Where Ouro comes from.</h2>
+    <h2>Where <a class="inline" href="https://ourodegoa.in/" target="_blank" rel="noopener noreferrer">Ouro</a> comes from.</h2>
     <div class="cols">
       <div><p class="kicker">The spice trail</p><p>Black pepper vines, banana palms, cashew and coconut groves. Crush a leaf and smell the spice where it grows.</p></div>
       <div><p class="kicker">The copper still</p><p>Not cashew season, so the still runs on water this time. Same wood fire, same copper. A very pure rehearsal, if a mild one.</p></div>
@@ -264,7 +278,7 @@ function gtag(){dataLayer.push(arguments);}
     <p class="kicker">Saturday &nbsp;·&nbsp; After the trail</p>
     <h2>A natural pool in the middle of the green.</h2>
     <hr class="rule">
-    <p>Cool, clear water on a working farm in South Goa. A long, lazy swim before anything else happens.</p>
+    <p>Cool, clear water on <a class="inline" href="https://www.dudhsagarplantation.com" target="_blank" rel="noopener noreferrer">a working farm in South Goa</a>. A long, lazy swim before anything else happens.</p>
   </section>
 
   <!-- 06 — Elvis -->
@@ -289,7 +303,8 @@ function gtag(){dataLayer.push(arguments);}
       <li>The music continues.</li>
       <li>The barbecue is on.</li>
     </ul>
-    <p class="gold-italic">Made with Ouro, the spiced cashew feni from this very farm.</p>
+    <p class="gold-italic">Made with <a class="inline" href="https://ourodegoa.in/" target="_blank" rel="noopener noreferrer">Ouro</a>, the spiced cashew feni from this very farm.</p>
+    <a class="btn ghost" href="https://ourodegoa.in/" target="_blank" rel="noopener noreferrer">Discover Ouro &rarr;</a>
   </section>
 
   <!-- 08 — scorpions and the moon -->
@@ -310,13 +325,14 @@ function gtag(){dataLayer.push(arguments);}
         <figure class="tile" style="margin:0"><img src="img/pool.jpg" width="967" height="574" loading="lazy" style="aspect-ratio:967/574" alt="The farm today, with its natural pool"><span>TODAY</span></figure>
       </div>
     </div>
-    <p class="kicker">Dudhsagar Plantation &nbsp;·&nbsp; Our story</p>
+    <p class="kicker"><a class="inline" href="https://www.dudhsagarplantation.com" target="_blank" rel="noopener noreferrer">Dudhsagar Plantation</a> &nbsp;·&nbsp; Our story</p>
     <h2>Never meant to be a homestay.</h2>
     <div class="timeline">
       <div><span class="when">1984</span><p>Ajit Malkarnekar and his wife Doris began with land that had no water, no electricity and no trees. Just a plan to restore the soil and grow food sustainably.</p></div>
       <div><span class="when">Years later</span><p>Their son Ashok studied environmental economics in Germany and came home, not to run a resort but to continue the philosophy.</p></div>
       <div><span class="when">Today</span><p>Fruit, spices, medicinal plants and cashew, which becomes feni. Much of what you eat here grows here. You sleep on it, and Ouro is made on it.</p></div>
     </div>
+    <a class="btn ghost" href="https://www.dudhsagarplantation.com" target="_blank" rel="noopener noreferrer">Visit Dudhsagar Plantation &rarr;</a>
   </section>
 
   <!-- 10 — see you at the next one -->
@@ -325,12 +341,23 @@ function gtag(){dataLayer.push(arguments);}
     <h2>See you at<br>the next one.</h2>
     <hr class="rule">
     <p class="gold-italic">This one is booked. Follow MAP for what comes next.</p>
-    <a class="btn" href="https://whatsapp.com/channel/0029Va7sKkgGpLHWyrns8J1c" target="_blank" rel="noopener noreferrer">Join MAP Community</a>
-    <a class="btn ghost" href="https://www.instagram.com/movingartsprogramgoa" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <p class="interest">Yess, I am interested in the next one.</p>
+    <p>Leave us your number on WhatsApp and we'll tell you when the next Feni Trail is happening.</p>
+    <a class="btn wa" id="feniInterestBtn" href="https://wa.me/919849690077?text=Yess%20I%20am%20interested%20in%20the%20next%20one%2C%20please%20let%20me%20know%20when%20is%20the%20next%20one%20happening." target="_blank" rel="noopener noreferrer">Yess, I'm interested &rarr;</a>
   </section>
 
   <footer><span>THE FENI TRAIL</span><a class="back" style="margin:0" href="/">&#8962; Home</a></footer>
 
 </div>
+<script>
+document.addEventListener("click", function(e){
+  var a = e.target.closest("a"); if(!a || typeof gtag !== "function") return;
+  try{
+    if(a.id === "feniInterestBtn") gtag("event", "feni_next_interest", {method:"whatsapp"});
+    else if(a.href.indexOf("ourodegoa.in") > -1) gtag("event", "partner_click", {partner:"ouro"});
+    else if(a.href.indexOf("dudhsagarplantation.com") > -1) gtag("event", "partner_click", {partner:"dudhsagar"});
+  }catch(err){}
+}, true);
+</script>
 </body>
 </html>
