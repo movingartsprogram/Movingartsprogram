@@ -259,11 +259,42 @@ a.inline:hover{text-decoration-color:var(--gold);}
 .night{background:var(--forest-3) !important;padding-top:0;}
 .night-photo{position:relative;max-width:1000px;margin:0 auto;}
 .night-photo img{width:100%;}
-.night-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(8,22,16,0) 40%, var(--forest-3) 100%);}
-.glow{position:absolute;border-radius:50%;pointer-events:none;mix-blend-mode:screen;transform:translate(-50%,-50%);}
-.glow.moon{left:82.5%;top:19%;width:22%;aspect-ratio:1;background:radial-gradient(circle, rgba(255,232,160,.55) 0%, rgba(255,232,160,0) 65%);animation:breathe 5s ease-in-out infinite;}
-.glow.scorp{left:17.5%;top:67%;width:30%;aspect-ratio:1;background:radial-gradient(circle, rgba(220,255,170,.5) 0%, rgba(220,255,170,0) 62%);animation:breathe 3.4s ease-in-out infinite;}
-@keyframes breathe{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(.9);}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1);}}
+.night-photo::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(8,22,16,0) 40%, var(--forest-3) 100%);}
+/* moon and scorpion are cut-outs over the cleaned photo, so they can move.
+   Positions are the cut-outs' own boxes inside the 1000x650 photo. */
+.moon-wrap{position:absolute;z-index:2;left:69%;top:0;width:30%;pointer-events:none;animation:moonDrift 11s ease-in-out infinite;transform-origin:45% 56%;}
+.moon-wrap img{width:100%;position:relative;}
+.moon-glow{
+  position:absolute;left:45%;top:56%;width:80%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(255,232,160,.5) 0%, rgba(255,232,160,0) 62%);mix-blend-mode:screen;
+  animation:breathe 5s ease-in-out infinite;
+}
+@keyframes moonDrift{
+  0%,100%{transform:translate(0,0) rotate(-3deg);}
+  50%{transform:translate(-3%,7%) rotate(4deg);}
+}
+@keyframes breathe{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(.9);}50%{opacity:1;transform:translate(-50%,-50%) scale(1.12);}}
+.scorp-wrap{position:absolute;z-index:2;left:3.4%;top:51.5%;width:28.8%;pointer-events:none;animation:crawl 13s ease-in-out infinite;transform-origin:40% 55%;}
+.scorp-wrap img{
+  width:100%;
+  filter:drop-shadow(0 0 5px rgba(255,47,176,.95)) drop-shadow(0 0 16px rgba(255,47,176,.55));
+  animation:skitter .7s steps(2,end) infinite, scorpGlow 3.2s ease-in-out infinite;
+}
+/* a few short scuttles forward, a pause, then back — not a slide */
+@keyframes crawl{
+  0%,8%{transform:translate(0,0) rotate(0deg);}
+  18%{transform:translate(14%,-4%) rotate(-5deg);}
+  26%,34%{transform:translate(22%,-2%) rotate(-2deg);}
+  46%{transform:translate(38%,3%) rotate(4deg);}
+  54%,62%{transform:translate(42%,2%) rotate(2deg);}
+  80%{transform:translate(18%,-1%) rotate(-3deg);}
+  92%,100%{transform:translate(0,0) rotate(0deg);}
+}
+@keyframes skitter{0%{transform:translate(0,0);}100%{transform:translate(0,-1.2%);}}
+@keyframes scorpGlow{
+  0%,100%{filter:drop-shadow(0 0 4px rgba(255,47,176,.85)) drop-shadow(0 0 12px rgba(255,47,176,.4));}
+  50%{filter:drop-shadow(0 0 7px rgba(255,47,176,1)) drop-shadow(0 0 22px rgba(255,47,176,.7));}
+}
 .night .wrap{margin-top:-9%;}
 
 /* ======================= OUR STORY ======================= */
@@ -494,9 +525,9 @@ function gtag(){dataLayer.push(arguments);}
 <!-- 08 — scorpions and the moon -->
 <section class="chapter night">
   <div class="night-photo">
-    <img src="img/night.jpg" width="1000" height="650" loading="lazy" alt="A scorpion glowing in the dark, with a thin crescent moon above">
-    <span class="glow moon" aria-hidden="true"></span>
-    <span class="glow scorp" aria-hidden="true"></span>
+    <img src="img/night-bg.jpg" width="1000" height="650" loading="lazy" alt="Night on the farm: a scorpion glowing pink in the dark, with a thin crescent moon above">
+    <div class="moon-wrap" aria-hidden="true"><span class="moon-glow"></span><img src="img/moon.png" width="300" height="224" loading="lazy" alt=""></div>
+    <div class="scorp-wrap" aria-hidden="true"><img src="img/scorpion.png" width="288" height="214" loading="lazy" alt=""></div>
     <div class="fx stars" data-fx="stars" data-count="22" aria-hidden="true"></div>
   </div>
   <div class="wrap">
