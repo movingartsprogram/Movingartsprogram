@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Feni Trail — Only on Invite | Moving Arts Program</title>
+<meta name="description" content="The Feni Trail — a Moving Arts Program original. One day, one night at Dudhsagar Plantation, Goa: the river, the spice trail, the copper still, Ouro feni cocktails and Elvis Lobo under the open sky. For a selected few.">
+<meta name="theme-color" content="#0c1f15">
+<link rel="canonical" href="https://movingartsprogram.com/the-feni-trail/">
+<meta property="og:title" content="The Feni Trail — Only on Invite | Moving Arts Program">
+<meta property="og:description" content="One day, one night, one farm. A private weekend for a selected few at Dudhsagar Plantation, Goa, with Ouro feni and Elvis Lobo.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://movingartsprogram.com/the-feni-trail/">
+<meta property="og:site_name" content="Moving Arts Program">
+<meta property="og:image" content="https://movingartsprogram.com/the-feni-trail/img/river.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE FENI TRAIL — built from the "Feni Trail Insta" slides.
+   Same palette as the slides: forest green, cream, poster gold.
+   ============================================================ */
+:root{
+  --forest:#0c1f15;
+  --forest-2:#0f2a1c;
+  --cream:#f3ead8;
+  --cream-dim:#d9cfbb;
+  --gold:#c9a648;
+  --gold-line:rgba(201,166,72,.45);
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;background:var(--forest);color:var(--cream);
+  font-family:'Crimson Pro',Georgia,serif;font-size:19px;line-height:1.5;
+}
+img{display:block;max-width:100%;height:auto;}
+a{color:var(--gold);}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 16px;}
+
+/* ---------- small caps kicker, like the slides ---------- */
+.kicker{
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--gold);margin:0 0 14px;
+}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:700;color:var(--cream);margin:0;line-height:1.05;}
+h2{font-size:clamp(34px,8vw,54px);margin-bottom:18px;}
+.rule{width:64px;height:2px;background:var(--gold);border:0;margin:22px 0;}
+.center .rule{margin-left:auto;margin-right:auto;}
+p{margin:0 0 12px;color:var(--cream-dim);}
+.gold-italic{font-style:italic;color:var(--gold);}
+
+/* ---------- framed sections (the slides' thin gold border) ---------- */
+.frame{
+  border:1px solid var(--gold-line);padding:clamp(22px,6vw,44px);
+  margin:20px 0;position:relative;background:var(--forest);
+}
+.frame.photo-bg{
+  background-size:cover;background-position:center top;
+  min-height:520px;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.center{text-align:center;}
+
+/* ---------- back to home ---------- */
+.back{
+  display:inline-block;margin:18px 0 0;font-family:'Space Mono',monospace;font-size:12px;
+  letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--gold);
+}
+.back:hover{text-decoration:underline;}
+
+/* ---------- hero ---------- */
+.hero{
+  background:
+    linear-gradient(180deg, rgba(8,20,13,.55) 0%, rgba(8,20,13,.35) 35%, rgba(8,20,13,.92) 100%),
+    url('img/river.jpg') center top/cover;
+  min-height:auto;
+}
+.map-logo{
+  width:220px;margin:0 auto 22px;padding:16px 22px;border-radius:22px;
+  border:1px solid var(--gold-line);background:rgba(5,12,8,.75);
+}
+.partners{width:300px;margin:0 auto 34px;border-radius:10px;}
+.hero h1{font-size:clamp(52px,14vw,96px);margin:6px 0 0;}
+.date{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:28px;color:var(--gold);margin:0 0 10px;}
+.hero p{color:var(--cream);font-size:21px;max-width:34ch;margin-left:auto;margin-right:auto;}
+.hero .gold-italic{font-size:23px;margin-top:16px;}
+
+/* ---------- the plan ---------- */
+.plan .sub{font-style:italic;color:var(--gold);font-size:21px;margin:-6px 0 0;}
+.plan .day{
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.32em;color:var(--cream-dim);
+  border-top:1px solid var(--gold-line);padding-top:20px;margin:24px 0 10px;
+}
+.plan ol{list-style:none;margin:0;padding:0;}
+.plan li{display:grid;grid-template-columns:44px 1fr;gap:6px;padding:9px 0;}
+.plan .n{font-family:'Space Mono',monospace;font-size:13px;color:var(--gold);padding-top:6px;}
+.plan h3{font-size:clamp(21px,5vw,28px);}
+.plan li p{font-style:italic;color:var(--gold);margin:4px 0 0;font-size:17px;}
+
+/* ---------- photo pairs ---------- */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:26px;}
+.tile{position:relative;border:1px solid var(--gold-line);padding:6px;}
+.tile img{width:100%;aspect-ratio:434/466;object-fit:cover;}
+.tile span{
+  position:absolute;left:14px;bottom:14px;background:rgba(8,20,13,.85);
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;color:var(--gold);padding:5px 9px;
+}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;border-top:1px solid var(--gold-line);padding-top:18px;}
+.cols .kicker{margin-bottom:8px;}
+
+.wide-photo{border:1px solid var(--gold-line);padding:6px;margin-bottom:28px;}
+
+/* ---------- Elvis ---------- */
+.arch{
+  width:min(100%,420px);margin:0 auto 26px;border:1px solid var(--gold-line);
+  border-radius:999px 999px 0 0;padding:6px;
+}
+.arch img{border-radius:999px 999px 0 0;width:100%;}
+
+/* ---------- barbecue lines ---------- */
+.lines{list-style:none;margin:0 0 16px;padding:0;border-top:1px solid var(--gold-line);}
+.lines li{
+  font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:clamp(20px,5vw,28px);
+  padding:12px 0;border-bottom:1px solid var(--gold-line);
+}
+
+/* ---------- night ---------- */
+/* photo shown whole (scorpion left, moon right), text rises over its faded bottom */
+.night{padding-top:0;padding-left:0;padding-right:0;}
+.night-photo{position:relative;}
+.night-photo::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(12,31,21,0) 45%, var(--forest) 100%);
+}
+.night-photo img{width:100%;}
+.night > :not(.night-photo){position:relative;margin-left:clamp(22px,6vw,44px);margin-right:clamp(22px,6vw,44px);}
+.night > .kicker{margin-top:-8%;}
+
+/* ---------- our story ---------- */
+.story-photos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:26px;align-items:stretch;}
+.story-photos .arch{width:100%;margin:0;}
+.story-photos .stack{display:grid;gap:12px;align-content:start;}
+.timeline{border-top:1px solid var(--gold-line);margin-top:6px;}
+.timeline div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:16px 0;border-bottom:1px solid var(--gold-line);}
+.timeline .when{text-transform:uppercase;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.3em;color:var(--gold);padding-top:4px;}
+.timeline p{margin:0;color:var(--cream);}
+
+/* ---------- closing ---------- */
+.closing{
+  background:
+    linear-gradient(180deg, rgba(8,20,13,.25) 0%, rgba(8,20,13,.92) 70%),
+    url('img/butterfly.jpg') center top/cover;
+}
+.closing h2{font-size:clamp(40px,11vw,72px);}
+.btn{
+  display:inline-block;margin:18px 6px 0;padding:12px 22px;border:1px solid var(--gold);
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--forest);background:var(--gold);text-decoration:none;
+}
+.btn.ghost{background:transparent;color:var(--gold);}
+.btn:hover{filter:brightness(1.1);}
+
+footer{
+  display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:.3em;color:var(--gold);padding:10px 0 40px;
+}
+
+@media (max-width:560px){
+  body{font-size:18px;}
+  .kicker{letter-spacing:.2em;}
+  .cols{grid-template-columns:1fr;}
+  .timeline div{grid-template-columns:1fr;gap:4px;}
+  .story-photos{grid-template-columns:1fr;}
+  .story-photos .arch{width:min(100%,360px);margin:0 auto;}
+  .story-photos .stack{grid-template-columns:1fr 1fr;}
+}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+</style>
+<script>
+window.MAP_GA_ID = "G-JMXNSRJPDD";
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+(function(){
+  if(!/^G-[A-Z0-9]{6,}$/.test(window.MAP_GA_ID)) return;
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + window.MAP_GA_ID;
+  document.head.appendChild(s);
+  gtag("js", new Date());
+  gtag("config", window.MAP_GA_ID, {send_page_view:true});
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="/" title="Back to Moving Arts Program">&#8962; Moving Arts Program</a>
+
+  <!-- 01 — cover -->
+  <section class="frame hero center">
+    <p class="kicker">A Moving Arts Program original</p>
+    <img class="map-logo" src="/map-logo-arts-and-beyond.png" width="320" height="182" alt="Moving Arts Program — Arts &amp; Beyond">
+    <img class="partners" src="img/partners.jpg" width="515" height="107" alt="Dudhsagar Plantation and Ouro De Goa spiced premium cashew feni">
+    <p class="kicker">The Feni Trail &nbsp;·&nbsp; For a selected few</p>
+    <p class="date">17 October</p>
+    <h1>Sorry.<br>We're full.</h1>
+    <hr class="rule">
+    <p>A private weekend for a selected few, hosted by us, on one farm. This one is booked.</p>
+    <p class="gold-italic">See you at the next one.</p>
+  </section>
+
+  <!-- 02 — the plan -->
+  <section class="frame plan">
+    <p class="kicker">Dudhsagar Plantation &nbsp;·&nbsp; One day, one night</p>
+    <h2>The plan.</h2>
+    <p class="sub">A selected few, one farm, nothing to organise.</p>
+    <p class="day">SATURDAY 17 OCTOBER</p>
+    <ol>
+      <li><span class="n">01</span><div><h3>Lunch on the farm</h3><p>We start together.</p></div></li>
+      <li><span class="n">02</span><div><h3>Find the river</h3><p>Into the stream, down to the little river.</p></div></li>
+      <li><span class="n">03</span><div><h3>The spice trail and the copper still</h3><p>Crush a leaf. Watch Ouro being made.</p></div></li>
+      <li><span class="n">04</span><div><h3>The natural swimming pool</h3><p>Cool, clear, in the middle of the green.</p></div></li>
+      <li><span class="n">05</span><div><h3>Elvis Lobo, under the open sky</h3><p>Playing just for us.</p></div></li>
+      <li><span class="n">06</span><div><h3>Barbecue, music and Ouro feni cocktails</h3><p>Once Elvis puts the guitar down.</p></div></li>
+      <li><span class="n">07</span><div><h3>The scorpion trail and moon spotting</h3><p>Then one look at a thin moon.</p></div></li>
+    </ol>
+    <p class="day">SUNDAY 18 OCTOBER</p>
+    <ol>
+      <li><span class="n">08</span><div><h3>Breakfast, then home</h3></div></li>
+    </ol>
+  </section>
+
+  <!-- 03 — the river -->
+  <section class="frame">
+    <p class="kicker">Saturday &nbsp;·&nbsp; The trail</p>
+    <h2>Find<br>the river.</h2>
+    <hr class="rule">
+    <p>Follow the trail and find the river.</p>
+  </section>
+
+  <!-- 04 — where Ouro comes from -->
+  <section class="frame">
+    <div class="pair">
+      <figure class="tile" style="margin:0"><img src="img/spice.jpg" width="434" height="466" loading="lazy" alt="Cashew apples on a plate at the farm"><span>SPICE TRAIL</span></figure>
+      <figure class="tile" style="margin:0"><img src="img/still.jpg" width="434" height="466" loading="lazy" alt="Illustration of a wood-fired copper still"><span>THE STILL</span></figure>
+    </div>
+    <p class="kicker">Saturday &nbsp;·&nbsp; Afternoon</p>
+    <h2>Where Ouro comes from.</h2>
+    <div class="cols">
+      <div><p class="kicker">The spice trail</p><p>Black pepper vines, banana palms, cashew and coconut groves. Crush a leaf and smell the spice where it grows.</p></div>
+      <div><p class="kicker">The copper still</p><p>Not cashew season, so the still runs on water this time. Same wood fire, same copper. A very pure rehearsal, if a mild one.</p></div>
+    </div>
+  </section>
+
+  <!-- 05 — the pool -->
+  <section class="frame">
+    <div class="wide-photo"><img src="img/pool.jpg" width="967" height="574" loading="lazy" alt="The natural swimming pool at Dudhsagar Plantation, seen from above"></div>
+    <p class="kicker">Saturday &nbsp;·&nbsp; After the trail</p>
+    <h2>A natural pool in the middle of the green.</h2>
+    <hr class="rule">
+    <p>Cool, clear water on a working farm in South Goa. A long, lazy swim before anything else happens.</p>
+  </section>
+
+  <!-- 06 — Elvis -->
+  <section class="frame center">
+    <div class="arch"><img src="img/elvis.jpg" width="684" height="624" loading="lazy" alt="Watercolour portrait of Elvis Lobo holding his acoustic guitar"></div>
+    <p class="kicker">Elvis Lobo &nbsp;·&nbsp; Saturday night</p>
+    <h2>How lucky are we?</h2>
+    <p>Goa's guitar god is playing just for our selected few. Under the stars, next to the pool. No stage. Just Elvis and his acoustic guitar.</p>
+    <a class="btn ghost" href="/elvis-lobo/">Meet The Boss &rarr;</a>
+  </section>
+
+  <!-- 07 — barbecue and Ouro -->
+  <section class="frame">
+    <div class="pair">
+      <figure class="tile" style="margin:0"><img src="img/bbq.jpg" width="434" height="414" loading="lazy" alt="Meat, sausages and vegetables on the barbecue grill"><span>THE BARBECUE</span></figure>
+      <figure class="tile" style="margin:0"><img src="img/ouro.jpg" width="434" height="414" loading="lazy" alt="A bottle of Ouro spiced cashew feni next to a cocktail"><span>OURO FENI COCKTAIL</span></figure>
+    </div>
+    <p class="kicker">Saturday &nbsp;·&nbsp; After Elvis</p>
+    <h2>Barbecue and Ouro feni cocktails.</h2>
+    <ul class="lines">
+      <li>Our feni cocktails, freshly poured.</li>
+      <li>The music continues.</li>
+      <li>The barbecue is on.</li>
+    </ul>
+    <p class="gold-italic">Made with Ouro, the spiced cashew feni from this very farm.</p>
+  </section>
+
+  <!-- 08 — scorpions and the moon -->
+  <section class="frame night">
+    <div class="night-photo"><img src="img/night.jpg" width="1000" height="650" loading="lazy" alt="A scorpion glowing in the dark, with a thin crescent moon above"></div>
+    <p class="kicker">Saturday &nbsp;·&nbsp; Late night</p>
+    <h2>Scorpions, then the moon.</h2>
+    <hr class="rule">
+    <p>With those who know where to look, we find real scorpions glowing in the dark. Then one last look at a thin sliver of moon before we turn in.</p>
+  </section>
+
+  <!-- 09 — our story -->
+  <section class="frame">
+    <div class="story-photos">
+      <div class="arch"><img src="img/family.jpg" width="422" height="372" loading="lazy" alt="Ajit and Ashok Malkarnekar of Dudhsagar Plantation"></div>
+      <div class="stack">
+        <figure class="tile" style="margin:0"><img src="img/land1984.jpg" width="422" height="146" loading="lazy" style="aspect-ratio:422/146" alt="The bare land in 1984"><span>1984</span></figure>
+        <figure class="tile" style="margin:0"><img src="img/pool.jpg" width="967" height="574" loading="lazy" style="aspect-ratio:967/574" alt="The farm today, with its natural pool"><span>TODAY</span></figure>
+      </div>
+    </div>
+    <p class="kicker">Dudhsagar Plantation &nbsp;·&nbsp; Our story</p>
+    <h2>Never meant to be a homestay.</h2>
+    <div class="timeline">
+      <div><span class="when">1984</span><p>Ajit Malkarnekar and his wife Doris began with land that had no water, no electricity and no trees. Just a plan to restore the soil and grow food sustainably.</p></div>
+      <div><span class="when">Years later</span><p>Their son Ashok studied environmental economics in Germany and came home, not to run a resort but to continue the philosophy.</p></div>
+      <div><span class="when">Today</span><p>Fruit, spices, medicinal plants and cashew, which becomes feni. Much of what you eat here grows here. You sleep on it, and Ouro is made on it.</p></div>
+    </div>
+  </section>
+
+  <!-- 10 — see you at the next one -->
+  <section class="frame closing center">
+    <p class="kicker">The Feni Trail</p>
+    <h2>See you at<br>the next one.</h2>
+    <hr class="rule">
+    <p class="gold-italic">This one is booked. Follow MAP for what comes next.</p>
+    <a class="btn" href="https://whatsapp.com/channel/0029Va7sKkgGpLHWyrns8J1c" target="_blank" rel="noopener noreferrer">Join MAP Community</a>
+    <a class="btn ghost" href="https://www.instagram.com/movingartsprogramgoa" target="_blank" rel="noopener noreferrer">Instagram</a>
+  </section>
+
+  <footer><span>THE FENI TRAIL</span><a class="back" style="margin:0" href="/">&#8962; Home</a></footer>
+
+</div>
+</body>
+</html>
