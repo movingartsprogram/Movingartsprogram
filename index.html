@@ -343,6 +343,26 @@ input[type=range].wa-vol::-moz-range-thumb{
   50%{text-shadow:none;
     box-shadow:0 5px 9px rgba(0,0,0,.42), var(--clay-face-sm);}
 }
+/* three buttons share one row: equal widths, long labels wrap inside the pill */
+.wa-support-row{flex-wrap:nowrap;gap:6px;align-items:stretch;}
+.wa-support-row .wa-toggle{flex:1 1 0;min-width:0;justify-content:center;text-align:center;line-height:1.2;padding:6px 8px;}
+.wa-support-row .wa-toggle.wa-book-btn{padding:6px 8px;letter-spacing:.3px;}
+/* THE FENI TRAIL: bigger, centred, white glow */
+.wa-toggle.wa-feni-btn{
+  flex-direction:column;justify-content:center;gap:3px;
+  padding:12px 30px;min-height:54px;color:#fff;
+  font-family:'Oswald',sans-serif;
+  background:linear-gradient(180deg,#56565f 0%, #2c2c34 100%);
+  animation:wa-white-glow 2.4s ease-in-out infinite;
+}
+.wa-feni-btn .feni-name{font-size:18px;font-weight:600;letter-spacing:3px;line-height:1;}
+.wa-feni-btn .feni-sub{font-family:Tahoma,Arial,sans-serif;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#e8e8e8;}
+@keyframes wa-white-glow{
+  0%,100%{text-shadow:0 0 10px rgba(255,255,255,.95);
+    box-shadow:0 5px 9px rgba(0,0,0,.42), var(--clay-face-sm), 0 0 14px rgba(255,255,255,.75), 0 0 32px rgba(255,255,255,.35);}
+  50%{text-shadow:0 0 3px rgba(255,255,255,.4);
+    box-shadow:0 5px 9px rgba(0,0,0,.42), var(--clay-face-sm), 0 0 5px rgba(255,255,255,.3);}
+}
 .wa-toggle.wa-support-btn{
   color:var(--mag);
   animation:wa-hard-blink 1.3s steps(1,end) infinite;
@@ -859,11 +879,12 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
 
       <div class="wa-support-row">
         <button type="button" class="wa-toggle on wa-green-btn" onclick="showPage('privategigs')">Customised Private Gigs</button>
+        <a class="wa-toggle on wa-book-btn" href="/gig-bookings/" title="Book your seats for the next MAP gig">&#127915; TICKET TO RIDE</a>
         <button type="button" class="wa-toggle on wa-support-btn" onclick="showPage('money')">Support the Music</button>
       </div>
 
       <div class="wa-book-row">
-        <a class="wa-toggle on wa-book-btn" href="/gig-bookings/" title="Book your seats for the next MAP gig">&#127915; TICKET TO RIDE</a>
+        <a class="wa-toggle wa-feni-btn" href="/the-feni-trail/" title="The Feni Trail — a private weekend, only on invite"><span class="feni-name">THE FENI TRAIL</span><span class="feni-sub">only on invite</span></a>
       </div>
     </div>
   </div>
@@ -1832,6 +1853,8 @@ document.addEventListener("click", function(e){
     mapTrack("media_button", {label: txt, map_page: current});
   } else if(el.matches(".wa-book-btn")){
     mapTrack("booking_page_click", {map_page: current});
+  } else if(el.matches(".wa-feni-btn")){
+    mapTrack("feni_trail_click", {map_page: current});
   } else if(el.matches(".wa-toggle")){
     mapTrack("panel_button", {label: el.title || txt, link_url: el.href || "", map_page: current});
   } else if(el.matches(".wa-titlebar button")){
