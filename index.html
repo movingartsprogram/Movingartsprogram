@@ -4,8 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moving Arts Program — Live Music, Goa</title>
-<meta name="description" content="Moving Arts Program — pro-bono live music in Goa: The Classics, Unaccompanied, Rock Revival, The Outcasts, Vinyl Resurrection & Grateful Dead Tribute.">
+<title>Moving Arts Program — Live Music, Gigs &amp; Concerts in Goa</title>
+<meta name="description" content="Live music in Goa by Moving Arts Program: gigs, concerts and festivals. Grateful Dead Tribute, Rock Revival, Elvis Lobo, Unaccompanied and The Feni Trail.">
 <meta name="theme-color" content="#0d0d12">
 <link rel="canonical" href="https://movingartsprogram.com/">
 <meta property="og:title" content="Moving Arts Program — Sound. Art. Spirit.">
@@ -675,6 +675,20 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": "https://movingartsprogram.com/#website",
+      "name": "Moving Arts Program",
+      "alternateName": [
+        "MAP",
+        "Moving Arts Program Goa"
+      ],
+      "url": "https://movingartsprogram.com/",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "https://movingartsprogram.com/#organization"
+      }
+    },
+    {
       "@type": "Organization",
       "@id": "https://movingartsprogram.com/#organization",
       "name": "Moving Arts Program",
@@ -791,6 +805,20 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       "description": "Moving Arts Program can be booked to curate and produce a customised private live music gig in Goa — weddings, birthdays, anniversaries, corporate nights. Message MAP directly on WhatsApp to discuss your event.",
       "provider": { "@id": "https://movingartsprogram.com/#organization" },
       "areaServed": { "@type": "AdministrativeArea", "name": "Goa, India" }
+    },
+    {
+      "@type": "Service",
+      "name": "The Feni Trail",
+      "serviceType": "Offbeat Goa farm experience",
+      "url": "https://movingartsprogram.com/the-feni-trail/",
+      "description": "An invite-only, offbeat Goa farm experience in hidden South Goa: one day and one night at Dudhsagar Plantation with a river trail, spice plantation, cashew feni copper still, natural pool, Elvis Lobo live and a glowing-scorpion night walk.",
+      "provider": {
+        "@id": "https://movingartsprogram.com/#organization"
+      },
+      "areaServed": {
+        "@type": "AdministrativeArea",
+        "name": "Goa, India"
+      }
     },
     {
       "@type": "MusicGroup",
