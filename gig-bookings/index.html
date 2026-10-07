@@ -274,8 +274,10 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 /* safety net: shown only while the Sheet is slow to answer */
 .net-note{margin:12px 0 0;padding:12px;border:1.5px dashed rgba(255,225,53,.5);border-radius:var(--r-md);text-align:center;}
 .net-note[hidden]{display:none;}
-.net-note p{font-family:'VT323',monospace;font-size:17px;line-height:1.2;color:var(--vu);margin:0 0 10px;text-shadow:0 0 8px rgba(255,225,53,.4);}
-.net-note .cta{margin-top:8px;}
+.net-note .turtle{font-size:40px;line-height:1;margin:0 0 6px;display:inline-block;animation:turtle 2.4s ease-in-out infinite;}
+@keyframes turtle{0%,100%{transform:translateX(-10px);}50%{transform:translateX(10px);}}
+@media (prefers-reduced-motion:reduce){.net-note .turtle{animation:none;}}
+.net-note p{font-family:'VT323',monospace;font-size:17px;line-height:1.2;color:var(--vu);margin:0;text-shadow:0 0 8px rgba(255,225,53,.4);}
 .how-box{font-family:'VT323',monospace;font-size:15px;line-height:1.25;color:#d8e8d8;margin:12px 0 4px;
   padding:11px 13px;border-radius:var(--r-md);background:linear-gradient(180deg,#1a0d18 0%,#0c060b 100%);
   box-shadow:inset 0 2px 3px rgba(255,47,176,.18), inset 0 -4px 7px rgba(0,0,0,.6);}
@@ -554,6 +556,12 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
           <div class="poster-cap" id="posterCap">CURRENT EVENT</div>
         </div>
 
+        <!-- Slow-internet message: appears under the poster only if the Google Sheet hasn't answered after 20 seconds -->
+        <div class="net-note" id="netNote" hidden>
+          <div class="turtle" aria-hidden="true">🐢</div>
+          <p>YOUR INTERNET IS SLOW. HAVE PATIENCE — IT'S LOADING…</p>
+        </div>
+
         <!-- ═══ 2b. VENUE PICKER — appears only when the Event tab has a
              second gig in column C. Buttons are built by JavaScript. ═══ -->
         <div class="venue-pick" id="venuePick" hidden>
@@ -572,11 +580,6 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
           </ul>
         </div>
         <p class="tier-note" id="tierNote" hidden></p>
-        <!-- Safety net: appears only if the Google Sheet hasn't answered after a few seconds -->
-        <div class="net-note" id="netNote" hidden>
-          <p>SLOW INTERNET? LIVE BOOKING IS STILL CONNECTING. KEEP THIS PAGE OPEN — IT KEEPS TRYING BY ITSELF.</p>
-          <button type="button" class="cta cta-block" id="netRetry">TRY AGAIN</button>
-        </div>
 
         <!-- ═══ 4. THE FORM ═══ -->
         <div id="formWrap">
@@ -1035,27 +1038,17 @@ if(!TICKET_MODE){
   }, 300000);
 }
 
-/* ---------- safety net: if the Google Sheet is slow or unreachable ----------
-   After NET_WAIT without an answer, show this gig's details from the copy
-   below (so the page is never blank) and a TRY AGAIN button. Nothing here
-   can take a booking or a payment: the BOOK & PAY button stays off until
-   the Sheet answers, and the moment it does, the live details replace all
-   of this. The price switches by itself on the dates in `prices`.
-   UPDATE THIS WITH EACH NEW GIG (same time as the poster and the JSON-LD). */
-var NET_WAIT = 20000;   /* 20 seconds: slow Goa internet often needs more than 8 */
-var FALLBACK = {
-  name:  "BOMBAY ROCK XCHANGE",
-  date:  "SUN 22 NOV 2026",
-  time:  "8 PM ONWARDS",
-  venue: "Domingos Gazebo, Varca",
-  /* each price applies up to and including its date (India time) */
-  prices: [
-    {upto: "2026-10-22", text: "₹499 · EARLY BIRD (FIRST 50)"},
-    {upto: "2026-11-21", text: "₹799 · GENERAL"},
-    {upto: "2026-11-22", text: "₹1000 · ON THE DAY"}
-  ],
+/* ---------- slow internet: keep guests waiting, not leaving ----------
+   If the Sheet hasn't answered after 20 seconds, show the poster and a
+   "please hang on" message, and keep trying. Nothing else changes: no gig
+   details, prices or booking come from here, and the moment the Sheet
+   answers, the page carries on as normal and the message disappears.
+   UPDATE posterVersion (same number as the Sheet) and until WITH EACH NEW GIG.
+   If forgotten, it simply stops after `until`, so an old poster never shows. */
+var NET_WAIT = 20000;
+var SLOW = {
   posterVersion: 25,
-  until: "2026-11-22"   /* last day the safety net may show */
+  until: "2026-11-22"   /* last day it may show (India time) */
 };
 var NET_ON = false;
 function todayIndia(){
@@ -1063,42 +1056,26 @@ function todayIndia(){
   try{ return new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}); }
   catch(e){ return new Date(Date.now() + 19800000).toISOString().slice(0, 10); }
 }
-function fallbackPrice(){
-  var d = todayIndia();
-  for(var i = 0; i < FALLBACK.prices.length; i++){ if(d <= FALLBACK.prices[i].upto) return FALLBACK.prices[i].text; }
-  return "—";
-}
-function fallbackValid(){
-  return FALLBACK && FALLBACK.name && todayIndia() <= FALLBACK.until;
-}
-function applyFallback(){
-  document.getElementById("eventName").textContent = FALLBACK.name;
-  document.getElementById("posterCap").textContent = FALLBACK.name;
-  document.getElementById("evDate").textContent  = FALLBACK.date;
-  document.getElementById("evTime").textContent  = FALLBACK.time;
-  document.getElementById("evVenue").textContent = FALLBACK.venue;
-  document.getElementById("evPrice").textContent = fallbackPrice();
+function slowScreen(){
+  document.getElementById("eventName").textContent = "LOADING EVENT…";
+  document.getElementById("posterCap").textContent = "CURRENT EVENT";
   var btn = document.getElementById("submitBtn");
-  if(!BUSY){ btn.disabled = true; btn.textContent = "CONNECTING TO LIVE BOOKING…"; }
+  if(!BUSY){ btn.disabled = true; btn.textContent = "LOADING…"; }
 }
-function showSafetyNet(){
-  if(EVENT_LIVE || NET_ON || TICKET_MODE || !fallbackValid()) return;
+function showSlowNote(){
+  if(EVENT_LIVE || NET_ON || TICKET_MODE || todayIndia() > SLOW.until) return;
   NET_ON = true;
   document.getElementById("netNote").removeAttribute("hidden");
-  applyFallback();
-  loadPoster("current-event-poster.jpg?v=" + FALLBACK.posterVersion);
-  mapTrack("booking_safety_net_shown", {event_name: FALLBACK.name});
+  slowScreen();
+  loadPoster("current-event-poster.jpg?v=" + SLOW.posterVersion);
+  mapTrack("booking_slow_note_shown", {});
 }
-function hideSafetyNet(){
-  NET_ON = false;
-  document.getElementById("netNote").setAttribute("hidden", "");
-}
-/* Every redraw: live details win; until then keep the copy on screen. */
+/* Every redraw: once the Sheet answers, hide the message; until then keep it calm. */
 var renderEventLive = renderEvent;
 renderEvent = function(){
   renderEventLive();
-  if(EVENT_LIVE){ if(NET_ON) hideSafetyNet(); }
-  else if(NET_ON){ applyFallback(); }
+  if(EVENT_LIVE){ if(NET_ON){ NET_ON = false; document.getElementById("netNote").setAttribute("hidden", ""); } }
+  else if(NET_ON){ slowScreen(); }
 };
 /* Once the normal tries run out, keep asking every 30 seconds instead of stopping. */
 var retryLoadFirst = retryLoad;
@@ -1106,15 +1083,7 @@ retryLoad = function(){
   if(NET_ON && CFG_TRIES >= 8){ setTimeout(function(){ if(!EVENT_LIVE) loadEvent(); }, 30000); return; }
   retryLoadFirst();
 };
-document.getElementById("netRetry").addEventListener("click", function(){
-  this.textContent = "TRYING…";
-  var b = this;
-  setTimeout(function(){ b.textContent = "TRY AGAIN"; }, 3000);
-  CFG_TRIES = 0;
-  loadEvent();
-  mapTrack("booking_safety_net_retry", {event_name: FALLBACK.name});
-});
-if(!TICKET_MODE) setTimeout(showSafetyNet, NET_WAIT);
+if(!TICKET_MODE) setTimeout(showSlowNote, NET_WAIT);
 
 /* ---------- validation ---------- */
 function showErr(msg){
