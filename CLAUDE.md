@@ -90,6 +90,11 @@ Saket Rao (drums), Tejal (bass). Early Bird ₹499 (till 22 Oct), General ₹799
 - Google Search Console property exists (owner verified). Google can't be asked to
   "Request indexing" by any tool; the owner does that by hand on a laptop.
 - `82fb14a332eb444aaced508b42d8593b.txt` is the IndexNow key file (Bing/Yandex). Keep it.
+- **Automatic Bing ping:** `.github/workflows/indexnow.yml` runs on every push to `main`
+  (except CLAUDE.md-only changes). It waits for the Pages deploy of that commit, then
+  sends every URL in `sitemap.xml` to IndexNow. So keep `sitemap.xml` complete: new
+  public pages must be added there to be pinged. It can also be run by hand from the
+  Actions tab ("Run workflow"). Bing Webmaster Tools is set up (imported from Search Console).
 
 ## Analytics
 GA4 `G-JMXNSRJPDD` is on every public page. Custom events include `booking_page_click`,

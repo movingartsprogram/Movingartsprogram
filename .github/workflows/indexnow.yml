@@ -1,0 +1,67 @@
+# Tell Bing (and Yahoo, DuckDuckGo, Yandex, ChatGPT search via IndexNow)
+# about the site's pages every time a change goes live.
+#
+# Flow: a push to main -> wait for GitHub Pages to finish publishing that
+# exact commit -> send every URL in sitemap.xml to IndexNow with MAP's key.
+# Read-only: it never changes the site. Google has no equivalent API;
+# Google re-reads sitemap.xml on its own.
+name: IndexNow ping
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'CLAUDE.md'          # notes only, nothing for search engines
+  workflow_dispatch: {}       # "Run workflow" button for a manual ping
+
+permissions:
+  contents: read
+  actions: read               # to see when the Pages deploy has finished
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: true    # several quick merges -> only the last one pings
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      HOST: movingartsprogram.com
+      KEY: 82fb14a332eb444aaced508b42d8593b   # public on purpose: /82fb14a332eb444aaced508b42d8593b.txt
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for the GitHub Pages deploy of this commit
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 40); do                      # up to ~10 minutes
+            run=$(gh api "repos/${{ github.repository }}/actions/runs?head_sha=${{ github.sha }}" \
+                  --jq '[.workflow_runs[] | select(.name=="pages build and deployment")][0] | "\(.status) \(.conclusion)"')
+            echo "Pages deploy: ${run:-not started yet}"
+            case "$run" in
+              "completed success") echo "Site is live."; exit 0 ;;
+              completed*) echo "::error::Pages deploy did not succeed ($run); not pinging."; exit 1 ;;
+            esac
+            sleep 15
+          done
+          echo "::warning::Pages deploy still running after 10 min; pinging anyway."
+
+      - name: Send sitemap URLs to IndexNow
+        run: |
+          urls=$(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//')
+          echo "URLs:"; echo "$urls"
+          [ -n "$urls" ] || { echo "::error::No URLs found in sitemap.xml"; exit 1; }
+          body=$(jq -n --arg host "$HOST" --arg key "$KEY" \
+                       --arg loc "https://$HOST/$KEY.txt" \
+                       --arg urls "$urls" \
+                 '{host:$host, key:$key, keyLocation:$loc, urlList:($urls|split("\n")|map(select(length>0)))}')
+          code=$(curl -sS -o response.txt -w '%{http_code}' -X POST https://api.indexnow.org/indexnow \
+                 -H 'Content-Type: application/json; charset=utf-8' --data "$body")
+          echo "IndexNow answered HTTP $code"; cat response.txt || true
+          case "$code" in
+            200|202) echo "Accepted by IndexNow." ;;
+            *) echo "::error::IndexNow rejected the request (HTTP $code)"; exit 1 ;;
+          esac
