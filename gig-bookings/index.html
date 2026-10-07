@@ -574,9 +574,8 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
         <p class="tier-note" id="tierNote" hidden></p>
         <!-- Safety net: appears only if the Google Sheet hasn't answered after a few seconds -->
         <div class="net-note" id="netNote" hidden>
-          <p>LIVE BOOKING IS TAKING A MOMENT TO CONNECT. IT KEEPS TRYING BY ITSELF.</p>
+          <p>SLOW INTERNET? LIVE BOOKING IS STILL CONNECTING. KEEP THIS PAGE OPEN — IT KEEPS TRYING BY ITSELF.</p>
           <button type="button" class="cta cta-block" id="netRetry">TRY AGAIN</button>
-          <a class="cta cta-block cta-pink" id="netWa" href="#" target="_blank" rel="noopener noreferrer">📲 BOOK ON WHATSAPP INSTEAD</a>
         </div>
 
         <!-- ═══ 4. THE FORM ═══ -->
@@ -1037,24 +1036,40 @@ if(!TICKET_MODE){
 }
 
 /* ---------- safety net: if the Google Sheet is slow or unreachable ----------
-   After a few seconds without an answer, show this gig's details from the
-   copy below (so the page is never blank), and offer TRY AGAIN and
-   BOOK ON WHATSAPP. Nothing here can take a booking or a payment: the
-   BOOK & PAY button stays off until the Sheet answers, and the moment it
-   does, the live details replace all of this.
+   After NET_WAIT without an answer, show this gig's details from the copy
+   below (so the page is never blank) and a TRY AGAIN button. Nothing here
+   can take a booking or a payment: the BOOK & PAY button stays off until
+   the Sheet answers, and the moment it does, the live details replace all
+   of this. The price switches by itself on the dates in `prices`.
    UPDATE THIS WITH EACH NEW GIG (same time as the poster and the JSON-LD). */
+var NET_WAIT = 20000;   /* 20 seconds: slow Goa internet often needs more than 8 */
 var FALLBACK = {
   name:  "BOMBAY ROCK XCHANGE",
   date:  "SUN 22 NOV 2026",
   time:  "8 PM ONWARDS",
   venue: "Domingos Gazebo, Varca",
-  price: "₹499 EARLY BIRD · ₹799 GENERAL",
+  /* each price applies up to and including its date (India time) */
+  prices: [
+    {upto: "2026-10-22", text: "₹499 · EARLY BIRD (FIRST 50)"},
+    {upto: "2026-11-21", text: "₹799 · GENERAL"},
+    {upto: "2026-11-22", text: "₹1000 · ON THE DAY"}
+  ],
   posterVersion: 25,
-  until: "2026-11-23"   /* after this date the safety net stays off */
+  until: "2026-11-22"   /* last day the safety net may show */
 };
 var NET_ON = false;
+function todayIndia(){
+  /* "en-CA" gives YYYY-MM-DD, which compares correctly as text */
+  try{ return new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}); }
+  catch(e){ return new Date(Date.now() + 19800000).toISOString().slice(0, 10); }
+}
+function fallbackPrice(){
+  var d = todayIndia();
+  for(var i = 0; i < FALLBACK.prices.length; i++){ if(d <= FALLBACK.prices[i].upto) return FALLBACK.prices[i].text; }
+  return "—";
+}
 function fallbackValid(){
-  return FALLBACK && FALLBACK.name && new Date().toISOString().slice(0, 10) < FALLBACK.until;
+  return FALLBACK && FALLBACK.name && todayIndia() <= FALLBACK.until;
 }
 function applyFallback(){
   document.getElementById("eventName").textContent = FALLBACK.name;
@@ -1062,15 +1077,13 @@ function applyFallback(){
   document.getElementById("evDate").textContent  = FALLBACK.date;
   document.getElementById("evTime").textContent  = FALLBACK.time;
   document.getElementById("evVenue").textContent = FALLBACK.venue;
-  document.getElementById("evPrice").textContent = FALLBACK.price;
+  document.getElementById("evPrice").textContent = fallbackPrice();
   var btn = document.getElementById("submitBtn");
   if(!BUSY){ btn.disabled = true; btn.textContent = "CONNECTING TO LIVE BOOKING…"; }
 }
 function showSafetyNet(){
   if(EVENT_LIVE || NET_ON || TICKET_MODE || !fallbackValid()) return;
   NET_ON = true;
-  var msg = "Hi Prashant, I'd like to book tickets for " + FALLBACK.name + " (" + FALLBACK.date + ", " + FALLBACK.venue + "). The booking page wasn't loading for me.\n\nName: \nNumber of tickets: ";
-  document.getElementById("netWa").href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(msg);
   document.getElementById("netNote").removeAttribute("hidden");
   applyFallback();
   loadPoster("current-event-poster.jpg?v=" + FALLBACK.posterVersion);
@@ -1101,10 +1114,7 @@ document.getElementById("netRetry").addEventListener("click", function(){
   loadEvent();
   mapTrack("booking_safety_net_retry", {event_name: FALLBACK.name});
 });
-document.getElementById("netWa").addEventListener("click", function(){
-  mapTrack("booking_safety_net_whatsapp", {event_name: FALLBACK.name});
-});
-if(!TICKET_MODE) setTimeout(showSafetyNet, 8000);
+if(!TICKET_MODE) setTimeout(showSafetyNet, NET_WAIT);
 
 /* ---------- validation ---------- */
 function showErr(msg){

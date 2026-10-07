@@ -60,9 +60,10 @@ the first two as they are.
    (name, `startDate` with `+05:30`, venue address, performers, offers/prices, dates).
    Remove it once the gig is over so Google never shows an old event.
    Also update the **`FALLBACK`** block in the page script (name, date, time, venue,
-   price text, `posterVersion`, `until` = the day after the gig). It is the safety net:
-   if the Sheet hasn't answered after 8 seconds, the page shows these details, keeps
-   the BOOK & PAY button off, keeps retrying, and offers TRY AGAIN and BOOK ON WHATSAPP.
+   `prices` with the last day of each tier, `posterVersion`, `until` = gig day). It is the
+   safety net: if the Sheet hasn't answered after 20 seconds (`NET_WAIT`), the page shows
+   these details with the price for today's date, keeps BOOK & PAY off, keeps retrying,
+   and offers TRY AGAIN. No WhatsApp button, on purpose (owner doesn't want the messages).
 3. Tell the owner to **increase "Poster version"** in the Google Sheet's Event tab
    (the page loads `current-event-poster.jpg?v=<posterVersion>`), so phones fetch the new poster.
 4. Update `sitemap.xml` `lastmod` for `/gig-bookings/` and remind the owner to
