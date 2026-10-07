@@ -59,6 +59,10 @@ the first two as they are.
 2. Update the **MusicEvent JSON-LD** block in the `<head>` of `gig-bookings/index.html`
    (name, `startDate` with `+05:30`, venue address, performers, offers/prices, dates).
    Remove it once the gig is over so Google never shows an old event.
+   Also update the **`FALLBACK`** block in the page script (name, date, time, venue,
+   price text, `posterVersion`, `until` = the day after the gig). It is the safety net:
+   if the Sheet hasn't answered after 8 seconds, the page shows these details, keeps
+   the BOOK & PAY button off, keeps retrying, and offers TRY AGAIN and BOOK ON WHATSAPP.
 3. Tell the owner to **increase "Poster version"** in the Google Sheet's Event tab
    (the page loads `current-event-poster.jpg?v=<posterVersion>`), so phones fetch the new poster.
 4. Update `sitemap.xml` `lastmod` for `/gig-bookings/` and remind the owner to
