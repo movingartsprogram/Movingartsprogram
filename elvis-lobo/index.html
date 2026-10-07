@@ -130,6 +130,7 @@ p{margin:0 0 12px;}
   transition:transform .45s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
 }
 .orbit-satellite img{width:100%;height:100%;object-fit:cover;display:block;}
+picture{display:contents;}
 .album-orbit:hover .orbit-satellite,
 .album-orbit.active .orbit-satellite{
   opacity:1;pointer-events:auto;
@@ -271,16 +272,16 @@ function gtag(){dataLayer.push(arguments);}
     <div class="album-box">
       <div class="album-orbit" id="albumOrbit">
         <div class="orbit-center" id="orbitCenter">
-          <img src="elvis-lobo-photos/photos/elvis-lobo-thumb-1.jpg" alt="Elvis Lobo — album">
+          <picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-1.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-1.jpg" alt="Elvis Lobo — album"></picture>
         </div>
-        <button class="orbit-satellite" type="button" data-full="0" style="--ox:0px; --oy:-108px;"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-1.jpg" alt="Elvis Lobo, Goa guitarist, live photo 1"></button>
-        <button class="orbit-satellite" type="button" data-full="1" style="--ox:76px; --oy:-76px;"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-2.jpg" alt="Elvis Lobo, Goa guitarist, live photo 2"></button>
-        <button class="orbit-satellite" type="button" data-full="2" style="--ox:108px; --oy:0px;"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-3.jpg" alt="Elvis Lobo, Goa guitarist, live photo 3"></button>
-        <button class="orbit-satellite" type="button" data-full="3" style="--ox:76px; --oy:76px;"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-4.jpg" alt="Elvis Lobo, Goa guitarist, live photo 4"></button>
-        <button class="orbit-satellite" type="button" data-full="4" style="--ox:0px; --oy:108px;"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-5.jpg" alt="Elvis Lobo, Goa guitarist, live photo 5"></button>
-        <button class="orbit-satellite" type="button" data-full="5" style="--ox:-76px; --oy:76px;"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-6.jpg" alt="Elvis Lobo, Goa guitarist, live photo 6"></button>
-        <button class="orbit-satellite" type="button" data-full="6" style="--ox:-108px; --oy:0px;"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-7.jpg" alt="Elvis Lobo, Goa guitarist, live photo 7"></button>
-        <button class="orbit-satellite" type="button" data-full="7" style="--ox:-76px; --oy:-76px;"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-8.jpg" alt="Elvis Lobo, Goa guitarist, live photo 8"></button>
+        <button class="orbit-satellite" type="button" data-full="0" style="--ox:0px; --oy:-108px;"><picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-1.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-1.jpg" alt="Elvis Lobo, Goa guitarist, live photo 1"></picture></button>
+        <button class="orbit-satellite" type="button" data-full="1" style="--ox:76px; --oy:-76px;"><picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-2.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-2.jpg" alt="Elvis Lobo, Goa guitarist, live photo 2"></picture></button>
+        <button class="orbit-satellite" type="button" data-full="2" style="--ox:108px; --oy:0px;"><picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-3.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-3.jpg" alt="Elvis Lobo, Goa guitarist, live photo 3"></picture></button>
+        <button class="orbit-satellite" type="button" data-full="3" style="--ox:76px; --oy:76px;"><picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-4.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-4.jpg" alt="Elvis Lobo, Goa guitarist, live photo 4"></picture></button>
+        <button class="orbit-satellite" type="button" data-full="4" style="--ox:0px; --oy:108px;"><picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-5.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-5.jpg" alt="Elvis Lobo, Goa guitarist, live photo 5"></picture></button>
+        <button class="orbit-satellite" type="button" data-full="5" style="--ox:-76px; --oy:76px;"><picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-6.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-6.jpg" alt="Elvis Lobo, Goa guitarist, live photo 6"></picture></button>
+        <button class="orbit-satellite" type="button" data-full="6" style="--ox:-108px; --oy:0px;"><picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-7.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-7.jpg" alt="Elvis Lobo, Goa guitarist, live photo 7"></picture></button>
+        <button class="orbit-satellite" type="button" data-full="7" style="--ox:-76px; --oy:-76px;"><picture><source srcset="elvis-lobo-photos/photos/elvis-lobo-thumb-8.webp" type="image/webp"><img src="elvis-lobo-photos/photos/elvis-lobo-thumb-8.jpg" alt="Elvis Lobo, Goa guitarist, live photo 8"></picture></button>
       </div>
       <p class="album-hint">Hover or tap the photo to see the album</p>
     </div>
@@ -348,8 +349,18 @@ function gtag(){dataLayer.push(arguments);}
   var lightbox = document.getElementById('lightbox');
   var lightboxImg = document.getElementById('lightboxImg');
 
+  /* WebP copies sit next to each JPG (about 40% smaller). Use them when the
+     browser can decode WebP; fall back to the JPG if anything goes wrong. */
+  var WEBP_OK = false;
+  (function(){ var t = new Image(); t.onload = function(){ WEBP_OK = t.width > 0; };
+    t.src = "data:image/webp;base64,UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA=="; })();
+  lightboxImg.addEventListener('error', function(){
+    var jpg = lightboxImg.getAttribute('data-jpg');
+    if(jpg && lightboxImg.src.indexOf('.webp') > -1){ lightboxImg.src = jpg; }
+  });
   function openLightbox(idx){
-    lightboxImg.src = FULL[idx];
+    lightboxImg.setAttribute('data-jpg', FULL[idx]);
+    lightboxImg.src = WEBP_OK ? FULL[idx].replace(/\.jpg$/, '.webp') : FULL[idx];
     lightbox.classList.add('show');
   }
   function closeLightbox(){

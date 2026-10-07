@@ -76,6 +76,9 @@ Saket Rao (drums), Tejal (bass). Early Bird ₹499 (till 22 Oct), General ₹799
   (`night-bg`, `moon`, `scorpion`). Those load eagerly with `fetchpriority="low"`,
   because lazy loading inside animated, absolutely positioned layers failed on iOS.
 - `the-feni-trail/img/night.jpg` is no longer used, but is kept on purpose for old cached pages.
+- Elvis page photos (`elvis-lobo/elvis-lobo-photos/photos/`) also have WebP copies: thumbnails via
+  `<picture>`, the full-size lightbox picks `.webp` when the browser decodes it and falls back to the `.jpg`.
+  Keep both formats when adding photos.
 
 ## SEO
 - Every public page has a unique title, description, canonical URL, og and twitter tags,
