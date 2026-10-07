@@ -30,7 +30,7 @@ jobs:
       HOST: movingartsprogram.com
       KEY: 82fb14a332eb444aaced508b42d8593b   # public on purpose: /82fb14a332eb444aaced508b42d8593b.txt
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Wait for the GitHub Pages deploy of this commit
         if: github.event_name == 'push'
