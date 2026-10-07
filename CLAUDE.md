@@ -59,6 +59,11 @@ the first two as they are.
 2. Update the **MusicEvent JSON-LD** block in the `<head>` of `gig-bookings/index.html`
    (name, `startDate` with `+05:30`, venue address, performers, offers/prices, dates).
    Remove it once the gig is over so Google never shows an old event.
+   Also update the **`SLOW`** block in the page script: `posterVersion` (same number as
+   the Sheet's Poster version) and `until` (gig day). If the Sheet hasn't answered after
+   20 seconds (`NET_WAIT`), the page shows the poster with a walking 🐢 under it and "YOUR INTERNET
+   IS SLOW. HAVE PATIENCE — IT'S LOADING…", and keeps retrying. Nothing else: no details, prices,
+   buttons or WhatsApp (owner's choice).
 3. Tell the owner to **increase "Poster version"** in the Google Sheet's Event tab
    (the page loads `current-event-poster.jpg?v=<posterVersion>`), so phones fetch the new poster.
 4. Update `sitemap.xml` `lastmod` for `/gig-bookings/` and remind the owner to
