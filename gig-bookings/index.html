@@ -224,6 +224,55 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .booking-id .amt{font-family:'VT323',monospace;font-size:20px;color:var(--vu);}
 .small{font-size:12px;color:#8fae8f;margin-top:6px;}
 
+/* ---------- more gigs (pay at the gate), under the Razorpay strip ---------- */
+.more-gigs{margin-top:22px;overflow:hidden;border-radius:var(--r-md);
+  background:linear-gradient(180deg,#131313 0%, #050505 100%);
+  box-shadow:0 10px 20px rgba(0,0,0,.45), inset 0 2px 3px rgba(255,255,255,.08), inset 0 -5px 9px rgba(0,0,0,.6);}
+.more-gigs[hidden],.mg-card[hidden]{display:none;}
+.mg-title{background:linear-gradient(180deg,#7a1a5a 0%, #3d0d2c 100%);color:#ffd7ef;
+  font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;padding:6px 12px;
+  box-shadow:inset 0 2px 3px rgba(255,200,235,.26), inset 0 -4px 6px rgba(0,0,0,.5);}
+.mg-lead{font-family:'VT323',monospace;font-size:15px;color:#8fae8f;margin:8px 12px 2px;}
+/* all cards share one grid cell, so the box is as tall as the tallest card and never jumps */
+.mg-stage{display:grid;}
+.mg-card{grid-area:1/1;align-self:center;display:flex;gap:12px;align-items:flex-start;padding:12px;
+  opacity:0;visibility:hidden;transform:translateX(14px);transition:opacity .5s ease,transform .5s ease,visibility 0s linear .5s;}
+.mg-card.on{opacity:1;visibility:visible;transform:none;transition:opacity .5s ease,transform .5s ease;}
+@media (prefers-reduced-motion:reduce){.mg-card,.mg-card.on{transform:none;transition:none;}}
+.mg-nav{display:flex;align-items:center;justify-content:center;gap:10px;padding:0 12px 10px;}
+.mg-nav[hidden]{display:none;}
+.mg-arrow{background:none;border:1px solid #173d17;border-radius:var(--r-pill);color:var(--phos);font-size:11px;
+  width:34px;height:26px;cursor:pointer;}
+.mg-arrow:focus-visible,.mg-dot:focus-visible{outline:2px solid var(--vu);outline-offset:2px;}
+.mg-dots{display:flex;gap:6px;}
+.mg-dot{width:9px;height:9px;padding:0;border:none;border-radius:50%;background:rgba(124,252,0,.22);cursor:pointer;}
+.mg-dot.on{background:var(--phos);box-shadow:0 0 5px var(--phos);}
+.mg-body .mg-who{color:#a8cba8;}
+/* keep cards a similar height, so the carousel has no big empty gap */
+.mg-body .mg-blurb{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
+.mg-pic{flex:0 0 96px;width:96px;height:120px;object-fit:cover;border-radius:var(--r-sm);border:1px solid #173d17;overflow:hidden;position:relative;}
+.mg-pic img{display:block;width:100%;height:100%;object-fit:cover;}
+.mg-duo{position:relative;overflow:hidden;}
+.mg-duo img{position:absolute;inset:0;}
+.mg-duo .mg-alt{animation:mg-swap 6s ease-in-out infinite;}
+@keyframes mg-swap{0%,42%{opacity:0;}50%,92%{opacity:1;}100%{opacity:0;}}
+@media (prefers-reduced-motion:reduce){.mg-duo .mg-alt{animation:none;opacity:0;}}
+.mg-body{flex:1;min-width:0;}
+.mg-name{font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.5;color:var(--vu);margin:0 0 4px;
+  text-shadow:0 0 6px rgba(255,225,53,.4);overflow-wrap:anywhere;}
+.mg-body p{font-family:'VT323',monospace;font-size:16px;line-height:1.2;color:#d8e8d8;margin:0 0 5px;}
+.mg-body strong{color:var(--phos);font-weight:normal;}
+.mg-body .mg-when{color:var(--phos);}
+.mg-count{display:inline-block;font-size:13px;color:#fff;background:var(--mag);border-radius:var(--r-pill);padding:0 6px;margin-left:4px;
+  box-shadow:0 0 6px rgba(255,47,176,.6);}
+.mg-body .mg-pink{color:var(--mag);}
+.mg-body .mg-gate{font-family:'Press Start 2P',monospace;font-size:8px;line-height:1.6;color:var(--vu);margin-top:6px;}
+.mg-foot{font-family:'VT323',monospace;font-size:15px;line-height:1.25;color:#8fae8f;text-align:center;
+  margin:0;padding:10px 12px 14px;box-shadow:inset 0 1px 0 rgba(124,252,0,.12);}
+.mg-foot a{color:var(--phos);}
+.mg-foot a[href="/gigs/"]{font-family:'Press Start 2P',monospace;font-size:8px;line-height:2.4;color:var(--vu);}
+@media (max-width:359px){.mg-pic{flex-basis:76px;width:76px;height:95px;}.mg-name{font-size:9px;}}
+
 /* ---------- Razorpay trust strip ---------- */
 .rzp-trust{
   display:flex;align-items:center;justify-content:center;gap:7px;
@@ -633,6 +682,84 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
             <span>PAYMENTS SECURED BY</span><span class="rzp-mark">Razorpay</span>
           </div>
           <div class="rzp-methods">UPI · CARDS · NETBANKING · WALLETS</div>
+
+          <!-- ═══ OTHER GIGS COMING UP: information only, no booking. One gig at a time,
+               moving on by itself like the home display. The gigs come from /gigs.js
+               (the one gig list for the site): gigs booked here are left out, the rest are
+               "pay at the gate". Past gigs drop off by themselves; the section hides when
+               none are left. Self-contained: no booking code touches it. ═══ -->
+          <section class="more-gigs" id="moreGigs" aria-labelledby="mgTitle" hidden>
+            <div class="mg-title" id="mgTitle">OTHER GIGS COMING UP</div>
+            <p class="mg-lead">No online booking for these. Just turn up and pay at the gate.</p>
+            <div class="mg-stage" id="mgStage" aria-live="polite"></div>
+            <div class="mg-nav">
+              <button type="button" class="mg-arrow" id="mgPrev" aria-label="Previous gig">◄</button>
+              <div class="mg-dots" id="mgDots"></div>
+              <button type="button" class="mg-arrow" id="mgNext" aria-label="Next gig">►</button>
+            </div>
+            <p class="mg-foot"><a href="/gigs/" onclick="mapTrack('more_gigs_all',{from:'booking'})">ALL UPCOMING GIGS IN GOA →</a><br>
+              Curated with WHOLE LOTTA LOVE by Moving Arts Program.<br>
+              Enquiries &amp; collaborations: PK · <a href="tel:+919849690077">98496 90077</a></p>
+          </section>
+          <script src="/gigs.js"></script>
+          <script>
+          /* Other gigs coming up: built from /gigs.js, one card at a time, auto-advancing. */
+          (function(){
+            var box = document.getElementById("moreGigs"); if(!box || !window.MAP_GIGS_UPCOMING) return;
+            var gigs = window.MAP_GIGS_UPCOMING().filter(function(g){ return g.tickets !== "online"; });
+            if(!gigs.length) return;
+            var stage = document.getElementById("mgStage"), dots = document.getElementById("mgDots");
+            function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+            var cards = gigs.map(function(g){
+              var c = el("article", "mg-card");
+              var pic = el("div", "mg-pic" + (g.images.length > 1 ? " mg-duo" : ""));
+              g.images.slice(0, 2).forEach(function(src, i){
+                var im = el("img", i ? "mg-alt" : ""); im.src = src; im.width = 480; im.height = 600;
+                im.loading = "lazy"; im.decoding = "async"; im.alt = i ? "" : g.name; pic.appendChild(im);
+              });
+              var b = el("div", "mg-body");
+              b.appendChild(el("h4", "mg-name", g.name.toUpperCase()));
+              var w = el("p", "mg-when", g.day + " · " + g.venue + (g.area ? ", " + g.area : "") + " ");
+              w.appendChild(el("span", "mg-count", g.days > 1 ? g.days + " DAYS TO GO" : g.countdown));
+              b.appendChild(w);
+              if(g.lineup && g.lineup.length && !(g.lineup.length === 1 && g.lineup[0].name === g.name)){
+                b.appendChild(el("p", "mg-who", g.lineup.map(function(m){ return m.name + (m.role ? " (" + m.role + ")" : ""); }).join(" · ")));
+              }
+              if(g.blurb) b.appendChild(el("p", "mg-blurb", g.blurb));
+              if(g.adults) b.appendChild(el("p", "mg-pink", "🔞 Adults only. Leave the kids behind."));
+              b.appendChild(el("p", "mg-gate", "🎟 TICKETS AT THE GATE"));
+              c.appendChild(pic); c.appendChild(b); stage.appendChild(c);
+              var d = el("button", "mg-dot"); d.type = "button"; d.setAttribute("aria-label", g.name);
+              dots.appendChild(d);
+              return c;
+            });
+            var i = 0, paused = false, timer = null;
+            function show(n){
+              i = (n + cards.length) % cards.length;
+              cards.forEach(function(c, k){ c.classList.toggle("on", k === i); c.setAttribute("aria-hidden", k === i ? "false" : "true"); });
+              [].forEach.call(dots.children, function(d, k){ d.classList.toggle("on", k === i); });
+              var alt = cards[i].querySelector(".mg-alt");
+              if(alt){ alt.style.animation = "none"; void alt.offsetWidth; alt.style.animation = ""; }
+            }
+            function restart(){ if(timer) clearInterval(timer); if(cards.length > 1) timer = setInterval(function(){ if(!paused && !document.hidden) show(i + 1); }, 6000); }
+            [].forEach.call(dots.children, function(d, k){ d.addEventListener("click", function(){ show(k); restart(); }); });
+            document.getElementById("mgPrev").addEventListener("click", function(){ show(i - 1); restart(); });
+            document.getElementById("mgNext").addEventListener("click", function(){ show(i + 1); restart(); });
+            /* swipe on phones */
+            var x0 = null;
+            stage.addEventListener("touchstart", function(e){ x0 = e.touches[0].clientX; paused = true; }, {passive: true});
+            stage.addEventListener("touchend", function(e){
+              paused = false; if(x0 == null) return;
+              var dx = e.changedTouches[0].clientX - x0; x0 = null;
+              if(Math.abs(dx) > 40){ show(dx < 0 ? i + 1 : i - 1); restart(); }
+            }, {passive: true});
+            box.addEventListener("mouseenter", function(){ paused = true; });
+            box.addEventListener("mouseleave", function(){ paused = false; });
+            if(cards.length < 2) box.querySelector(".mg-nav").hidden = true;
+            box.hidden = false;
+            show(0); restart();
+          })();
+          </script>
         </div>
 
         <!-- ═══ 5. CONFIRMATION + PAYMENT ═══ -->
