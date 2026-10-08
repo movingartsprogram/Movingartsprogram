@@ -116,7 +116,62 @@ body::after{
 }
 
 .wa-top-row{display:flex;gap:8px;align-items:stretch;}
-.wa-lcd-col1{flex:1 1 58%;min-width:0;}
+.wa-lcd-col1{flex:1 1 58%;min-width:0;display:flex;flex-direction:column;}
+
+/* ---------- gig billboard: fills whatever LCD space is left under the marquee,
+   so it never pushes or overlaps the side buttons. Slides cross-fade in turn. ---------- */
+.bb-wrap{flex:1 1 auto;position:relative;min-height:60px;margin-top:6px;}
+.bb-wrap[hidden]{display:none;}
+.bb-inner{position:absolute;inset:0 0 9px 0;border-top:1px solid #143214;padding-top:5px;}
+.bb-slide{position:absolute;inset:5px 0 0 0;display:flex;gap:8px;align-items:center;
+  opacity:0;visibility:hidden;transition:opacity .6s ease, visibility 0s linear .6s;}
+.bb-slide.on{opacity:1;visibility:visible;transition:opacity .6s ease;}
+.bb-slide[hidden]{display:none;}
+.bb-pic{position:relative;height:100%;max-height:100px;flex:0 0 auto;}
+.bb-poster{display:block;height:100%;max-height:100px;width:auto;aspect-ratio:4/5;object-fit:cover;border-radius:5px;
+  border:1px solid var(--phos-line);box-shadow:0 0 6px rgba(124,252,0,.15);}
+/* two photos taking turns (13 Nov slide) */
+.bb-duo .bb-alt{position:absolute;top:0;left:0;animation:bb-swap 4.5s ease-in-out infinite;}
+@keyframes bb-swap{0%,40%{opacity:0;}50%,90%{opacity:1;}100%{opacity:0;}}
+@media (prefers-reduced-motion:reduce){.bb-duo .bb-alt{animation:none;opacity:0;}}
+/* the headline gig: small pink kicker and a pulsing glow while its slide is up */
+.bb-kicker{font-family:'VT323',monospace;font-size:12px;line-height:1;letter-spacing:1px;color:var(--mag);
+  text-shadow:0 0 6px rgba(255,47,176,.8);}
+.bb-star.on .bb-poster{animation:bb-glow 1.6s ease-in-out infinite;}
+.bb-star.on .bb-name{animation:bb-glow-text 1.6s ease-in-out infinite;}
+@keyframes bb-glow{0%,100%{box-shadow:0 0 6px rgba(255,225,53,.45);}50%{box-shadow:0 0 14px 3px rgba(255,225,53,.9),0 0 26px 6px rgba(255,47,176,.45);}}
+@keyframes bb-glow-text{0%,100%{text-shadow:0 0 6px rgba(255,225,53,.45);}50%{text-shadow:0 0 10px rgba(255,225,53,1),0 0 18px rgba(255,47,176,.7);}}
+@media (prefers-reduced-motion:reduce){.bb-star.on .bb-poster{animation:none;box-shadow:0 0 12px 2px rgba(255,225,53,.8);}.bb-star.on .bb-name{animation:none;}}
+.bb-noposter{display:grid;place-items:center;font-size:22px;color:var(--mag);background:rgba(255,47,176,.08);
+  text-shadow:0 0 8px rgba(255,47,176,.6);}
+.bb-text{min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:3px;overflow:hidden;}
+.bb-name{font-family:'Press Start 2P',monospace;font-size:8px;line-height:1.5;color:var(--vu);
+  text-shadow:0 0 6px rgba(255,225,53,.45);overflow-wrap:anywhere;}
+.bb-line{font-family:'VT323',monospace;font-size:14px;line-height:1.05;color:var(--phos);}
+.bb-tag{font-family:'VT323',monospace;font-size:14px;line-height:1.05;color:var(--vu);}
+.bb-pink{color:var(--mag);}
+/* countdown sticker on the poster's bottom edge */
+.bb-count{position:absolute;left:50%;bottom:-3px;transform:translateX(-50%);white-space:nowrap;
+  font-family:'VT323',monospace;font-size:13px;line-height:1;color:#fff;background:var(--mag);
+  border-radius:var(--r-pill);padding:2px 5px 1px;box-shadow:0 0 6px rgba(255,47,176,.7);}
+.bb-book{align-self:flex-start;font-family:Tahoma,Arial,sans-serif;font-size:9px;font-weight:bold;letter-spacing:.3px;
+  color:#0a1f0a;text-decoration:none;border-radius:var(--r-pill);padding:3px 9px;margin:1px 0;
+  background:linear-gradient(180deg,#b8ff66 0%, var(--phos) 45%, #57bd00 100%);
+  box-shadow:0 0 8px rgba(124,252,0,.45), inset 0 1px 2px rgba(255,255,255,.4);}
+.bb-book:focus-visible{outline:2px solid var(--vu);outline-offset:2px;}
+.bb-dots{position:absolute;left:0;right:0;bottom:0;height:5px;display:flex;justify-content:center;gap:4px;}
+.bb-dots span{width:5px;height:5px;border-radius:50%;background:rgba(124,252,0,.2);}
+.bb-dots span.on{background:var(--phos);box-shadow:0 0 4px var(--phos);}
+@media (max-width:359px){
+  .bb-slide{gap:5px;align-items:center;}
+  .bb-pic{height:84%;}
+  .bb-name{font-size:7px;}
+  .bb-line,.bb-tag{font-size:13px;}
+  .bb-book{font-size:8px;padding:2px 7px;}
+  .bb-count{font-size:11px;}
+  .bb-kicker{font-size:11px;}
+}
+@media (min-width:600px){.bb-name{font-size:10px;}.bb-line,.bb-tag{font-size:17px;}.bb-count{font-size:14px;}.bb-book{font-size:11px;}}
 
 .wa-time{
   font-family:'VT323',monospace;color:var(--phos);font-size:19px;letter-spacing:1px;
@@ -448,21 +503,6 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 }
 .wa-content-body{padding:16px;}
 
-/* ---------- next gig banner ---------- */
-.next-gig[hidden]{display:none;}
-.ng-body{display:flex;gap:14px;align-items:center;padding:14px 16px 16px;}
-.ng-poster{flex:0 0 38%;max-width:200px;display:block;}
-.ng-poster img{width:100%;height:auto;display:block;border-radius:var(--r-sm);border:1px solid var(--phos-line);box-shadow:0 8px 20px rgba(0,0,0,.55);}
-.ng-info{flex:1;min-width:0;}
-.ng-name{font-family:'Press Start 2P',monospace;font-size:12px;line-height:1.5;color:var(--phos);margin:0 0 6px;text-shadow:0 0 8px rgba(124,252,0,.45);overflow-wrap:anywhere;}
-.ng-info p{font-family:'VT323',monospace;font-size:16px;line-height:1.2;margin:0 0 5px;color:#d8e8d8;}
-.ng-who{color:#a8cba8 !important;}
-.ng-count{color:var(--mag) !important;font-size:20px !important;text-shadow:0 0 8px rgba(255,47,176,.45);}
-.ng-price{color:var(--vu) !important;}
-.ng-book{display:block;text-align:center;text-decoration:none;margin:8px 0 6px;}
-.ng-faq{display:block;font-family:'VT323',monospace;font-size:16px;color:var(--phos);}
-@media (max-width:360px){.ng-name{font-size:10px;}.ng-info p{font-size:15px;}}
-@media (prefers-reduced-motion:no-preference){.ng-count{animation:wa-pulse 2.6s ease-in-out infinite;}}
 
 .page{display:none;}
 .page.active{display:block;}
@@ -851,7 +891,57 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
             <div class="wa-time" id="waTime">00:00</div>
             <div class="wa-track-title" id="waTrackTitle">HOME — SOUND. ART. SPIRIT.</div>
             <div class="wa-meta"><span>128 kbps</span><span>44 kHz</span><span>STEREO</span></div>
-            <div class="wa-spectrum" id="waSpectrum"></div>
+            <!-- ═══ GIG BILLBOARD: fills the empty LCD space under the marquee and rotates
+                 through upcoming gigs. UPDATE WITH EACH NEW GIG: one .bb-slide per gig,
+                 soonest first, with data-date and data-until (India date). A slide hides
+                 itself after its until; the billboard hides when none are left.
+                 Only gigs booked online get a BOOK button. ═══ -->
+            <div class="bb-wrap" id="gigBoard" aria-label="Upcoming gigs" role="region">
+              <div class="bb-inner">
+                <div class="bb-slide" data-date="2026-10-29" data-until="2026-10-29">
+                  <div class="bb-pic"><img class="bb-poster" src="/six-string-seance-poster-sm.jpg" width="480" height="600" decoding="async" alt="Six String Séance poster"><span class="bb-count"></span></div>
+                  <div class="bb-text">
+                    <div class="bb-name">SIX STRING SÉANCE</div>
+                    <div class="bb-line">Elvis Lobo &amp; Bobby</div>
+                    <div class="bb-line">29 OCT · Saltamontes</div>
+                    <div class="bb-tag bb-pink">🔞 18+ · AT THE GATE</div>
+                  </div>
+                </div>
+                <div class="bb-slide" data-date="2026-11-01" data-until="2026-11-01">
+                  <div class="bb-pic"><img class="bb-poster" src="/roll-heads-sm.jpg" width="480" height="600" decoding="async" alt="Roll Heads logo, Gangtok, Sikkim"><span class="bb-count"></span></div>
+                  <div class="bb-text">
+                    <div class="bb-name">ROLL HEADS</div>
+                    <div class="bb-line">From Gangtok, Sikkim</div>
+                    <div class="bb-line">1 NOV · Guru Bar</div>
+                    <div class="bb-tag">🎟 AT THE GATE</div>
+                  </div>
+                </div>
+                <div class="bb-slide" data-date="2026-11-13" data-until="2026-11-13">
+                  <div class="bb-pic bb-duo">
+                    <img class="bb-poster" src="/elvis-lobo-guitar-sm.jpg" width="480" height="600" decoding="async" alt="Elvis Lobo on guitar">
+                    <img class="bb-poster bb-alt" src="/dj-voyager-sm.jpg" width="480" height="600" decoding="async" alt="DJ Voyager on the decks">
+                    <span class="bb-count"></span>
+                  </div>
+                  <div class="bb-text">
+                    <div class="bb-name">ELVIS LOBO × DJ VOYAGER</div>
+                    <div class="bb-line">Electronic set</div>
+                    <div class="bb-line">13 NOV · Wise Fools</div>
+                    <div class="bb-tag">🎟 AT THE GATE</div>
+                  </div>
+                </div>
+                <div class="bb-slide bb-star" data-date="2026-11-22" data-until="2026-11-22">
+                  <div class="bb-pic"><img class="bb-poster" src="/gig-bookings/current-event-poster.jpg?v=25" width="900" height="1125" decoding="async" alt="Bombay Rock Xchange poster"><span class="bb-count"></span></div>
+                  <div class="bb-text">
+                    <div class="bb-kicker">★ GIG OF THE YEAR ★</div>
+                    <div class="bb-name">BOMBAY ROCK XCHANGE</div>
+                    <div class="bb-line">Luke Kenny &amp; band</div>
+                    <div class="bb-line">22 NOV · Varca</div>
+                    <a class="bb-book" href="/gig-bookings/" onclick="mapTrack('billboard_book_click',{gig:'brx'})">🎫 BOOK NOW</a>
+                  </div>
+                </div>
+              </div>
+              <div class="bb-dots" aria-hidden="true"></div>
+            </div>
           </div>
           <div class="wa-side-col">
             <div class="wa-side-default">
@@ -913,27 +1003,6 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       </div>
     </div>
   </div>
-
-  <!-- ═══ NEXT GIG banner. UPDATE WITH EACH NEW GIG (text, poster ?v=, dates in the
-       script at the bottom). It hides itself the day after the gig (NG_UNTIL). ═══ -->
-  <section class="wa-content-window next-gig" id="nextGig" aria-labelledby="ngTitle">
-    <div class="wa-content-title">NEXT GIG — NOW BOOKING</div>
-    <div class="ng-body">
-      <a class="ng-poster" href="/gig-bookings/" onclick="mapTrack('next_gig_click',{part:'poster'})">
-        <img src="/gig-bookings/current-event-poster.jpg?v=25" width="900" height="1125" decoding="async" loading="lazy"
-             alt="Bombay Rock Xchange poster: Luke Kenny and Ravi Iyer, Sunday 22 November, Domingos Gazebo, Varca">
-      </a>
-      <div class="ng-info">
-        <h2 class="ng-name" id="ngTitle">BOMBAY ROCK XCHANGE</h2>
-        <p class="ng-who">Luke Kenny · Ravi Iyer · Saket Rao · Tejal</p>
-        <p class="ng-when">SUN 22 NOV · 8 PM<br>Domingos Gazebo, Varca</p>
-        <p class="ng-count" id="ngCount" hidden></p>
-        <p class="ng-price" id="ngPrice" hidden></p>
-        <a class="cta ng-book" href="/gig-bookings/" onclick="mapTrack('next_gig_click',{part:'book'})">🎫 BOOK TICKETS</a>
-        <a class="ng-faq" href="/bombay-rock-xchange/" onclick="mapTrack('next_gig_click',{part:'faq'})">Gig info &amp; FAQ →</a>
-      </div>
-    </div>
-  </section>
 
   <div class="wa-content-window">
     <div class="wa-content-title" id="waContentTitle">OBJECTIVE</div>
@@ -1253,7 +1322,7 @@ for(let c=0;c<SCOPE_COLS;c++){
     col.appendChild(cell);
     px.push(cell);
   }
-  spec.appendChild(col);
+  if(spec) spec.appendChild(col);   /* the scrolling text was removed from the LCD (Oct 2026); kept harmless */
   scopePixels.push(px);
   scopeCols.push(col);
 }
@@ -1303,7 +1372,7 @@ function marqueeStop(){
   scrollPos = 0;
 }
 drawScope();
-if(!REDUCED){ marqueePlay(); }
+if(!REDUCED && spec){ marqueePlay(); }
 
 // Save phone batteries: freeze the marquee when the tab is hidden.
 let marqueeWasPlaying = false;
@@ -1908,32 +1977,36 @@ var mapTicker = setInterval(function(){
 showPage('home');
 </script>
 <script>
-/* Next gig banner: countdown and today's price, both by India date. UPDATE WITH EACH NEW GIG. */
+/* Gig billboard in the LCD: countdown per gig, hide past gigs, rotate slides. */
 (function(){
-  var NG_DATE = "2026-11-22", NG_UNTIL = "2026-11-22";
-  var PRICES = [
-    {upto: "2026-10-22", text: "₹499 EARLY BIRD (FIRST 50) · TILL 22 OCT"},
-    {upto: "2026-11-21", text: "₹799 GENERAL · TILL 21 NOV"},
-    {upto: "2026-11-22", text: "₹1000 AT THE GATE TONIGHT"}
-  ];
-  var box = document.getElementById("nextGig"); if(!box) return;
+  var board = document.getElementById("gigBoard"); if(!board) return;
   var today;
   try{ today = new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}); }
   catch(e){ today = new Date(Date.now() + 19800000).toISOString().slice(0, 10); }
-  if(today > NG_UNTIL){ box.hidden = true; return; }
-  /* Only on the home screen, so other sections aren't pushed down the page. */
-  function onHome(){ var h = document.getElementById("page-home"); return !h || h.classList.contains("active"); }
-  box.hidden = !onHome();
-  if(typeof window.showPage === "function"){
-    var showPageFirst = window.showPage;
-    window.showPage = function(){ var r = showPageFirst.apply(this, arguments); box.hidden = !onHome(); return r; };
+  var slides = [].slice.call(board.querySelectorAll(".bb-slide")).filter(function(sl){
+    if(today > sl.getAttribute("data-until")){ sl.hidden = true; return false; }
+    var d = Math.round((Date.parse(sl.getAttribute("data-date")) - Date.parse(today)) / 86400000);
+    sl.querySelector(".bb-count").textContent = d > 1 ? d + " DAYS" : (d === 1 ? "TOMORROW" : "TONIGHT!");
+    return true;
+  });
+  if(!slides.length){ board.hidden = true; return; }
+  var dots = board.querySelector(".bb-dots");
+  slides.forEach(function(){ dots.appendChild(document.createElement("span")); });
+  var i = 0, paused = false;
+  function show(n){
+    slides.forEach(function(sl, k){ sl.classList.toggle("on", k === n); sl.setAttribute("aria-hidden", k === n ? "false" : "true"); });
+    /* two-photo slides: restart the swap so the first photo always shows first */
+    var alt = slides[n].querySelector(".bb-alt");
+    if(alt){ alt.style.animation = "none"; void alt.offsetWidth; alt.style.animation = ""; }
+    [].forEach.call(dots.children, function(dt, k){ dt.classList.toggle("on", k === n); });
   }
-  var d = Math.round((Date.parse(NG_DATE) - Date.parse(today)) / 86400000);
-  var c = document.getElementById("ngCount");
-  c.textContent = d > 1 ? d + " DAYS TO GO" : (d === 1 ? "TOMORROW NIGHT" : "TONIGHT!");
-  c.hidden = false;
-  for(var i = 0; i < PRICES.length; i++){
-    if(today <= PRICES[i].upto){ var p = document.getElementById("ngPrice"); p.textContent = PRICES[i].text; p.hidden = false; break; }
+  show(0);
+  if(slides.length > 1){
+    board.addEventListener("mouseenter", function(){ paused = true; });
+    board.addEventListener("mouseleave", function(){ paused = false; });
+    board.addEventListener("focusin", function(){ paused = true; });
+    board.addEventListener("focusout", function(){ paused = false; });
+    setInterval(function(){ if(!paused && !document.hidden){ i = (i + 1) % slides.length; show(i); } }, 4500);
   }
 })();
 </script>

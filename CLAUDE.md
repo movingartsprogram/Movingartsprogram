@@ -67,9 +67,15 @@ the first two as they are.
    buttons or WhatsApp (owner's choice).
    Also update the booking page's **share preview** (`<title>`, description, og/twitter
    title, description and image alt) and the **Add to calendar** links on the ticket screen.
-   On the **home page**, update the **NEXT GIG banner** (`#nextGig`: text, poster `?v=`) and
-   its script at the bottom (`NG_DATE`, `NG_UNTIL`, `PRICES`). It hides itself after `NG_UNTIL`
-   and only shows on the home screen. Make a gig info/FAQ page like `/bombay-rock-xchange/`
+   On the **home page**, update the **GIG BILLBOARD** inside the LCD (`#gigBoard`, under the
+   time/title/kbps rows): one `.bb-slide` per gig, soonest first, with `data-date` and
+   `data-until` (India date). Slides cross-fade every 4.5 s; each hides after its `until`;
+   the countdown sticker sits on the poster. Only gigs booked online get the BOOK NOW button,
+   others say "AT THE GATE". It fills only the LCD's leftover space (absolutely positioned),
+   so the panel must never get taller: check `.wa-top-row` height old vs new at 320–1280px
+   with the real fonts. Owner's choice: no separate banner below the player, and the old
+   dot-matrix scrolling text ("Elvis Lobo rocks…") was removed from the LCD (its JS is
+   kept but inert). Make a gig info/FAQ page like `/bombay-rock-xchange/`
    (ask the owner for gate time, parking, food, ages) and add it to `sitemap.xml`.
 3. Tell the owner to **increase "Poster version"** in the Google Sheet's Event tab
    (the page loads `current-event-poster.jpg?v=<posterVersion>`), so phones fetch the new poster.
@@ -79,6 +85,16 @@ the first two as they are.
 Current gig (at time of writing): **Bombay Rock Xchange**, Sun 22 Nov 2026, 8 PM,
 Domingos Gazebo, Pedda Road, Varca 403721. Luke Kenny (vocals), Ravi Iyer (guitar),
 Saket Rao (drums), Tejal (bass). Early Bird ₹499 (till 22 Oct), General ₹799, Gate ₹1000.
+Also on the billboard: **Six String Séance**, Thu 29 Oct 2026, Saltamontes. Elvis Lobo
+(guitar), Bobby (vinyls). Halloween-eve "modern baithak" (music, vinyls, magic, stories),
+pulp/B-grade horror tribute. Adults only. Tickets at the gate only. Poster:
+`six-string-seance-poster.jpg` (900px) and `-sm.jpg` (billboard).
+And: **Roll Heads** (from Gangtok, Sikkim), Sun 1 Nov 2026, Guru Bar. Tickets at the gate.
+Picture `roll-heads-sm.jpg`.
+And: **Elvis Lobo × DJ Voyager**, electronic set, Fri 13 Nov 2026, Wise Fools. Tickets at the
+gate only. Photos `elvis-lobo-guitar-sm.jpg` and `dj-voyager-sm.jpg` take turns on its slide.
+Only 22 Nov is booked online. Its slide has `.bb-star`: a pink "★ GIG OF THE YEAR ★"
+kicker and a pulsing glow while it's showing.
 
 ## Images and speed
 - Images live as separate files, never embedded in the HTML. Feni Trail images are in
