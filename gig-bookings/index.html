@@ -4,19 +4,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book a Gig — Moving Arts Program, Goa</title>
-<meta name="description" content="Book your seats for Moving Arts Program live music events in Goa. Every rupee goes to the artists and volunteers.">
+<title>Bombay Rock Xchange Tickets — Luke Kenny Live in Goa, 22 Nov | MAP</title>
+<meta name="description" content="Book tickets for Bombay Rock Xchange: Luke Kenny, Ravi Iyer, Saket Rao and Tejal live at Domingos Gazebo, Varca, South Goa. Sun 22 Nov, 8 PM. Classic rock and Bollywood.">
 <meta name="theme-color" content="#0d0d12">
 <link rel="canonical" href="https://movingartsprogram.com/gig-bookings/">
-<meta property="og:title" content="Book a Gig — Moving Arts Program">
-<meta property="og:description" content="Reserve your seats for MAP live music in Goa. Every rupee goes to the artists and volunteers.">
+<meta property="og:title" content="Bombay Rock Xchange — Luke Kenny live in Goa · Sun 22 Nov">
+<meta property="og:description" content="Luke Kenny, Ravi Iyer, Saket Rao and Tejal. Classic rock and Bollywood at Domingos Gazebo, Varca. Book your tickets.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://movingartsprogram.com/gig-bookings/">
 <meta property="og:site_name" content="Moving Arts Program">
+<!-- Share preview: UPDATE THE TITLE, DESCRIPTIONS AND IMAGE ALT ABOVE AND BELOW WITH EACH NEW GIG -->
 <meta property="og:image" content="https://movingartsprogram.com/gig-bookings/current-event-poster.jpg">
+<meta property="og:image:width" content="900">
+<meta property="og:image:height" content="1125">
+<meta property="og:image:alt" content="Bombay Rock Xchange poster: Luke Kenny and Ravi Iyer, Sunday 22 November, Domingos Gazebo, Varca">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Book a Gig — Moving Arts Program">
-<meta name="twitter:description" content="Reserve your seats for MAP live music in Goa.">
+<meta name="twitter:title" content="Bombay Rock Xchange — Luke Kenny live in Goa · Sun 22 Nov">
+<meta name="twitter:description" content="Luke Kenny, Ravi Iyer, Saket Rao and Tejal. Classic rock and Bollywood at Domingos Gazebo, Varca.">
 <meta name="twitter:image" content="https://movingartsprogram.com/gig-bookings/current-event-poster.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a1f0a'/%3E%3Cpath d='M5 3.5v9l7-4.5z' fill='%237CFC00'/%3E%3C/svg%3E">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -272,6 +276,9 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
   text-shadow:0 0 8px rgba(255,225,53,.4);}
 .tier-note[hidden]{display:none;}
 /* safety net: shown only while the Sheet is slow to answer */
+/* add to calendar, on the ticket screen */
+.cal-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.cal-btn{display:block;text-align:center;text-decoration:none;font-size:9px;padding-left:6px;padding-right:6px;}
 .net-note{margin:12px 0 0;padding:12px;border:1.5px dashed rgba(255,225,53,.5);border-radius:var(--r-md);text-align:center;}
 .net-note[hidden]{display:none;}
 .net-note .turtle{font-size:40px;line-height:1;margin:0 0 6px;display:inline-block;animation:turtle 2.4s ease-in-out infinite;}
@@ -707,6 +714,13 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
 
           <button type="button" class="cta cta-block cta-gold" id="printBtn">🎟&nbsp; PRINT / SAVE MY TICKET</button>
           <p class="small">On a phone, choose "Save as PDF" to keep it in your files.</p>
+
+          <!-- Add to calendar: plain links, no booking logic. UPDATE WITH EACH NEW GIG. -->
+          <div class="cal-row">
+            <a class="cta cal-btn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Bombay+Rock+Xchange+%E2%80%94+Moving+Arts+Program&amp;dates=20261122T143000Z/20261122T173000Z&amp;location=Domingos+Gazebo%2C+Pedda+Road%2C+Varca%2C+Goa+403721&amp;details=Gates+open+7+PM%2C+music+from+8+PM.+Bring+your+QR+ticket+%E2%80%94+one+per+person.+https%3A%2F%2Fmovingartsprogram.com%2Fbombay-rock-xchange%2F" target="_blank" rel="noopener noreferrer" onclick="mapTrack('add_to_calendar',{from:'ticket',type:'google'})">📅 GOOGLE CALENDAR</a>
+            <a class="cta cal-btn" href="/bombay-rock-xchange/bombay-rock-xchange.ics" download onclick="mapTrack('add_to_calendar',{from:'ticket',type:'ics'})">📅 APPLE / OTHER</a>
+          </div>
+          <p class="small">Gates 7 PM. <a href="/bombay-rock-xchange/" style="color:var(--phos)">Parking, food &amp; FAQ</a></p>
 
           <p class="thanks-note" id="thanksNote">🎶 Thank you so much for supporting live music — booking your seat means the world to us.</p>
 
