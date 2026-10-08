@@ -134,6 +134,14 @@ body::after{
 .bb-duo .bb-alt{position:absolute;top:0;left:0;animation:bb-swap 4.5s ease-in-out infinite;}
 @keyframes bb-swap{0%,40%{opacity:0;}50%,90%{opacity:1;}100%{opacity:0;}}
 @media (prefers-reduced-motion:reduce){.bb-duo .bb-alt{animation:none;opacity:0;}}
+/* the headline gig: small pink kicker and a pulsing glow while its slide is up */
+.bb-kicker{font-family:'VT323',monospace;font-size:12px;line-height:1;letter-spacing:1px;color:var(--mag);
+  text-shadow:0 0 6px rgba(255,47,176,.8);}
+.bb-star.on .bb-poster{animation:bb-glow 1.6s ease-in-out infinite;}
+.bb-star.on .bb-name{animation:bb-glow-text 1.6s ease-in-out infinite;}
+@keyframes bb-glow{0%,100%{box-shadow:0 0 6px rgba(255,225,53,.45);}50%{box-shadow:0 0 14px 3px rgba(255,225,53,.9),0 0 26px 6px rgba(255,47,176,.45);}}
+@keyframes bb-glow-text{0%,100%{text-shadow:0 0 6px rgba(255,225,53,.45);}50%{text-shadow:0 0 10px rgba(255,225,53,1),0 0 18px rgba(255,47,176,.7);}}
+@media (prefers-reduced-motion:reduce){.bb-star.on .bb-poster{animation:none;box-shadow:0 0 12px 2px rgba(255,225,53,.8);}.bb-star.on .bb-name{animation:none;}}
 .bb-noposter{display:grid;place-items:center;font-size:22px;color:var(--mag);background:rgba(255,47,176,.08);
   text-shadow:0 0 8px rgba(255,47,176,.6);}
 .bb-text{min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:3px;overflow:hidden;}
@@ -161,6 +169,7 @@ body::after{
   .bb-line,.bb-tag{font-size:13px;}
   .bb-book{font-size:8px;padding:2px 7px;}
   .bb-count{font-size:11px;}
+  .bb-kicker{font-size:11px;}
 }
 @media (min-width:600px){.bb-name{font-size:10px;}.bb-line,.bb-tag{font-size:17px;}.bb-count{font-size:14px;}.bb-book{font-size:11px;}}
 
@@ -898,6 +907,15 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
                     <div class="bb-tag bb-pink">🔞 18+ · AT THE GATE</div>
                   </div>
                 </div>
+                <div class="bb-slide" data-date="2026-11-01" data-until="2026-11-01">
+                  <div class="bb-pic"><img class="bb-poster" src="/roll-heads-sm.jpg" width="480" height="600" decoding="async" alt="Roll Heads logo, Gangtok, Sikkim"><span class="bb-count"></span></div>
+                  <div class="bb-text">
+                    <div class="bb-name">ROLL HEADS</div>
+                    <div class="bb-line">From Gangtok, Sikkim</div>
+                    <div class="bb-line">1 NOV · Guru Bar</div>
+                    <div class="bb-tag">🎟 AT THE GATE</div>
+                  </div>
+                </div>
                 <div class="bb-slide" data-date="2026-11-13" data-until="2026-11-13">
                   <div class="bb-pic bb-duo">
                     <img class="bb-poster" src="/elvis-lobo-guitar-sm.jpg" width="480" height="600" decoding="async" alt="Elvis Lobo on guitar">
@@ -911,9 +929,10 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
                     <div class="bb-tag">🎟 AT THE GATE</div>
                   </div>
                 </div>
-                <div class="bb-slide" data-date="2026-11-22" data-until="2026-11-22">
+                <div class="bb-slide bb-star" data-date="2026-11-22" data-until="2026-11-22">
                   <div class="bb-pic"><img class="bb-poster" src="/gig-bookings/current-event-poster.jpg?v=25" width="900" height="1125" decoding="async" alt="Bombay Rock Xchange poster"><span class="bb-count"></span></div>
                   <div class="bb-text">
+                    <div class="bb-kicker">★ GIG OF THE YEAR ★</div>
                     <div class="bb-name">BOMBAY ROCK XCHANGE</div>
                     <div class="bb-line">Luke Kenny &amp; band</div>
                     <div class="bb-line">22 NOV · Varca</div>

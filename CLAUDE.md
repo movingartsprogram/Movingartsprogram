@@ -89,9 +89,12 @@ Also on the billboard: **Six String Séance**, Thu 29 Oct 2026, Saltamontes. Elv
 (guitar), Bobby (vinyls). Halloween-eve "modern baithak" (music, vinyls, magic, stories),
 pulp/B-grade horror tribute. Adults only. Tickets at the gate only. Poster:
 `six-string-seance-poster.jpg` (900px) and `-sm.jpg` (billboard).
+And: **Roll Heads** (from Gangtok, Sikkim), Sun 1 Nov 2026, Guru Bar. Tickets at the gate.
+Picture `roll-heads-sm.jpg`.
 And: **Elvis Lobo × DJ Voyager**, electronic set, Fri 13 Nov 2026, Wise Fools. Tickets at the
 gate only. Photos `elvis-lobo-guitar-sm.jpg` and `dj-voyager-sm.jpg` take turns on its slide.
-Only 22 Nov is booked online.
+Only 22 Nov is booked online. Its slide has `.bb-star`: a pink "★ GIG OF THE YEAR ★"
+kicker and a pulsing glow while it's showing.
 
 ## Images and speed
 - Images live as separate files, never embedded in the HTML. Feni Trail images are in
