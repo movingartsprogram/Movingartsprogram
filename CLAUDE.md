@@ -20,6 +20,7 @@ API keys or private guest details in it.
 |---|---|
 | `/` (`index.html`) | Home: Winamp-style "player" UI. The series sections are in-page `#page-*` blocks switched by JS (`showPage`). |
 | `/gig-bookings/` | **Ticketing.** Google Apps Script backend (Google Sheet) + Razorpay. Event details come from the Sheet at runtime. |
+| `/bombay-rock-xchange/` | Gig info & FAQ for the current gig (line-up, gates, parking, food, ages, refunds) + `bombay-rock-xchange.ics` calendar file. FAQPage JSON-LD. Keep it after the gig as an archive page. |
 | `/the-feni-trail/` | The Feni Trail: invite-only farm experience at Dudhsagar Plantation with Ouro feni. Animated, SEO-optimised. |
 | `/elvis-lobo/` | Elvis Lobo ("The Boss") story and video archive. |
 | `/policies/` | Terms, privacy, refunds, pricing and contact (required by Razorpay). |
@@ -64,6 +65,12 @@ the first two as they are.
    20 seconds (`NET_WAIT`), the page shows the poster with a walking 🐢 under it and "YOUR INTERNET
    IS SLOW. HAVE PATIENCE — IT'S LOADING…", and keeps retrying. Nothing else: no details, prices,
    buttons or WhatsApp (owner's choice).
+   Also update the booking page's **share preview** (`<title>`, description, og/twitter
+   title, description and image alt) and the **Add to calendar** links on the ticket screen.
+   On the **home page**, update the **NEXT GIG banner** (`#nextGig`: text, poster `?v=`) and
+   its script at the bottom (`NG_DATE`, `NG_UNTIL`, `PRICES`). It hides itself after `NG_UNTIL`
+   and only shows on the home screen. Make a gig info/FAQ page like `/bombay-rock-xchange/`
+   (ask the owner for gate time, parking, food, ages) and add it to `sitemap.xml`.
 3. Tell the owner to **increase "Poster version"** in the Google Sheet's Event tab
    (the page loads `current-event-poster.jpg?v=<posterVersion>`), so phones fetch the new poster.
 4. Update `sitemap.xml` `lastmod` for `/gig-bookings/` and remind the owner to
