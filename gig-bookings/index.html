@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bombay Rock Xchange Tickets — Luke Kenny Live in Goa, 22 Nov | MAP</title>
-<meta name="description" content="Book tickets for Bombay Rock Xchange: Luke Kenny, Ravi Iyer, Saket Rao and Tejal live at Domingos Gazebo, Varca, South Goa. Sun 22 Nov, 8 PM. Classic rock and Bollywood.">
+<meta name="description" content="Book Bombay Rock Xchange tickets: Luke Kenny, Ravi Iyer, Saket Rao and Tejal live at Domingos Gazebo, Varca, South Goa. Sun 22 Nov, 8 PM.">
 <meta name="theme-color" content="#0d0d12">
 <link rel="canonical" href="https://movingartsprogram.com/gig-bookings/">
 <meta property="og:title" content="Bombay Rock Xchange — Luke Kenny live in Goa · Sun 22 Nov">
@@ -244,9 +244,10 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .mg-arrow{background:none;border:1px solid #173d17;border-radius:var(--r-pill);color:var(--phos);font-size:11px;
   width:34px;height:26px;cursor:pointer;}
 .mg-arrow:focus-visible,.mg-dot:focus-visible{outline:2px solid var(--vu);outline-offset:2px;}
-.mg-dots{display:flex;gap:6px;}
-.mg-dot{width:9px;height:9px;padding:0;border:none;border-radius:50%;background:rgba(124,252,0,.22);cursor:pointer;}
-.mg-dot.on{background:var(--phos);box-shadow:0 0 5px var(--phos);}
+.mg-dots{display:flex;gap:0;}
+/* 9px dot, 25px tap area (transparent border) */
+.mg-dot{width:25px;height:25px;padding:0;border:8px solid transparent;background-clip:padding-box;border-radius:50%;background-color:rgba(124,252,0,.22);cursor:pointer;}
+.mg-dot.on{background-color:var(--phos);box-shadow:0 0 5px var(--phos);}
 .mg-body .mg-who{color:#a8cba8;}
 /* keep cards a similar height, so the carousel has no big empty gap */
 .mg-body .mg-blurb{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}

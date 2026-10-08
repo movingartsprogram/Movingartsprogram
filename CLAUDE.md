@@ -68,7 +68,8 @@ the first two as they are.
    IS SLOW. HAVE PATIENCE — IT'S LOADING…", and keeps retrying. Nothing else: no details, prices,
    buttons or WhatsApp (owner's choice).
    **Add every gig (online or at the gate) to `/gigs.js`** (fields are documented at the top
-   of the file; pictures 480×600, 4:5, ~40–90 KB). That one edit updates the home billboard,
+   of the file; pictures go in `/gigs/img/` at 240×300, 4:5, ~15–25 KB: they show as small
+   thumbnails, so bigger files only slow phones down). That one edit updates the home billboard,
    the booking page's "Other gigs coming up" carousel (gigs with `tickets:"gate"` only) and
    the `/gigs/` page with its Google event data. Nothing to remove after a gig.
    Also update the booking page's **share preview** (`<title>`, description, og/twitter
@@ -112,14 +113,16 @@ kicker and a pulsing glow while it's showing.
   Keep both formats when adding photos.
 
 ## SEO
-- Every public page has a unique title, description, canonical URL, og and twitter tags,
-  and descriptive alt text.
+- Every public page has a unique title, description (keep under ~155 characters so Google
+  shows it whole), canonical URL, og and twitter tags, and descriptive alt text.
 - Home JSON-LD: `WebSite` (site name), `Organization`, Grateful Dead `MusicEvent`
   (14 Feb), the series as `Service`s (including The Feni Trail), and Elvis Lobo as `MusicGroup`.
 - Feni Trail JSON-LD: `Event` (SoldOut / invitation only), `BreadcrumbList` and `FAQPage`.
   Target keywords: offbeat Goa, hidden Goa, personalised Goa experience, Goa farm experience,
   cashew feni, Dudhsagar Plantation.
-- `sitemap.xml` lists `/`, `/gig-bookings/`, `/the-feni-trail/`, `/elvis-lobo/` and `/policies/`.
+- `sitemap.xml` lists `/`, `/gig-bookings/`, `/gigs/`, `/bombay-rock-xchange/`, `/the-feni-trail/`,
+  `/elvis-lobo/` and `/policies/`. `/gigs/` targets "live music in Goa" and injects MusicEvent data
+  from `/gigs.js`; `/bombay-rock-xchange/` has FAQPage data.
   Update `lastmod` whenever a page changes, and add new public pages.
 - Google Search Console property exists (owner verified). Google can't be asked to
   "Request indexing" by any tool; the owner does that by hand on a laptop.
@@ -134,6 +137,9 @@ kicker and a pulsing glow while it's showing.
 GA4 `G-JMXNSRJPDD` is on every public page. Custom events include `booking_page_click`,
 `feni_trail_click`, `feni_next_interest` (WhatsApp interest button), `partner_click`
 (Ouro / Dudhsagar), `donate_click`, `social_click` and `page_view` per home section.
+Added Oct 2026: `billboard_book_click` (home LCD billboard), `booking_slow_note_shown` (the 🐢 slow
+-internet message on the booking page appeared), `add_to_calendar`, `more_gigs_all`, `gigs_book_click`,
+`gigs_home_click`, `gig_faq_book`, `gig_faq_map`, `gig_faq_home_click`, `email_click`.
 
 ## Contacts and links used on the site
 - WhatsApp: +91 98496 90077 (`wa.me/919849690077`). Email: movingartsp@gmail.com.

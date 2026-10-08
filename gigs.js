@@ -24,7 +24,8 @@
      price     optional text, e.g. "₹499 early bird · ₹799 · ₹1000 at the gate"
      lowPrice, highPrice   optional numbers in ₹, for Google (online gigs)
      star      true for the headline gig (glow + "GIG OF THE YEAR")
-     images    1 or 2 pictures, 480×600 (4:5). Two pictures take turns.
+     images    1 or 2 pictures in /gigs/img/, 240×300 (4:5), about 15–25 KB each.
+               Two pictures take turns. (They show small, so bigger files only slow phones.)
      info      optional link to a gig info / FAQ page
    ══════════════════════════════════════════════════════════════════════ */
 window.MAP_GIGS = [
@@ -38,7 +39,7 @@ window.MAP_GIGS = [
     blurb: "A modern-day baithak over music, vinyls, magic and stories (dirty or laundry-clean), all of us sitting in one big circle. It's Halloween eve, so expect horror: avant-garde, B-grade, a tribute to pulp horror.",
     adults: true,
     tickets: "gate",
-    images: ["/six-string-seance-poster-sm.jpg"]
+    images: ["/gigs/img/six-string-seance.jpg"]
   },
   {
     id: "roll-heads",
@@ -49,7 +50,7 @@ window.MAP_GIGS = [
     lineup: [{name: "Roll Heads", role: "band from Gangtok, Sikkim"}],
     blurb: "The band from Gangtok, Sikkim, live in Goa.",
     tickets: "gate",
-    images: ["/roll-heads-sm.jpg"]
+    images: ["/gigs/img/roll-heads.jpg"]
   },
   {
     id: "elvis-lobo-dj-voyager",
@@ -60,7 +61,7 @@ window.MAP_GIGS = [
     lineup: [{name: "Elvis Lobo", role: "guitar"}, {name: "DJ Voyager", role: "decks"}],
     blurb: "An electronic set: Elvis Lobo's guitar meets DJ Voyager on the decks.",
     tickets: "gate",
-    images: ["/elvis-lobo-guitar-sm.jpg", "/dj-voyager-sm.jpg"]
+    images: ["/gigs/img/elvis-lobo-guitar.jpg", "/gigs/img/dj-voyager.jpg"]
   },
   {
     id: "bombay-rock-xchange",
@@ -75,7 +76,7 @@ window.MAP_GIGS = [
     price: "₹499 early bird (till 22 Oct) · ₹799 general · ₹1000 at the gate",
     lowPrice: 499, highPrice: 1000,
     star: true,
-    images: ["/gig-bookings/current-event-poster.jpg?v=25"],
+    images: ["/gigs/img/bombay-rock-xchange.jpg"],
     info: "/bombay-rock-xchange/"
   }
 ];
