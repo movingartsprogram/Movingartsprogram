@@ -451,6 +451,10 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 /* ---------- next gig banner ---------- */
 .next-gig[hidden]{display:none;}
 .ng-body{display:flex;gap:14px;align-items:center;padding:14px 16px 16px;}
+.ng-body[hidden]{display:none;}
+.ng-body + .ng-body{border-top:1px dashed var(--phos-line);}
+.ng-adult{color:var(--mag) !important;}
+.ng-gate{font-family:'Press Start 2P',monospace !important;font-size:10px !important;line-height:1.6 !important;color:var(--vu) !important;margin:8px 0 6px !important;}
 .ng-poster{flex:0 0 38%;max-width:200px;display:block;}
 .ng-poster img{width:100%;height:auto;display:block;border-radius:var(--r-sm);border:1px solid var(--phos-line);box-shadow:0 8px 20px rgba(0,0,0,.55);}
 .ng-info{flex:1;min-width:0;}
@@ -914,23 +918,41 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
     </div>
   </div>
 
-  <!-- ═══ NEXT GIG banner. UPDATE WITH EACH NEW GIG (text, poster ?v=, dates in the
-       script at the bottom). It hides itself the day after the gig (NG_UNTIL). ═══ -->
-  <section class="wa-content-window next-gig" id="nextGig" aria-labelledby="ngTitle">
-    <div class="wa-content-title">NEXT GIG — NOW BOOKING</div>
-    <div class="ng-body">
-      <a class="ng-poster" href="/gig-bookings/" onclick="mapTrack('next_gig_click',{part:'poster'})">
+  <!-- ═══ NEXT GIGS banner. One .ng-body card per gig, soonest first. UPDATE WITH EACH NEW GIG
+       (text, poster, and the GIGS list in the script at the bottom). Each card hides itself
+       the day after its gig; the whole banner hides when no card is left. ═══ -->
+  <section class="wa-content-window next-gig" id="nextGig" aria-label="Next gigs">
+    <div class="wa-content-title">NEXT GIGS — DON'T MISS</div>
+
+    <div class="ng-body" id="ngSeance">
+      <a class="ng-poster" href="/elvis-lobo/" onclick="mapTrack('next_gig_click',{gig:'seance',part:'poster'})">
+        <img src="/six-string-seance-poster-sm.jpg" width="480" height="600" decoding="async" loading="lazy"
+             alt="Six String Séance poster: Elvis Lobo on guitar and Bobby on vinyls, 29 October at Saltamontes">
+      </a>
+      <div class="ng-info">
+        <h2 class="ng-name">SIX STRING SÉANCE</h2>
+        <p class="ng-who">Elvis Lobo on six strings · Bobby on vinyls</p>
+        <p class="ng-when">THU 29 OCT · Saltamontes<br>Halloween-eve baithak: music, vinyls, magic &amp; stories. Pulp-horror tribute.</p>
+        <p class="ng-adult">🔞 ADULTS ONLY — LEAVE THE KIDS BEHIND</p>
+        <p class="ng-count" hidden></p>
+        <p class="ng-gate">🎟 TICKETS AT THE GATE</p>
+        <a class="ng-faq" href="/elvis-lobo/" onclick="mapTrack('next_gig_click',{gig:'seance',part:'elvis'})">Meet Elvis Lobo, The Boss →</a>
+      </div>
+    </div>
+
+    <div class="ng-body" id="ngBrx">
+      <a class="ng-poster" href="/gig-bookings/" onclick="mapTrack('next_gig_click',{gig:'brx',part:'poster'})">
         <img src="/gig-bookings/current-event-poster.jpg?v=25" width="900" height="1125" decoding="async" loading="lazy"
              alt="Bombay Rock Xchange poster: Luke Kenny and Ravi Iyer, Sunday 22 November, Domingos Gazebo, Varca">
       </a>
       <div class="ng-info">
-        <h2 class="ng-name" id="ngTitle">BOMBAY ROCK XCHANGE</h2>
+        <h2 class="ng-name">BOMBAY ROCK XCHANGE</h2>
         <p class="ng-who">Luke Kenny · Ravi Iyer · Saket Rao · Tejal</p>
         <p class="ng-when">SUN 22 NOV · 8 PM<br>Domingos Gazebo, Varca</p>
-        <p class="ng-count" id="ngCount" hidden></p>
-        <p class="ng-price" id="ngPrice" hidden></p>
-        <a class="cta ng-book" href="/gig-bookings/" onclick="mapTrack('next_gig_click',{part:'book'})">🎫 BOOK TICKETS</a>
-        <a class="ng-faq" href="/bombay-rock-xchange/" onclick="mapTrack('next_gig_click',{part:'faq'})">Gig info &amp; FAQ →</a>
+        <p class="ng-count" hidden></p>
+        <p class="ng-price" hidden></p>
+        <a class="cta ng-book" href="/gig-bookings/" onclick="mapTrack('next_gig_click',{gig:'brx',part:'book'})">🎫 BOOK TICKETS</a>
+        <a class="ng-faq" href="/bombay-rock-xchange/" onclick="mapTrack('next_gig_click',{gig:'brx',part:'faq'})">Gig info &amp; FAQ →</a>
       </div>
     </div>
   </section>
@@ -1908,32 +1930,44 @@ var mapTicker = setInterval(function(){
 showPage('home');
 </script>
 <script>
-/* Next gig banner: countdown and today's price, both by India date. UPDATE WITH EACH NEW GIG. */
+/* Next gigs banner: per-gig countdown, today's price, and auto-hide, all by India date.
+   UPDATE WITH EACH NEW GIG. */
 (function(){
-  var NG_DATE = "2026-11-22", NG_UNTIL = "2026-11-22";
-  var PRICES = [
-    {upto: "2026-10-22", text: "₹499 EARLY BIRD (FIRST 50) · TILL 22 OCT"},
-    {upto: "2026-11-21", text: "₹799 GENERAL · TILL 21 NOV"},
-    {upto: "2026-11-22", text: "₹1000 AT THE GATE TONIGHT"}
+  var GIGS = [
+    {id: "ngSeance", date: "2026-10-29", until: "2026-10-29"},
+    {id: "ngBrx", date: "2026-11-22", until: "2026-11-22", prices: [
+      {upto: "2026-10-22", text: "₹499 EARLY BIRD (FIRST 50) · TILL 22 OCT"},
+      {upto: "2026-11-21", text: "₹799 GENERAL · TILL 21 NOV"},
+      {upto: "2026-11-22", text: "₹1000 AT THE GATE TONIGHT"}
+    ]}
   ];
   var box = document.getElementById("nextGig"); if(!box) return;
   var today;
   try{ today = new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}); }
   catch(e){ today = new Date(Date.now() + 19800000).toISOString().slice(0, 10); }
-  if(today > NG_UNTIL){ box.hidden = true; return; }
+  var live = 0;
+  GIGS.forEach(function(g){
+    var card = document.getElementById(g.id); if(!card) return;
+    if(today > g.until){ card.hidden = true; return; }
+    live++;
+    var d = Math.round((Date.parse(g.date) - Date.parse(today)) / 86400000);
+    var c = card.querySelector(".ng-count");
+    c.textContent = d > 1 ? d + " DAYS TO GO" : (d === 1 ? "TOMORROW NIGHT" : "TONIGHT!");
+    c.hidden = false;
+    var p = card.querySelector(".ng-price");
+    if(p && g.prices){
+      for(var i = 0; i < g.prices.length; i++){
+        if(today <= g.prices[i].upto){ p.textContent = g.prices[i].text; p.hidden = false; break; }
+      }
+    }
+  });
+  if(!live){ box.hidden = true; return; }
   /* Only on the home screen, so other sections aren't pushed down the page. */
   function onHome(){ var h = document.getElementById("page-home"); return !h || h.classList.contains("active"); }
   box.hidden = !onHome();
   if(typeof window.showPage === "function"){
     var showPageFirst = window.showPage;
     window.showPage = function(){ var r = showPageFirst.apply(this, arguments); box.hidden = !onHome(); return r; };
-  }
-  var d = Math.round((Date.parse(NG_DATE) - Date.parse(today)) / 86400000);
-  var c = document.getElementById("ngCount");
-  c.textContent = d > 1 ? d + " DAYS TO GO" : (d === 1 ? "TOMORROW NIGHT" : "TONIGHT!");
-  c.hidden = false;
-  for(var i = 0; i < PRICES.length; i++){
-    if(today <= PRICES[i].upto){ var p = document.getElementById("ngPrice"); p.textContent = PRICES[i].text; p.hidden = false; break; }
   }
 })();
 </script>
