@@ -27,16 +27,17 @@
      images    1 or 2 pictures in /gigs/img/, 240×300 (4:5), about 15–25 KB each.
                Two pictures take turns. (They show small, so bigger files only slow phones.)
      info      optional link to a gig info / FAQ page
+     board     optional short place for the home billboard (default: venue)
    ══════════════════════════════════════════════════════════════════════ */
 window.MAP_GIGS = [
   {
     id: "six-string-seance",
     name: "Six String Séance",
     date: "2026-10-29", time: "",
-    venue: "Saltamontes", area: "",
+    venue: "Saltamontes", area: "Anjuna",
     who: "Elvis Lobo & Bobby",
     lineup: [{name: "Elvis Lobo", role: "six strings"}, {name: "Bobby", role: "vinyls"}],
-    blurb: "A modern-day baithak over music, vinyls, magic and stories (dirty or laundry-clean), all of us sitting in one big circle. It's Halloween eve, so expect horror: avant-garde, B-grade, a tribute to pulp horror.",
+    blurb: "A modern-day baithak over music, vinyls, magic and stories (dirty or laundry-clean), all of us sitting in one big circle. It's Halloween eve, so expect horror: avant-garde, B-grade, a tribute to pulp horror. A pulp horror theme party.",
     adults: true,
     tickets: "gate",
     images: ["/gigs/img/six-string-seance.jpg"]
@@ -45,10 +46,10 @@ window.MAP_GIGS = [
     id: "roll-heads",
     name: "Roll Heads",
     date: "2026-11-01", time: "",
-    venue: "Guru Bar", area: "",
+    venue: "Guru Bar", area: "Anjuna",
     who: "From Gangtok, Sikkim",
     lineup: [{name: "Roll Heads", role: "band from Gangtok, Sikkim"}],
-    blurb: "The band from Gangtok, Sikkim, live in Goa.",
+    blurb: "All the way from Gangtok, Sikkim, live in Goa.",
     tickets: "gate",
     images: ["/gigs/img/roll-heads.jpg"]
   },
@@ -56,7 +57,7 @@ window.MAP_GIGS = [
     id: "elvis-lobo-dj-voyager",
     name: "Elvis Lobo × DJ Voyager",
     date: "2026-11-13", time: "",
-    venue: "Wise Fools", area: "",
+    venue: "Wise Fools", area: "Varca",
     who: "Electronic set",
     lineup: [{name: "Elvis Lobo", role: "guitar"}, {name: "DJ Voyager", role: "decks"}],
     blurb: "An electronic set: Elvis Lobo's guitar meets DJ Voyager on the decks.",
@@ -64,14 +65,27 @@ window.MAP_GIGS = [
     images: ["/gigs/img/elvis-lobo-guitar.jpg", "/gigs/img/dj-voyager.jpg"]
   },
   {
+    id: "bombay-rock-xchange-anjuna",
+    name: "Bombay Rock Xchange",
+    date: "2026-11-21", time: "",
+    venue: "Saltamontes", area: "Anjuna",
+    who: "Ravi Iyer & Luke Kenny",
+    lineup: [{name: "Ravi Iyer", role: "guitar"}, {name: "Luke Kenny", role: "vocals"}],
+    blurb: "Bombay Rock Xchange featuring Ravi Iyer and Luke Kenny, for the first time in Goa. Classic rock and Bollywood.",
+    tickets: "gate",
+    star: true,
+    images: ["/gigs/img/bombay-rock-xchange.jpg"],
+    info: "/bombay-rock-xchange/"
+  },
+  {
     id: "bombay-rock-xchange",
     name: "Bombay Rock Xchange",
     date: "2026-11-22", time: "20:00",
-    venue: "Domingos Gazebo", area: "Varca",
+    venue: "Domingos Gazebo", area: "Varca", board: "Varca",
     who: "Luke Kenny & band",
     lineup: [{name: "Luke Kenny", role: "vocals"}, {name: "Ravi Iyer", role: "guitar"},
              {name: "Saket Rao", role: "drums"}, {name: "Tejal", role: "bass"}],
-    blurb: "Classic rock and Bollywood on their first Goa tour. The biggest gig of the year.",
+    blurb: "Classic rock and Bollywood on their first Goa tour, with a surprise artist from Goa. The biggest gig of the year.",
     tickets: "online",
     price: "₹499 early bird (till 22 Oct) · ₹799 general · ₹1000 at the gate",
     lowPrice: 499, highPrice: 1000,

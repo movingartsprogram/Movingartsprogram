@@ -97,6 +97,9 @@ And: **Roll Heads** (from Gangtok, Sikkim), Sun 1 Nov 2026, Guru Bar. Tickets at
 Picture `roll-heads-sm.jpg`.
 And: **Elvis Lobo × DJ Voyager**, electronic set, Fri 13 Nov 2026, Wise Fools. Tickets at the
 gate only. Photos `elvis-lobo-guitar-sm.jpg` and `dj-voyager-sm.jpg` take turns on its slide.
+And: **Bombay Rock Xchange at Saltamontes, Anjuna**, Sat 21 Nov 2026, featuring Ravi Iyer & Luke
+Kenny, first time in Goa. Tickets at the gate only (also on the FAQ page). 22 Nov adds a surprise
+artist from Goa. Towns: Saltamontes and Guru Bar are in Anjuna, Wise Fools is in Varca.
 Only 22 Nov is booked online. Its slide has `.bb-star`: a pink "★ GIG OF THE YEAR ★"
 kicker and a pulsing glow while it's showing.
 
