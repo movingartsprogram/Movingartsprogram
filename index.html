@@ -1957,7 +1957,7 @@ showPage('home');
     if(g.star) tx.appendChild(el("div", "bb-kicker", "★ GIG OF THE YEAR ★"));
     tx.appendChild(el("div", "bb-name", g.name.toUpperCase()));
     tx.appendChild(el("div", "bb-line", g.who));
-    tx.appendChild(el("div", "bb-line", g.day.replace(/^\w+ /, "") + " · " + (g.area || g.venue)));
+    tx.appendChild(el("div", "bb-line", g.day.replace(/^\w+ /, "") + " · " + (g.board || g.venue)));
     if(g.tickets === "online"){
       var bk = el("a", "bb-book", "🎫 BOOK NOW"); bk.href = "/gig-bookings/";
       bk.addEventListener("click", function(){ mapTrack("billboard_book_click", {gig: g.id}); });
