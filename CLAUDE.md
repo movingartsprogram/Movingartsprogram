@@ -20,6 +20,8 @@ API keys or private guest details in it.
 |---|---|
 | `/` (`index.html`) | Home: Winamp-style "player" UI. The series sections are in-page `#page-*` blocks switched by JS (`showPage`). |
 | `/gig-bookings/` | **Ticketing.** Google Apps Script backend (Google Sheet) + Razorpay. Event details come from the Sheet at runtime. |
+| `/gigs/` | **Live Music in Goa — Upcoming Gigs.** SEO page built from `/gigs.js`; injects `ItemList` of `MusicEvent`s for Google. In the sitemap. |
+| `/gigs.js` | **The one gig list for the site.** Feeds the home LCD billboard, the booking page's "Other gigs coming up" carousel and `/gigs/`. Past gigs drop off by themselves (India date). |
 | `/bombay-rock-xchange/` | Gig info & FAQ for the current gig (line-up, gates, parking, food, ages, refunds) + `bombay-rock-xchange.ics` calendar file. FAQPage JSON-LD. Keep it after the gig as an archive page. |
 | `/the-feni-trail/` | The Feni Trail: invite-only farm experience at Dudhsagar Plantation with Ouro feni. Animated, SEO-optimised. |
 | `/elvis-lobo/` | Elvis Lobo ("The Boss") story and video archive. |
@@ -65,21 +67,18 @@ the first two as they are.
    20 seconds (`NET_WAIT`), the page shows the poster with a walking 🐢 under it and "YOUR INTERNET
    IS SLOW. HAVE PATIENCE — IT'S LOADING…", and keeps retrying. Nothing else: no details, prices,
    buttons or WhatsApp (owner's choice).
-   Also update the booking page's **ALSO COMING UP — PAY AT THE GATE** section (`#moreGigs`,
-   under the Razorpay strip inside `#formWrap`): one `.mg-card` per walk-in gig with
-   `data-date` / `data-until`; cards hide after their date, the section hides when empty.
-   Information only, self-contained script, no booking logic.
+   **Add every gig (online or at the gate) to `/gigs.js`** (fields are documented at the top
+   of the file; pictures 480×600, 4:5, ~40–90 KB). That one edit updates the home billboard,
+   the booking page's "Other gigs coming up" carousel (gigs with `tickets:"gate"` only) and
+   the `/gigs/` page with its Google event data. Nothing to remove after a gig.
    Also update the booking page's **share preview** (`<title>`, description, og/twitter
    title, description and image alt) and the **Add to calendar** links on the ticket screen.
-   On the **home page**, update the **GIG BILLBOARD** inside the LCD (`#gigBoard`, under the
-   time/title/kbps rows): one `.bb-slide` per gig, soonest first, with `data-date` and
-   `data-until` (India date). Slides cross-fade every 4.5 s; each hides after its `until`;
-   the countdown sticker sits on the poster. Only gigs booked online get the BOOK NOW button,
-   others say "AT THE GATE". It fills only the LCD's leftover space (absolutely positioned),
-   so the panel must never get taller: check `.wa-top-row` height old vs new at 320–1280px
-   with the real fonts. Owner's choice: no separate banner below the player, and the old
-   dot-matrix scrolling text ("Elvis Lobo rocks…") was removed from the LCD (its JS is
-   kept but inert). Make a gig info/FAQ page like `/bombay-rock-xchange/`
+   The home **GIG BILLBOARD** (`#gigBoard`, inside the LCD) is built from `/gigs.js`: slides
+   cross-fade every 4.5 s, countdown sticker on the picture, BOOK NOW only for online gigs,
+   `star:true` adds the pink "GIG OF THE YEAR" and glow. It fills only the LCD's leftover space,
+   so the panel must never get taller: check `.wa-top-row` height old vs new at 320–1280px with
+   the real fonts. Owner's choice: no banner below the player; the old dot-matrix scrolling text
+   was removed (its JS is kept but inert). Make a gig info/FAQ page like `/bombay-rock-xchange/`
    (ask the owner for gate time, parking, food, ages) and add it to `sitemap.xml`.
 3. Tell the owner to **increase "Poster version"** in the Google Sheet's Event tab
    (the page loads `current-event-poster.jpg?v=<posterVersion>`), so phones fetch the new poster.

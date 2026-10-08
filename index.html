@@ -127,7 +127,7 @@ body::after{
   opacity:0;visibility:hidden;transition:opacity .6s ease, visibility 0s linear .6s;}
 .bb-slide.on{opacity:1;visibility:visible;transition:opacity .6s ease;}
 .bb-slide[hidden]{display:none;}
-.bb-pic{position:relative;height:100%;max-height:100px;flex:0 0 auto;}
+.bb-pic{display:block;position:relative;height:100%;max-height:100px;flex:0 0 auto;}
 .bb-poster{display:block;height:100%;max-height:100px;width:auto;aspect-ratio:4/5;object-fit:cover;border-radius:5px;
   border:1px solid var(--phos-line);box-shadow:0 0 6px rgba(124,252,0,.15);}
 /* two photos taking turns (13 Nov slide) */
@@ -891,55 +891,11 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
             <div class="wa-time" id="waTime">00:00</div>
             <div class="wa-track-title" id="waTrackTitle">HOME — SOUND. ART. SPIRIT.</div>
             <div class="wa-meta"><span>128 kbps</span><span>44 kHz</span><span>STEREO</span></div>
-            <!-- ═══ GIG BILLBOARD: fills the empty LCD space under the marquee and rotates
-                 through upcoming gigs. UPDATE WITH EACH NEW GIG: one .bb-slide per gig,
-                 soonest first, with data-date and data-until (India date). A slide hides
-                 itself after its until; the billboard hides when none are left.
-                 Only gigs booked online get a BOOK button. ═══ -->
+            <!-- ═══ GIG BILLBOARD: fills the empty LCD space and rotates through upcoming
+                 gigs. The gigs come from /gigs.js (the one gig list for the site): edit
+                 gigs there, not here. Past gigs drop off by themselves. ═══ -->
             <div class="bb-wrap" id="gigBoard" aria-label="Upcoming gigs" role="region">
-              <div class="bb-inner">
-                <div class="bb-slide" data-date="2026-10-29" data-until="2026-10-29">
-                  <div class="bb-pic"><img class="bb-poster" src="/six-string-seance-poster-sm.jpg" width="480" height="600" decoding="async" alt="Six String Séance poster"><span class="bb-count"></span></div>
-                  <div class="bb-text">
-                    <div class="bb-name">SIX STRING SÉANCE</div>
-                    <div class="bb-line">Elvis Lobo &amp; Bobby</div>
-                    <div class="bb-line">29 OCT · Saltamontes</div>
-                    <div class="bb-tag bb-pink">🔞 18+ · AT THE GATE</div>
-                  </div>
-                </div>
-                <div class="bb-slide" data-date="2026-11-01" data-until="2026-11-01">
-                  <div class="bb-pic"><img class="bb-poster" src="/roll-heads-sm.jpg" width="480" height="600" decoding="async" alt="Roll Heads logo, Gangtok, Sikkim"><span class="bb-count"></span></div>
-                  <div class="bb-text">
-                    <div class="bb-name">ROLL HEADS</div>
-                    <div class="bb-line">From Gangtok, Sikkim</div>
-                    <div class="bb-line">1 NOV · Guru Bar</div>
-                    <div class="bb-tag">🎟 AT THE GATE</div>
-                  </div>
-                </div>
-                <div class="bb-slide" data-date="2026-11-13" data-until="2026-11-13">
-                  <div class="bb-pic bb-duo">
-                    <img class="bb-poster" src="/elvis-lobo-guitar-sm.jpg" width="480" height="600" decoding="async" alt="Elvis Lobo on guitar">
-                    <img class="bb-poster bb-alt" src="/dj-voyager-sm.jpg" width="480" height="600" decoding="async" alt="DJ Voyager on the decks">
-                    <span class="bb-count"></span>
-                  </div>
-                  <div class="bb-text">
-                    <div class="bb-name">ELVIS LOBO × DJ VOYAGER</div>
-                    <div class="bb-line">Electronic set</div>
-                    <div class="bb-line">13 NOV · Wise Fools</div>
-                    <div class="bb-tag">🎟 AT THE GATE</div>
-                  </div>
-                </div>
-                <div class="bb-slide bb-star" data-date="2026-11-22" data-until="2026-11-22">
-                  <div class="bb-pic"><img class="bb-poster" src="/gig-bookings/current-event-poster.jpg?v=25" width="900" height="1125" decoding="async" alt="Bombay Rock Xchange poster"><span class="bb-count"></span></div>
-                  <div class="bb-text">
-                    <div class="bb-kicker">★ GIG OF THE YEAR ★</div>
-                    <div class="bb-name">BOMBAY ROCK XCHANGE</div>
-                    <div class="bb-line">Luke Kenny &amp; band</div>
-                    <div class="bb-line">22 NOV · Varca</div>
-                    <a class="bb-book" href="/gig-bookings/" onclick="mapTrack('billboard_book_click',{gig:'brx'})">🎫 BOOK NOW</a>
-                  </div>
-                </div>
-              </div>
+              <div class="bb-inner"></div>
               <div class="bb-dots" aria-hidden="true"></div>
             </div>
           </div>
@@ -1976,29 +1932,50 @@ var mapTicker = setInterval(function(){
 /* boot */
 showPage('home');
 </script>
+<script src="/gigs.js"></script>
 <script>
-/* Gig billboard in the LCD: countdown per gig, hide past gigs, rotate slides. */
+/* Gig billboard in the LCD: built from /gigs.js, rotates slides, hides when no gigs are left. */
 (function(){
   var board = document.getElementById("gigBoard"); if(!board) return;
-  var today;
-  try{ today = new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}); }
-  catch(e){ today = new Date(Date.now() + 19800000).toISOString().slice(0, 10); }
-  var slides = [].slice.call(board.querySelectorAll(".bb-slide")).filter(function(sl){
-    if(today > sl.getAttribute("data-until")){ sl.hidden = true; return false; }
-    var d = Math.round((Date.parse(sl.getAttribute("data-date")) - Date.parse(today)) / 86400000);
-    sl.querySelector(".bb-count").textContent = d > 1 ? d + " DAYS" : (d === 1 ? "TOMORROW" : "TONIGHT!");
-    return true;
+  var gigs = window.MAP_GIGS_UPCOMING ? window.MAP_GIGS_UPCOMING() : [];
+  if(!gigs.length){ board.hidden = true; return; }
+  var inner = board.querySelector(".bb-inner"), dots = board.querySelector(".bb-dots");
+  function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+  var slides = gigs.map(function(g){
+    var sl = el("div", "bb-slide" + (g.star ? " bb-star" : ""));
+    var pic = el("a", "bb-pic" + (g.images.length > 1 ? " bb-duo" : ""));
+    pic.href = "/gigs/#" + g.id;
+    pic.setAttribute("aria-label", g.name + ": more about this gig");
+    g.images.slice(0, 2).forEach(function(src, i){
+      var im = el("img", "bb-poster" + (i ? " bb-alt" : ""));
+      im.src = src; im.width = 480; im.height = 600; im.decoding = "async";
+      im.alt = i ? "" : g.name;
+      pic.appendChild(im);
+    });
+    pic.appendChild(el("span", "bb-count", g.countdown));
+    var tx = el("div", "bb-text");
+    if(g.star) tx.appendChild(el("div", "bb-kicker", "★ GIG OF THE YEAR ★"));
+    tx.appendChild(el("div", "bb-name", g.name.toUpperCase()));
+    tx.appendChild(el("div", "bb-line", g.who));
+    tx.appendChild(el("div", "bb-line", g.day.replace(/^\w+ /, "") + " · " + (g.area || g.venue)));
+    if(g.tickets === "online"){
+      var bk = el("a", "bb-book", "🎫 BOOK NOW"); bk.href = "/gig-bookings/";
+      bk.addEventListener("click", function(){ mapTrack("billboard_book_click", {gig: g.id}); });
+      tx.appendChild(bk);
+    } else {
+      tx.appendChild(el("div", "bb-tag" + (g.adults ? " bb-pink" : ""), g.adults ? "🔞 18+ · AT THE GATE" : "🎟 AT THE GATE"));
+    }
+    sl.appendChild(pic); sl.appendChild(tx); inner.appendChild(sl);
+    dots.appendChild(document.createElement("span"));
+    return sl;
   });
-  if(!slides.length){ board.hidden = true; return; }
-  var dots = board.querySelector(".bb-dots");
-  slides.forEach(function(){ dots.appendChild(document.createElement("span")); });
   var i = 0, paused = false;
   function show(n){
     slides.forEach(function(sl, k){ sl.classList.toggle("on", k === n); sl.setAttribute("aria-hidden", k === n ? "false" : "true"); });
+    [].forEach.call(dots.children, function(dt, k){ dt.classList.toggle("on", k === n); });
     /* two-photo slides: restart the swap so the first photo always shows first */
     var alt = slides[n].querySelector(".bb-alt");
     if(alt){ alt.style.animation = "none"; void alt.offsetWidth; alt.style.animation = ""; }
-    [].forEach.call(dots.children, function(dt, k){ dt.classList.toggle("on", k === n); });
   }
   show(0);
   if(slides.length > 1){
