@@ -224,6 +224,38 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .booking-id .amt{font-family:'VT323',monospace;font-size:20px;color:var(--vu);}
 .small{font-size:12px;color:#8fae8f;margin-top:6px;}
 
+/* ---------- more gigs (pay at the gate), under the Razorpay strip ---------- */
+.more-gigs{margin-top:22px;overflow:hidden;border-radius:var(--r-md);
+  background:linear-gradient(180deg,#131313 0%, #050505 100%);
+  box-shadow:0 10px 20px rgba(0,0,0,.45), inset 0 2px 3px rgba(255,255,255,.08), inset 0 -5px 9px rgba(0,0,0,.6);}
+.more-gigs[hidden],.mg-card[hidden]{display:none;}
+.mg-title{background:linear-gradient(180deg,#7a1a5a 0%, #3d0d2c 100%);color:#ffd7ef;
+  font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;padding:6px 12px;
+  box-shadow:inset 0 2px 3px rgba(255,200,235,.26), inset 0 -4px 6px rgba(0,0,0,.5);}
+.mg-lead{font-family:'VT323',monospace;font-size:15px;color:#8fae8f;margin:8px 12px 2px;}
+.mg-card{display:flex;gap:12px;align-items:flex-start;padding:12px;}
+.mg-card + .mg-card{box-shadow:inset 0 1px 0 rgba(124,252,0,.12);}
+.mg-pic{flex:0 0 96px;width:96px;height:120px;object-fit:cover;border-radius:var(--r-sm);border:1px solid #173d17;}
+.mg-duo{position:relative;overflow:hidden;}
+.mg-duo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.mg-duo .mg-alt{animation:mg-swap 6s ease-in-out infinite;}
+@keyframes mg-swap{0%,42%{opacity:0;}50%,92%{opacity:1;}100%{opacity:0;}}
+@media (prefers-reduced-motion:reduce){.mg-duo .mg-alt{animation:none;opacity:0;}}
+.mg-body{flex:1;min-width:0;}
+.mg-name{font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.5;color:var(--vu);margin:0 0 4px;
+  text-shadow:0 0 6px rgba(255,225,53,.4);overflow-wrap:anywhere;}
+.mg-body p{font-family:'VT323',monospace;font-size:16px;line-height:1.2;color:#d8e8d8;margin:0 0 5px;}
+.mg-body strong{color:var(--phos);font-weight:normal;}
+.mg-body .mg-when{color:var(--phos);}
+.mg-count{display:inline-block;font-size:13px;color:#fff;background:var(--mag);border-radius:var(--r-pill);padding:0 6px;margin-left:4px;
+  box-shadow:0 0 6px rgba(255,47,176,.6);}
+.mg-body .mg-pink{color:var(--mag);}
+.mg-body .mg-gate{font-family:'Press Start 2P',monospace;font-size:8px;line-height:1.6;color:var(--vu);margin-top:6px;}
+.mg-foot{font-family:'VT323',monospace;font-size:15px;line-height:1.25;color:#8fae8f;text-align:center;
+  margin:0;padding:10px 12px 14px;box-shadow:inset 0 1px 0 rgba(124,252,0,.12);}
+.mg-foot a{color:var(--phos);}
+@media (max-width:359px){.mg-pic{flex-basis:76px;width:76px;height:95px;}.mg-name{font-size:9px;}}
+
 /* ---------- Razorpay trust strip ---------- */
 .rzp-trust{
   display:flex;align-items:center;justify-content:center;gap:7px;
@@ -633,6 +665,70 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
             <span>PAYMENTS SECURED BY</span><span class="rzp-mark">Razorpay</span>
           </div>
           <div class="rzp-methods">UPI · CARDS · NETBANKING · WALLETS</div>
+
+          <!-- ═══ MORE GIGS: information only, no booking. These are paid at the gate.
+               UPDATE WITH EACH NEW GIG (same gigs as the home billboard). Each card hides
+               itself the day after its gig (data-until, India date); the whole section
+               hides when none are left. Self-contained: no booking code touches it. ═══ -->
+          <section class="more-gigs" id="moreGigs" aria-labelledby="mgTitle">
+            <div class="mg-title" id="mgTitle">ALSO COMING UP — PAY AT THE GATE</div>
+            <p class="mg-lead">No online booking for these. Just turn up and pay at the gate.</p>
+
+            <article class="mg-card" data-date="2026-10-29" data-until="2026-10-29">
+              <img class="mg-pic" src="/six-string-seance-poster-sm.jpg" width="480" height="600" loading="lazy" decoding="async" alt="Six String Séance poster: Elvis Lobo on guitar and Bobby on vinyls">
+              <div class="mg-body">
+                <h4 class="mg-name">SIX STRING SÉANCE</h4>
+                <p class="mg-when">THU 29 OCT · Saltamontes <span class="mg-count"></span></p>
+                <p><strong>Elvis Lobo</strong> on six strings, <strong>Bobby</strong> on vinyls.</p>
+                <p>A modern-day baithak: music, vinyls, magic and stories (dirty or laundry-clean), all of us sitting in one big circle. It's Halloween eve, so expect horror: avant-garde, B-grade, a tribute to pulp horror.</p>
+                <p class="mg-pink">🔞 Adults only. Leave the kids behind.</p>
+                <p class="mg-gate">🎟 TICKETS AT THE GATE</p>
+              </div>
+            </article>
+
+            <article class="mg-card" data-date="2026-11-01" data-until="2026-11-01">
+              <img class="mg-pic" src="/roll-heads-sm.jpg" width="480" height="600" loading="lazy" decoding="async" alt="Roll Heads logo, Gangtok, Sikkim">
+              <div class="mg-body">
+                <h4 class="mg-name">ROLL HEADS</h4>
+                <p class="mg-when">SUN 1 NOV · Guru Bar <span class="mg-count"></span></p>
+                <p>The band from <strong>Gangtok, Sikkim</strong>, live in Goa.</p>
+                <p class="mg-gate">🎟 TICKETS AT THE GATE</p>
+              </div>
+            </article>
+
+            <article class="mg-card" data-date="2026-11-13" data-until="2026-11-13">
+              <div class="mg-pic mg-duo">
+                <img src="/elvis-lobo-guitar-sm.jpg" width="480" height="600" loading="lazy" decoding="async" alt="Elvis Lobo on guitar">
+                <img class="mg-alt" src="/dj-voyager-sm.jpg" width="480" height="600" loading="lazy" decoding="async" alt="DJ Voyager on the decks">
+              </div>
+              <div class="mg-body">
+                <h4 class="mg-name">ELVIS LOBO × DJ VOYAGER</h4>
+                <p class="mg-when">FRI 13 NOV · Wise Fools <span class="mg-count"></span></p>
+                <p>An electronic set: <strong>Elvis Lobo</strong>'s guitar meets <strong>DJ Voyager</strong> on the decks.</p>
+                <p class="mg-gate">🎟 TICKETS AT THE GATE</p>
+              </div>
+            </article>
+
+            <p class="mg-foot">Curated with WHOLE LOTTA LOVE by Moving Arts Program.<br>
+              Enquiries &amp; collaborations: PK · <a href="tel:+919849690077">98496 90077</a></p>
+          </section>
+          <script>
+          /* More gigs: countdown per card, hide past gigs, hide the section when none are left. */
+          (function(){
+            var box = document.getElementById("moreGigs"); if(!box) return;
+            var today;
+            try{ today = new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}); }
+            catch(e){ today = new Date(Date.now() + 19800000).toISOString().slice(0, 10); }
+            var live = 0;
+            [].forEach.call(box.querySelectorAll(".mg-card"), function(c){
+              if(today > c.getAttribute("data-until")){ c.hidden = true; return; }
+              live++;
+              var d = Math.round((Date.parse(c.getAttribute("data-date")) - Date.parse(today)) / 86400000);
+              c.querySelector(".mg-count").textContent = d > 1 ? d + " DAYS TO GO" : (d === 1 ? "TOMORROW" : "TONIGHT!");
+            });
+            if(!live) box.hidden = true;
+          })();
+          </script>
         </div>
 
         <!-- ═══ 5. CONFIRMATION + PAYMENT ═══ -->

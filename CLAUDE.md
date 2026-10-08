@@ -65,6 +65,10 @@ the first two as they are.
    20 seconds (`NET_WAIT`), the page shows the poster with a walking 🐢 under it and "YOUR INTERNET
    IS SLOW. HAVE PATIENCE — IT'S LOADING…", and keeps retrying. Nothing else: no details, prices,
    buttons or WhatsApp (owner's choice).
+   Also update the booking page's **ALSO COMING UP — PAY AT THE GATE** section (`#moreGigs`,
+   under the Razorpay strip inside `#formWrap`): one `.mg-card` per walk-in gig with
+   `data-date` / `data-until`; cards hide after their date, the section hides when empty.
+   Information only, self-contained script, no booking logic.
    Also update the booking page's **share preview** (`<title>`, description, og/twitter
    title, description and image alt) and the **Add to calendar** links on the ticket screen.
    On the **home page**, update the **GIG BILLBOARD** inside the LCD (`#gigBoard`, under the
