@@ -453,6 +453,7 @@ a.blink-pink:hover,a.blink-green:hover{opacity:1;animation:none;text-shadow:0 0 
 .ng-body{display:flex;gap:14px;align-items:center;padding:14px 16px 16px;}
 .ng-body[hidden]{display:none;}
 .ng-body + .ng-body{border-top:1px dashed var(--phos-line);}
+.ng-noposter{padding-top:12px;padding-bottom:12px;}
 .ng-adult{color:var(--mag) !important;}
 .ng-gate{font-family:'Press Start 2P',monospace !important;font-size:10px !important;line-height:1.6 !important;color:var(--vu) !important;margin:8px 0 6px !important;}
 .ng-poster{flex:0 0 38%;max-width:200px;display:block;}
@@ -940,6 +941,17 @@ function mapTrack(name, params){ try{ gtag("event", name, params || {}); }catch(
       </div>
     </div>
 
+    <div class="ng-body ng-noposter" id="ngWise">
+      <div class="ng-info">
+        <h2 class="ng-name">ELVIS LOBO × DJ VOYEGER</h2>
+        <p class="ng-who">An electronic set</p>
+        <p class="ng-when">FRI 13 NOV · Wise Fools</p>
+        <p class="ng-count" hidden></p>
+        <p class="ng-gate">🎟 TICKETS AT THE GATE</p>
+        <a class="ng-faq" href="/elvis-lobo/" onclick="mapTrack('next_gig_click',{gig:'wisefools',part:'elvis'})">Meet Elvis Lobo, The Boss →</a>
+      </div>
+    </div>
+
     <div class="ng-body" id="ngBrx">
       <a class="ng-poster" href="/gig-bookings/" onclick="mapTrack('next_gig_click',{gig:'brx',part:'poster'})">
         <img src="/gig-bookings/current-event-poster.jpg?v=25" width="900" height="1125" decoding="async" loading="lazy"
@@ -1211,7 +1223,47 @@ const FONT5x7 = {
   'a':['00000','00000','01110','00001','01111','10001','01111'],
   'v':['00000','00000','10001','10001','10001','01010','00100'],
   'c':['00000','00000','01111','10000','10000','10000','01111'],
-  'k':['10000','10000','10010','10100','11000','10100','10010']
+  'k':['10000','10000','10010','10100','11000','10100','10010'],
+  /* capitals, digits and a few symbols, for the gig lines */
+  'A':['01110','10001','10001','11111','10001','10001','10001'],
+  'B':['11110','10001','10001','11110','10001','10001','11110'],
+  'C':['01110','10001','10000','10000','10000','10001','01110'],
+  'D':['11110','10001','10001','10001','10001','10001','11110'],
+  'F':['11111','10000','10000','11110','10000','10000','10000'],
+  'G':['01110','10001','10000','10111','10001','10001','01111'],
+  'H':['10001','10001','10001','11111','10001','10001','10001'],
+  'I':['01110','00100','00100','00100','00100','00100','01110'],
+  'J':['00111','00010','00010','00010','00010','10010','01100'],
+  'K':['10001','10010','10100','11000','10100','10010','10001'],
+  'M':['10001','11011','10101','10101','10001','10001','10001'],
+  'N':['10001','10001','11001','10101','10011','10001','10001'],
+  'O':['01110','10001','10001','10001','10001','10001','01110'],
+  'P':['11110','10001','10001','11110','10000','10000','10000'],
+  'Q':['01110','10001','10001','10001','10101','10010','01101'],
+  'R':['11110','10001','10001','11110','10100','10010','10001'],
+  'S':['01111','10000','10000','01110','00001','00001','11110'],
+  'T':['11111','00100','00100','00100','00100','00100','00100'],
+  'U':['10001','10001','10001','10001','10001','10001','01110'],
+  'V':['10001','10001','10001','10001','10001','01010','00100'],
+  'W':['10001','10001','10001','10101','10101','10101','01010'],
+  'X':['10001','10001','01010','00100','01010','10001','10001'],
+  'Y':['10001','10001','01010','00100','00100','00100','00100'],
+  'Z':['11111','00001','00010','00100','01000','10000','11111'],
+  '0':['01110','10001','10011','10101','11001','10001','01110'],
+  '1':['00100','01100','00100','00100','00100','00100','01110'],
+  '2':['01110','10001','00001','00010','00100','01000','11111'],
+  '3':['11111','00010','00100','00010','00001','10001','01110'],
+  '4':['00010','00110','01010','10010','11111','00010','00010'],
+  '5':['11111','10000','11110','00001','00001','10001','01110'],
+  '6':['00110','01000','10000','11110','10001','10001','01110'],
+  '7':['11111','00001','00010','00100','01000','01000','01000'],
+  '8':['01110','10001','10001','01110','10001','10001','01110'],
+  '9':['01110','10001','10001','01111','00001','00010','01100'],
+  '+':['00000','00100','00100','11111','00100','00100','00000'],
+  '-':['00000','00000','00000','11111','00000','00000','00000'],
+  '&':['01100','10010','10100','01000','10101','10010','01101'],
+  '!':['00100','00100','00100','00100','00100','00000','00100'],
+  ':':['00000','01100','01100','00000','01100','01100','00000']
 };
 const MARQUEE_CHAR_GAP = 1;
 const MARQUEE_LOOP_GAP = 8;
@@ -1259,6 +1311,25 @@ pushText("Elvis Lobo rocks", 0);
 pushText("...", 1);
 pushText("Let there be songs to fill the air", 1);
 pushText("...", 1);
+/* Upcoming gigs scroll here too, CAPITALS only. Each line drops out the day after its gig
+   (India date). UPDATE WITH EACH NEW GIG, same time as the NEXT GIGS banner. */
+(function(){
+  const MARQUEE_GIGS = [
+    {until: "2026-10-29", text: "29 OCT SIX STRING SEANCE AT SALTAMONTES"},
+    {until: "2026-11-13", text: "13 NOV ELVIS LOBO + DJ VOYEGER AT WISE FOOLS"},
+    {until: "2026-11-22", text: "22 NOV BOMBAY ROCK XCHANGE - BOOK NOW"}
+  ];
+  let today;
+  try{ today = new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}); }
+  catch(e){ today = new Date(Date.now() + 19800000).toISOString().slice(0, 10); }
+  let seg = 0;
+  MARQUEE_GIGS.forEach(function(g){
+    if(today > g.until) return;
+    pushText(g.text, seg);
+    pushText("...", seg);
+    seg = 1 - seg;
+  });
+})();
 pushBlankCols(MARQUEE_LOOP_GAP, 1);
 const STRIP_WIDTH = marqueeStrip.length;
 
@@ -1935,6 +2006,7 @@ showPage('home');
 (function(){
   var GIGS = [
     {id: "ngSeance", date: "2026-10-29", until: "2026-10-29"},
+    {id: "ngWise", date: "2026-11-13", until: "2026-11-13"},
     {id: "ngBrx", date: "2026-11-22", until: "2026-11-22", prices: [
       {upto: "2026-10-22", text: "₹499 EARLY BIRD (FIRST 50) · TILL 22 OCT"},
       {upto: "2026-11-21", text: "₹799 GENERAL · TILL 21 NOV"},

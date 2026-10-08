@@ -84,6 +84,10 @@ Also on the banner: **Six String Séance**, Thu 29 Oct 2026, Saltamontes. Elvis 
 Bobby (vinyls). Halloween-eve "modern baithak" (music, vinyls, magic, stories), pulp/B-grade
 horror tribute. Adults only. Tickets at the gate only (not on the booking page). Poster:
 `six-string-seance-poster.jpg` (900px) and `-sm.jpg` (banner).
+Also: **Elvis Lobo × DJ Voyeger**, electronic set, Fri 13 Nov 2026, Wise Fools. Tickets at
+the gate only. No poster yet (text-only card). Only 22 Nov is booked online.
+The home LCD dot-matrix marquee also scrolls the gigs (`MARQUEE_GIGS`, capitals only; glyphs
+in `FONT5x7`). Update it with the banner.
 
 ## Images and speed
 - Images live as separate files, never embedded in the HTML. Feni Trail images are in
