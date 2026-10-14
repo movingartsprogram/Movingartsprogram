@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Six-String Séance</title>
+<meta name="viewport" content="width=1080">
+<style>
+@font-face{font-family:Quill;src:url(fonts/Fondamento-Regular.ttf)}
+@font-face{font-family:Quill;font-style:italic;src:url(fonts/Fondamento-Italic.ttf)}
+@font-face{font-family:Fraktur;font-weight:700;src:url(fonts/UnifrakturCook-Bold.ttf)}
+@font-face{font-family:Copper;src:url(fonts/PinyonScript-Regular.ttf)}
+@font-face{font-family:FellSC;src:url(fonts/IMFeENsc28P.ttf)}
+
+:root{
+  --L:46px;                 /* ruled-line spacing */
+  --silver:rgba(206,210,216,.42);
+  --gold-a:#f6dc8a; --gold-b:#d4a53c; --gold-c:#9c6f1c; --gold-d:#f1cf72;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden}
+body{background:radial-gradient(ellipse 70% 55% at 50% 45%,#24201c 0%,#110f0d 55%,#050404 100%)}
+body.clear{background:transparent}
+body.clear #bgfog{display:none}
+
+#bgfog,#scroll,#orn{position:absolute;inset:0;width:1080px;height:1920px}
+#orn{pointer-events:none}
+
+/* ---------- text ---------- */
+#page{position:absolute;left:150px;top:228px;width:780px;height:1500px}
+
+.gold{
+  background:linear-gradient(176deg,var(--gold-a) 0%,var(--gold-b) 38%,var(--gold-c) 58%,var(--gold-d) 80%,var(--gold-b) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-stroke:.9px rgba(214,168,72,.9);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+}
+.ink{filter:url(#quill) drop-shadow(0 0 1px rgba(0,0,0,.9)) drop-shadow(0 0 6px rgba(201,150,50,.18))}
+
+h1{font-family:Fraktur;font-weight:700;font-size:104px;line-height:1.02;text-align:center;letter-spacing:1px;margin-top:6px}
+h1 .gold{-webkit-text-stroke:1px rgba(214,168,72,.95)}
+
+.ruled{
+  position:relative;margin-top:30px;
+}
+.ruled::before{
+  content:"";position:absolute;left:-14px;right:-14px;top:var(--rule-off,0px);bottom:0;
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--L) - 1.2px),var(--silver) calc(var(--L) - 1.2px),var(--silver) var(--L));
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 4%,#000 96%,transparent 100%);
+  pointer-events:none;
+}
+.ruled p{font-family:Quill;font-size:32px;line-height:var(--L);min-height:var(--L)}
+.ruled p + p{margin-top:var(--L)}
+.ruled p.tight{margin-top:0}
+.ruled .c{text-align:center}
+.big{font-size:40px !important;letter-spacing:.3px}
+.cap{letter-spacing:1.5px}
+.adults{font-family:FellSC !important;font-size:34px !important;letter-spacing:4px;text-align:center}
+.small{font-size:25px !important}
+.copper{font-family:Copper !important;font-size:44px !important}
+</style>
+</head>
+<body>
+
+<!-- smoky backdrop -->
+<svg id="bgfog" viewBox="0 0 1080 1920">
+  <filter id="fog" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".0035 .006" numOctaves="4" seed="7"/>
+    <feColorMatrix values="0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .45  0 0 0 .22 -.04"/>
+  </filter>
+  <rect width="1080" height="1920" filter="url(#fog)"/>
+</svg>
+
+<!-- the scroll: paper + rolls (built by script) -->
+<svg id="scroll" viewBox="0 0 1080 1920">
+  <defs>
+    <filter id="paperTex" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="3" result="fine"/>
+      <feColorMatrix in="fine" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .09 0" result="grain"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".006" numOctaves="4" seed="11" result="blot"/>
+      <feColorMatrix in="blot" values="0 0 0 0 .62  0 0 0 0 .58  0 0 0 0 .52  0 0 0 .16 -.03" result="mottle"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".02 .4" numOctaves="2" seed="5" result="fib"/>
+      <feColorMatrix in="fib" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .05 -.01" result="fibres"/>
+      <feMerge><feMergeNode in="mottle"/><feMergeNode in="fibres"/><feMergeNode in="grain"/></feMerge>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="3" seed="9"/>
+      <feDisplacementMap in="SourceGraphic" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="14"/>
+      <feOffset dx="0" dy="14"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".85"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <radialGradient id="vign" cx="50%" cy="50%" r="62%">
+      <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity=".75"/>
+    </radialGradient>
+    <linearGradient id="rollG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#030303"/>
+      <stop offset=".18" stop-color="#1d1c1b"/>
+      <stop offset=".32" stop-color="#3b3936"/>
+      <stop offset=".44" stop-color="#1a1918"/>
+      <stop offset=".78" stop-color="#080808"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="silverV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5d6166"/>
+      <stop offset=".25" stop-color="#eef1f4"/>
+      <stop offset=".45" stop-color="#9ea3a9"/>
+      <stop offset=".7" stop-color="#4a4d51"/>
+      <stop offset="1" stop-color="#202224"/>
+    </linearGradient>
+    <radialGradient id="silverBall" cx="38%" cy="32%" r="70%">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".3" stop-color="#c9cdd2"/>
+      <stop offset=".75" stop-color="#55595e"/>
+      <stop offset="1" stop-color="#1b1c1e"/>
+    </radialGradient>
+    <radialGradient id="endG" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#000"/>
+      <stop offset=".85" stop-color="#151413"/>
+      <stop offset="1" stop-color="#2c2a28"/>
+    </radialGradient>
+  </defs>
+  <g id="scrollGroup" filter="url(#shadow)"></g>
+</svg>
+
+<!-- ornaments: border, key, sprig, planchette, wax seal -->
+<svg id="orn" viewBox="0 0 1080 1920">
+  <defs>
+    <filter id="quill" x="-2%" y="-10%" width="104%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="engrave" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <linearGradient id="silverS" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2f4f6"/>
+      <stop offset=".45" stop-color="#a7acb2"/>
+      <stop offset=".7" stop-color="#e3e6ea"/>
+      <stop offset="1" stop-color="#7d8288"/>
+    </linearGradient>
+    <radialGradient id="wax" cx="40%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#c8283a"/>
+      <stop offset=".55" stop-color="#8d0f1e"/>
+      <stop offset="1" stop-color="#3f040b"/>
+    </radialGradient>
+    <radialGradient id="waxIn" cx="55%" cy="60%" r="60%">
+      <stop offset="0" stop-color="#9c1424"/>
+      <stop offset="1" stop-color="#5a0711"/>
+    </radialGradient>
+    <filter id="waxEdge" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="21"/>
+      <feDisplacementMap in="SourceGraphic" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="waxShade" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/>
+      <feOffset in="b" dx="3" dy="6" result="o"/>
+      <feFlood flood-color="#000" flood-opacity=".8"/>
+      <feComposite in2="o" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="emboss" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="b"/>
+      <feSpecularLighting in="b" surfaceScale="2" specularConstant=".45" specularExponent="22" lighting-color="#ff7a88" result="s">
+        <feDistantLight azimuth="225" elevation="45"/>
+      </feSpecularLighting>
+      <feComposite in="s" in2="SourceAlpha" operator="in" result="sp"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="sp"/></feMerge>
+    </filter>
+    <!-- half flourish, mirrored for the fleurons -->
+    <path id="curl" fill="none" stroke-linecap="round" d="M0,0 C18,-2 30,-14 46,-14 C64,-14 70,2 60,8 C52,13 44,4 50,-2 M46,-14 C70,-26 98,-10 120,-8 C138,-6 150,-14 160,-8 M60,8 C78,14 96,6 110,10 C124,14 128,24 140,22"/>
+  </defs>
+
+  <g id="ornGroup" filter="url(#engrave)" stroke="url(#silverS)" fill="none"></g>
+</svg>
+
+<div id="page">
+  <h1 class="ink"><span class="gold">Six-String Séance</span></h1>
+
+  <div class="ruled" id="body">
+    <p class="ink"><span class="gold">Tarot card readers, magicians, face painters, mentalists, Bobby on vinyl, and the one and only Elvis Lobo on six strings.</span></p>
+    <p class="ink"><span class="gold">The plan: a baithak, not a gig. No stage, no rows, just a circle. Count the chairs before you sit.</span></p>
+    <p class="ink"><span class="gold">Bobby spins as you arrive. Faces get painted, cards get read. Magicians and mentalists work the circle. Elvis takes over. Then Bobby and Elvis jam together. Stories follow, dirty or laundry-clean.</span></p>
+    <p class="ink"><span class="gold" style="font-style:italic">Avant-garde B-grade pulp horror, cheap fangs and all.</span></p>
+    <p class="ink adults"><span class="gold">Adults only.</span></p>
+    <p class="ink c big"><span class="gold">Thursday 29 October, <i>Halloween eve</i></span></p>
+    <p class="ink c big"><span class="gold">Saltamontes, Anjuna</span></p>
+    <p class="ink c small"><span class="gold">Brought to you with <span class="cap">WHOLE LOTTA LOVE</span></span></p>
+    <p class="ink c small tight"><span class="gold">by Moving Arts Program.</span></p>
+    <p class="ink c small tight"><span class="gold">Enquiries &amp; collaborations: PK, 9849690077</span></p>
+    <p class="ink c small tight"><span class="gold">movingartsprogram.com</span></p>
+  </div>
+</div>
+
+<script>
+// ---- seeded random so every render is identical ----
+let s = 20261029;
+const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs, parent) => {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+};
+
+// ---- torn paper body ----
+const TOP = 150, BOT = 1770, LX = 72, RX = 1008;
+function edge(x0, inward) {           // inward: +1 for the left edge, -1 for the right edge
+  const pts = [];
+  for (let y = TOP; y <= BOT; y += 7 + rnd() * 10) {
+    let d = (rnd() - .5) * 9;
+    if (rnd() < .06) d += 18 + rnd() * 26;    // a torn bite
+    pts.push([x0 + inward * d, y]);
+  }
+  return pts;
+}
+const left = edge(LX, 1);
+const right = edge(RX, -1);
+const paperD = 'M' + left.map(p => p.join(',')).join(' L') + ' L' +
+  right.reverse().map(p => p.join(',')).join(' L') + ' Z';
+
+const g = document.getElementById('scrollGroup');
+// ash / burnt rim, slightly bigger than the paper
+el('path', { d: paperD, fill: '#3a3029', transform: 'translate(-6,0) scale(1.011,1)', filter: 'url(#rough)' }, g);
+el('path', { d: paperD, fill: '#17110d', transform: 'translate(-3,0) scale(1.005,1)', filter: 'url(#rough)' }, g);
+el('path', { d: paperD, fill: '#0b0a09', filter: 'url(#rough)' }, g);
+el('path', { d: paperD, fill: '#fff', filter: 'url(#paperTex)' }, g).setAttribute('style', 'mix-blend-mode:screen');
+el('path', { d: paperD, fill: 'url(#vign)', filter: 'url(#rough)' }, g);
+
+// ---- the two rolls ----
+function roll(cy, flip) {
+  const h = 118, y = cy - h / 2, x0 = 52, x1 = 1028, grp = el('g', {}, g);
+  // curled paper cylinder (slightly irregular top/bottom)
+  let top = [], bot = [];
+  for (let x = x0; x <= x1; x += 18) { top.push([x, y + (rnd() - .5) * 4]); bot.push([x, y + h + (rnd() - .5) * 4]); }
+  const d = 'M' + top.map(p => p.join(',')).join(' L') + ' L' + bot.reverse().map(p => p.join(',')).join(' L') + 'Z';
+  el('path', { d, fill: 'url(#rollG)', filter: 'url(#rough)', transform: flip ? `rotate(180 540 ${cy})` : '' }, grp);
+  // faint highlight crease
+  el('path', { d: `M${x0 + 30},${y + h * .3} C300,${y + h * .27} 700,${y + h * .34} ${x1 - 30},${y + h * .29}`, stroke: 'rgba(255,255,255,.10)', 'stroke-width': 3, fill: 'none', transform: flip ? `rotate(180 540 ${cy})` : '' }, grp);
+  // tear in the roll like the reference
+  el('path', { d: `M${520 + (flip ? 40 : -10)},${y + 2} l8,22 l-6,14 l10,20 l-4,18`, stroke: '#000', 'stroke-width': 3, fill: 'none', filter: 'url(#rough)' }, grp);
+  // spiral ends + silver finials
+  for (const side of [-1, 1]) {
+    const ex = side < 0 ? x0 : x1;
+    el('ellipse', { cx: ex, cy, rx: 24, ry: h / 2, fill: 'url(#endG)', stroke: '#33302d', 'stroke-width': 2 }, grp);
+    for (let r = 1; r < 5; r++)
+      el('ellipse', { cx: ex + side * 2, cy: cy + r, rx: 24 - r * 4.6, ry: h / 2 - r * 11, fill: 'none', stroke: 'rgba(120,115,108,.35)', 'stroke-width': 1.3 }, grp);
+    // finial: collar, turned rod, ball
+    const fx = ex + side * 18;
+    const rect = (x, w, hh) => el('rect', { x: side < 0 ? x - w : x, y: cy - hh / 2, width: w, height: hh, rx: 3, fill: 'url(#silverV)' }, grp);
+    rect(fx, 12, 40);
+    rect(fx + side * 12, 8, 26);
+    rect(fx + side * 20, 6, 34);
+    rect(fx + side * 26, 10, 18);
+    el('circle', { cx: fx + side * 46, cy, r: 13, fill: 'url(#silverBall)' }, grp);
+  }
+}
+roll(110, false);
+roll(1802, true);
+
+// ---- silver ornaments ----
+const o = document.getElementById('ornGroup');
+// double frame
+el('rect', { x: 118, y: 196, width: 844, height: 1556, 'stroke-width': 1.6, opacity: .7 }, o);
+el('rect', { x: 128, y: 206, width: 824, height: 1536, 'stroke-width': .8, opacity: .45 }, o);
+// corner dots
+for (const [x, y] of [[118, 196], [962, 196], [118, 1752], [962, 1752]]) el('circle', { cx: x, cy: y, r: 3.5, fill: '#d9dde1', stroke: 'none' }, o);
+
+function fleuron(cx, cy, sc = 1) {
+  const f = el('g', { transform: `translate(${cx},${cy}) scale(${sc})`, 'stroke-width': 1.6 }, o);
+  el('use', { href: '#curl', transform: 'translate(10,0)' }, f);
+  el('use', { href: '#curl', transform: 'translate(-10,0) scale(-1,1)' }, f);
+  el('path', { d: 'M0,-16 L8,0 L0,16 L-8,0 Z', fill: '#c9cdd2', stroke: 'none' }, f);
+  el('circle', { cx: 0, cy: -26, r: 3, fill: '#c9cdd2', stroke: 'none' }, f);
+  el('circle', { cx: 0, cy: 26, r: 3, fill: '#c9cdd2', stroke: 'none' }, f);
+}
+fleuron(540, 196, 1.15);
+fleuron(540, 1752, 1.15);
+
+// small divider: dotted line with a diamond
+function divider(y) {
+  el('line', { x1: 190, y1: y, x2: 500, y2: y, 'stroke-width': 1.2, 'stroke-dasharray': '1 6', 'stroke-linecap': 'round', opacity: .8 }, o);
+  el('line', { x1: 580, y1: y, x2: 890, y2: y, 'stroke-width': 1.2, 'stroke-dasharray': '1 6', 'stroke-linecap': 'round', opacity: .8 }, o);
+  el('path', { d: `M540,${y - 7} L552,${y} L540,${y + 7} L528,${y} Z`, fill: '#c9cdd2', stroke: 'none' }, o);
+  el('circle', { cx: 516, cy: y, r: 2.5, fill: '#c9cdd2', stroke: 'none' }, o);
+  el('circle', { cx: 564, cy: y, r: 2.5, fill: '#c9cdd2', stroke: 'none' }, o);
+}
+
+// hanging skeleton key, top left
+(function key() {
+  const k = el('g', { 'stroke-width': 2.2 }, o);
+  // chain from the frame corner
+  for (let i = 0; i < 9; i++) {
+    const t = i / 8, x = 142 + t * 14, y = 214 + t * 120;
+    el('ellipse', { cx: x, cy: y, rx: i % 2 ? 3 : 5.5, ry: 7, 'stroke-width': 1.4, transform: `rotate(8 ${x} ${y})` }, k);
+  }
+  const g2 = el('g', { transform: 'translate(162,352) rotate(-28)' }, k);
+  el('circle', { cx: 0, cy: 0, r: 20, 'stroke-width': 3 }, g2);
+  for (const a of [0, 90, 180, 270]) {
+    const r = a * Math.PI / 180;
+    el('circle', { cx: Math.cos(r) * 8, cy: Math.sin(r) * 8, r: 5.5, 'stroke-width': 1.6 }, g2);
+  }
+  el('path', { d: 'M-4,20 L-4,118 L4,118 L4,20', 'stroke-width': 2.2 }, g2);
+  for (const yy of [30, 38]) el('line', { x1: -8, y1: yy, x2: 8, y2: yy, 'stroke-width': 2.4 }, g2);
+  el('path', { d: 'M4,92 L24,92 L24,100 L16,100 L16,106 L24,106 L24,116 L4,116', 'stroke-width': 2 }, g2);
+})();
+
+// silver sprig, top right
+(function sprig() {
+  const sp = el('g', { 'stroke-width': 1.6 }, o);
+  el('path', { d: 'M948,226 C915,238 890,244 860,244 C840,244 826,240 812,234' }, sp);
+  el('path', { d: 'M900,240 C892,226 884,218 872,214' }, sp);
+  const leaves = [[924, 236, -20], [904, 242, 160], [882, 244, -10], [860, 244, 170], [838, 241, -5], [882, 216, -50], [892, 228, 120]];
+  for (const [x, y, a] of leaves) el('path', { d: `M${x},${y} q10,-14 24,-12 q-8,14 -24,12 Z`, transform: `rotate(${a} ${x} ${y})`, fill: 'rgba(200,205,210,.25)' }, sp);
+  for (const [x, y] of [[814, 233], [822, 224], [806, 224]]) el('circle', { cx: x, cy: y, r: 2.6, fill: '#c9cdd2', stroke: 'none' }, sp);
+  // faint ghost ring stain
+  el('circle', { cx: 884, cy: 560, r: 46, 'stroke-width': 3.5, opacity: .12 }, sp);
+  el('circle', { cx: 888, cy: 562, r: 40, 'stroke-width': 1.2, opacity: .08 }, sp);
+})();
+
+// planchette, bottom left (séance)
+(function planchette() {
+  const p = el('g', { transform: 'translate(208,1630) rotate(-16)', 'stroke-width': 2 }, o);
+  el('path', { d: 'M0,-78 C34,-60 62,-20 62,18 C62,52 34,66 0,66 C-34,66 -62,52 -62,18 C-62,-20 -34,-60 0,-78 Z', fill: 'rgba(200,205,210,.06)' }, p);
+  el('path', { d: 'M0,-64 C28,-48 50,-16 50,16 C50,44 28,54 0,54 C-28,54 -50,44 -50,16 C-50,-16 -28,-48 0,-64 Z', 'stroke-width': .9, opacity: .7 }, p);
+  el('circle', { cx: 0, cy: -8, r: 17, 'stroke-width': 2.2 }, p);
+  el('circle', { cx: 0, cy: -8, r: 12, 'stroke-width': .8 }, p);
+  // tiny eye in the window
+  el('path', { d: 'M-8,-8 Q0,-15 8,-8 Q0,-1 -8,-8 Z', 'stroke-width': 1.2 }, p);
+  el('circle', { cx: 0, cy: -8, r: 2, fill: '#c9cdd2', stroke: 'none' }, p);
+  for (const [x, y] of [[-36, 40], [36, 40], [0, -62]]) el('circle', { cx: x, cy: y, r: 3, fill: '#c9cdd2', stroke: 'none' }, p);
+  // a few letters, like the board under it
+  const t = el('text', { x: 0, y: 36, 'text-anchor': 'middle', 'font-family': 'FellSC', 'font-size': 15, fill: '#c9cdd2', stroke: 'none', 'letter-spacing': 3 }, p);
+  t.textContent = 'YES · NO';
+})();
+
+// silver spatter
+for (let i = 0; i < 26; i++) {
+  const zone = i < 13 ? [150, 1560, 140, 140] : [760, 300, 160, 120];
+  el('circle', { cx: zone[0] + rnd() * zone[2], cy: zone[1] + rnd() * zone[3], r: .8 + rnd() * 2.4, fill: '#bfc3c8', stroke: 'none', opacity: .25 + rnd() * .4 }, o);
+}
+
+// twine + wax seal, bottom right (outside the engrave filter)
+const svg = document.getElementById('orn');
+(function seal() {
+  const cx = 872, cy = 1650;
+  const tw = el('g', { fill: 'none', 'stroke-linecap': 'round' }, svg);
+  const loops = [
+    `M${cx - 10},${cy + 10} C${cx - 90},${cy - 40} ${cx - 120},${cy + 50} ${cx - 30},${cy + 30}`,
+    `M${cx + 10},${cy + 10} C${cx + 60},${cy - 60} ${cx + 110},${cy + 10} ${cx + 30},${cy + 30}`,
+    `M${cx - 20},${cy + 30} C${cx - 60},${cy + 80} ${cx - 90},${cy + 100} ${cx - 120},${cy + 112}`,
+    `M${cx + 20},${cy + 30} C${cx + 40},${cy + 80} ${cx + 30},${cy + 100} ${cx + 52},${cy + 118}`,
+  ];
+  for (const d of loops) {
+    el('path', { d, stroke: '#6e5530', 'stroke-width': 5 }, tw);
+    el('path', { d, stroke: '#b8925a', 'stroke-width': 2, 'stroke-dasharray': '3 4', opacity: .8 }, tw);
+  }
+  // dried silver flowers behind the seal
+  const fl = el('g', { stroke: '#aeb3b9', 'stroke-width': 1.3, fill: 'none', opacity: .85 }, svg);
+  for (const [x2, y2] of [[cx - 52, cy - 92], [cx - 22, cy - 106], [cx + 16, cy - 100], [cx + 46, cy - 82], [cx - 76, cy - 70]]) {
+    el('path', { d: `M${cx},${cy - 10} C${cx - 4},${cy - 50} ${x2 + (x2 - cx) * .3 + 14},${y2 + 40} ${x2},${y2}` }, fl);
+    el('path', { d: `M${(cx + x2) / 2},${(cy + y2) / 2 + 10} q${x2 < cx ? -14 : 14},-6 ${x2 < cx ? -20 : 20},-18 q${x2 < cx ? 4 : -4},14 ${x2 < cx ? 20 : -20},18 Z`, fill: 'rgba(190,195,200,.18)' }, fl);
+    for (let a = 0; a < 5; a++) {
+      const r = a / 5 * Math.PI * 2;
+      el('circle', { cx: x2 + Math.cos(r) * 5, cy: y2 + Math.sin(r) * 5, r: 3, fill: 'rgba(190,195,200,.3)' }, fl);
+    }
+    el('circle', { cx: x2, cy: y2, r: 2, fill: '#d6d9dd', stroke: 'none' }, fl);
+  }
+  const s1 = el('g', { filter: 'url(#waxShade)' }, svg);
+  el('circle', { cx, cy, r: 60, fill: 'url(#wax)', filter: 'url(#waxEdge)' }, s1);
+  const s2 = el('g', { filter: 'url(#emboss)' }, svg);
+  el('circle', { cx, cy, r: 41, fill: 'url(#waxIn)', stroke: '#b61f31', 'stroke-width': 2 }, s2);
+  el('circle', { cx, cy, r: 35, fill: 'none', stroke: '#6b0914', 'stroke-width': 1.2, 'stroke-dasharray': '2 3' }, s2);
+  const m = el('text', { x: cx, y: cy + 12, 'text-anchor': 'middle', 'font-family': 'Fraktur', 'font-weight': 700, 'font-size': 34, fill: '#6e0712', stroke: '#c9303f', 'stroke-width': .8 }, s2);
+  m.textContent = 'MAP';
+})();
+
+// dividers placed after layout so they sit between the blocks
+document.fonts.ready.then(() => {
+  // sit the silver rules just under the handwriting's baseline
+  const ruled = document.getElementById('body'), firstP = ruled.querySelector('p');
+  const probe = document.createElement('span');
+  probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+  firstP.prepend(probe);
+  const L = parseFloat(getComputedStyle(firstP).lineHeight);
+  const base = probe.getBoundingClientRect().bottom - ruled.getBoundingClientRect().top;
+  probe.remove();
+  ruled.style.setProperty('--rule-off', (((base + 6 - (L - 1.2)) % L) + L) % L - L + 'px');
+  const h1 = document.querySelector('h1').getBoundingClientRect();
+  divider(Math.round(h1.bottom + 14));
+  const adults = document.querySelector('.adults').getBoundingClientRect();
+  divider(Math.round(adults.bottom + 22));
+  const venue = document.querySelectorAll('.big')[1].getBoundingClientRect();
+  divider(Math.round(venue.bottom + 22));
+  document.body.dataset.ready = '1';
+});
+</script>
+</body>
+</html>
