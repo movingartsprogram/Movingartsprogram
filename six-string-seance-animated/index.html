@@ -16,9 +16,10 @@ body.rec{cursor:none}
 .w{position:absolute;opacity:0;will-change:transform,opacity,filter;perspective:600px}
 .ink{width:100%;height:100%;background:url(card-text.png) no-repeat;background-size:1024px 1536px}
 #halo{position:absolute;left:150px;top:420px;width:724px;height:300px;opacity:0;pointer-events:none;
-  background:radial-gradient(ellipse 50% 46% at 50% 52%,rgba(255,208,120,.42) 0%,rgba(255,170,60,.18) 42%,rgba(255,150,40,0) 72%);
+  background:radial-gradient(ellipse 50% 46% at 50% 52%,rgba(200,10,22,.55) 0%,rgba(150,0,12,.28) 42%,rgba(110,0,8,0) 72%);
   mix-blend-mode:screen}
-.title{filter:drop-shadow(0 0 2px rgba(255,226,150,.9)) drop-shadow(0 0 10px rgba(255,190,80,.75)) drop-shadow(0 0 26px rgba(255,160,50,.5))}
+.o{position:absolute;opacity:0;background:url(card-text.png) no-repeat;background-size:1024px 1536px}
+#caret{position:absolute;left:0;top:0;width:3px;border-radius:2px;opacity:0;background:#f0d48a;box-shadow:0 0 6px rgba(240,200,120,.8)}
 #hint{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);font:13px/1.3 system-ui,sans-serif;color:#9a8a6a;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:20px;transition:opacity .6s}
 body.rec #hint{opacity:0}
 </style>
@@ -27,22 +28,20 @@ body.rec #hint{opacity:0}
 <div id="wrap"><div id="stage">
   <img id="bg" src="card-clean.jpg" alt="Six-String Séance invitation card">
   <div id="halo"></div>
+  <div id="caret"></div>
 </div></div>
 <div id="hint">Tap to play · tap again to replay</div>
 <script>
-const LINES = [{"text":"presents","kind":"pre","y0":355,"y1":382,"words":[{"w":"presents","b":[441,355,141,27],"clip":"1.0px 0px 139.0px 0px 139.0px 27px 1.0px 27px"}]},{"text":"SIX-STRING","kind":"title","y0":458,"y1":522,"words":[{"w":"SIX-STRING","b":[232,458,559,64],"clip":"1.0px 0px 557.0px 0px 557.0px 64px 1.0px 64px"}]},{"text":"Séance","kind":"title","y0":528,"y1":668,"words":[{"w":"Séance","b":[300,528,437,140],"clip":"1.0px 0px 435.0px 0px 435.0px 140px 1.0px 140px"}]},{"text":"Tarot card readers, magicians, face painters,","kind":"b","y0":742,"y1":776,"words":[{"w":"Tarot","b":[255,742,87,34],"clip":"13.0px 0px 85.4px 0px 73.6px 34px 1.0px 34px"},{"w":"card","b":[327,742,69,34],"clip":"13.4px 0px 67.4px 0px 55.6px 34px 1.6px 34px"},{"w":"readers,","b":[381,742,107,34],"clip":"13.4px 0px 105.4px 0px 93.6px 34px 1.6px 34px"},{"w":"magicians,","b":[473,742,140,34],"clip":"13.4px 0px 138.0px 0px 126.0px 34px 1.6px 34px"},{"w":"face","b":[598,742,68,34],"clip":"13.0px 0px 66.0px 0px 54.0px 34px 1.0px 34px"},{"w":"painters,","b":[651,742,119,34],"clip":"13.0px 0px 117.0px 0px 105.0px 34px 1.0px 34px"}]},{"text":"mentalists, Bobby on vinyl, and the one and only","kind":"b","y0":776,"y1":809,"words":[{"w":"mentalists,","b":[231,776,138,33],"clip":"8.3px 0px 136.8px 0px 130.2px 33px 1.7px 33px"},{"w":"Bobby","b":[360,776,89,33],"clip":"7.8px 0px 87.8px 0px 81.2px 33px 1.2px 33px"},{"w":"on","b":[440,776,44,33],"clip":"7.8px 0px 42.3px 0px 35.7px 33px 1.2px 33px"},{"w":"vinyl,","b":[474,776,80,33],"clip":"8.3px 0px 78.8px 0px 72.2px 33px 1.7px 33px"},{"w":"and","b":[545,776,60,33],"clip":"7.8px 0px 58.3px 0px 51.7px 33px 1.2px 33px"},{"w":"the","b":[595,776,51,33],"clip":"8.3px 0px 49.8px 0px 43.2px 33px 1.7px 33px"},{"w":"one","b":[637,776,55,33],"clip":"7.8px 0px 53.3px 0px 46.7px 33px 1.2px 33px"},{"w":"and","b":[682,776,60,33],"clip":"8.3px 0px 58.3px 0px 51.7px 33px 1.7px 33px"},{"w":"only","b":[732,776,64,33],"clip":"8.3px 0px 62.3px 0px 55.7px 33px 1.7px 33px"}]},{"text":"Elvis Lobo on six strings.","kind":"b","y0":810,"y1":843,"words":[{"w":"Elvis","b":[364,810,72,33],"clip":"1.4px 0px 67.4px 0px 70.6px 33px 4.6px 33px"},{"w":"Lobo","b":[430,810,71,33],"clip":"1.4px 0px 66.4px 0px 69.6px 33px 4.6px 33px"},{"w":"on","b":[495,810,40,33],"clip":"1.4px 0px 34.8px 0px 38.2px 33px 4.6px 33px"},{"w":"six","b":[528,810,47,33],"clip":"1.8px 0px 41.8px 0px 45.2px 33px 5.2px 33px"},{"w":"strings.","b":[568,810,95,33],"clip":"1.8px 0px 90.4px 0px 93.6px 33px 5.2px 33px"}]},{"text":"The plan: a baithak, not a gig. No stage, no rows,","kind":"b","y0":871,"y1":905,"words":[{"w":"The","b":[219,871,70,34],"clip":"16.6px 0px 68.2px 0px 52.8px 34px 1.4px 34px"},{"w":"plan:","b":[270,871,84,34],"clip":"17.2px 0px 82.6px 0px 67.4px 34px 1.8px 34px"},{"w":"a","b":[336,871,40,34],"clip":"16.6px 0px 38.2px 0px 22.8px 34px 1.4px 34px"},{"w":"baithak,","b":[357,871,121,34],"clip":"17.2px 0px 119.2px 0px 103.8px 34px 1.8px 34px"},{"w":"not","b":[459,871,65,34],"clip":"17.2px 0px 63.6px 0px 48.4px 34px 1.8px 34px"},{"w":"a","b":[506,871,39,34],"clip":"16.6px 0px 37.2px 0px 21.8px 34px 1.4px 34px"},{"w":"gig.","b":[526,871,64,34],"clip":"17.2px 0px 62.6px 0px 47.4px 34px 1.8px 34px"},{"w":"No","b":[572,871,61,34],"clip":"16.6px 0px 59.2px 0px 43.8px 34px 1.4px 34px"},{"w":"stage,","b":[614,871,89,34],"clip":"17.2px 0px 87.2px 0px 71.8px 34px 1.8px 34px"},{"w":"no","b":[684,871,53,34],"clip":"17.2px 0px 51.6px 0px 36.4px 34px 1.8px 34px"},{"w":"rows,","b":[719,871,86,34],"clip":"16.6px 0px 84.6px 0px 69.4px 34px 1.4px 34px"}]},{"text":"just a circle. Count the chairs before you sit.","kind":"b","y0":906,"y1":940,"words":[{"w":"just","b":[258,906,62,34],"clip":"6.6px 0px 60.6px 0px 55.4px 34px 1.4px 34px"},{"w":"a","b":[312,906,29,34],"clip":"6.6px 0px 27.6px 0px 22.4px 34px 1.4px 34px"},{"w":"circle.","b":[333,906,79,34],"clip":"6.6px 0px 77.0px 0px 72.0px 34px 1.4px 34px"},{"w":"Count","b":[404,906,84,34],"clip":"6.0px 0px 82.0px 0px 77.0px 34px 1.0px 34px"},{"w":"the","b":[480,906,50,34],"clip":"6.0px 0px 48.0px 0px 43.0px 34px 1.0px 34px"},{"w":"chairs","b":[522,906,80,34],"clip":"6.0px 0px 78.0px 0px 73.0px 34px 1.0px 34px"},{"w":"before","b":[594,906,81,34],"clip":"6.0px 0px 79.6px 0px 74.4px 34px 1.0px 34px"},{"w":"you","b":[667,906,56,34],"clip":"6.6px 0px 54.6px 0px 49.4px 34px 1.4px 34px"},{"w":"sit.","b":[715,906,50,34],"clip":"6.6px 0px 48.6px 0px 43.4px 34px 1.4px 34px"}]},{"text":"Bobby spins as you arrive. Faces get painted, cards","kind":"b","y0":970,"y1":1003,"words":[{"w":"Bobby","b":[213,970,93,33],"clip":"12.8px 0px 91.8px 0px 80.2px 33px 1.2px 33px"},{"w":"spins","b":[292,970,76,33],"clip":"12.8px 0px 74.3px 0px 62.7px 33px 1.2px 33px"},{"w":"as","b":[353,970,44,33],"clip":"13.3px 0px 42.3px 0px 30.7px 33px 1.7px 33px"},{"w":"you","b":[382,970,62,33],"clip":"13.3px 0px 60.3px 0px 48.7px 33px 1.7px 33px"},{"w":"arrive.","b":[429,970,93,33],"clip":"13.3px 0px 91.3px 0px 79.7px 33px 1.7px 33px"},{"w":"Faces","b":[507,970,82,33],"clip":"13.3px 0px 80.8px 0px 69.2px 33px 1.7px 33px"},{"w":"get","b":[575,970,55,33],"clip":"12.8px 0px 53.3px 0px 41.7px 33px 1.2px 33px"},{"w":"painted,","b":[615,970,111,33],"clip":"13.3px 0px 109.3px 0px 97.7px 33px 1.7px 33px"},{"w":"cards","b":[711,970,77,33],"clip":"13.3px 0px 75.8px 0px 64.2px 33px 1.7px 33px"}]},{"text":"get read. Magicians and mentalists work the circle.","kind":"b","y0":1005,"y1":1038,"words":[{"w":"get","b":[217,1005,48,33],"clip":"2.8px 0px 46.8px 0px 45.2px 33px 1.2px 33px"},{"w":"read.","b":[261,1005,63,33],"clip":"2.8px 0px 61.8px 0px 60.2px 33px 1.2px 33px"},{"w":"Magicians","b":[320,1005,126,33],"clip":"2.8px 0px 124.3px 0px 122.7px 33px 1.2px 33px"},{"w":"and","b":[441,1005,54,33],"clip":"3.3px 0px 52.8px 0px 51.2px 33px 1.7px 33px"},{"w":"mentalists","b":[491,1005,121,33],"clip":"2.8px 0px 119.3px 0px 117.7px 33px 1.2px 33px"},{"w":"work","b":[607,1005,70,33],"clip":"3.3px 0px 68.3px 0px 66.7px 33px 1.7px 33px"},{"w":"the","b":[672,1005,42,33],"clip":"3.3px 0px 40.3px 0px 38.7px 33px 1.7px 33px"},{"w":"circle.","b":[709,1005,73,33],"clip":"3.3px 0px 71.8px 0px 70.2px 33px 1.7px 33px"}]},{"text":"Elvis takes over. Then Bobby and Elvis jam together.","kind":"b","y0":1040,"y1":1073,"words":[{"w":"Elvis","b":[204,1040,78,33],"clip":"10.1px 0px 76.1px 0px 67.9px 33px 1.9px 33px"},{"w":"takes","b":[270,1040,76,33],"clip":"10.1px 0px 74.1px 0px 65.9px 33px 1.9px 33px"},{"w":"over.","b":[334,1040,67,33],"clip":"10.1px 0px 65.6px 0px 57.4px 33px 1.9px 33px"},{"w":"Then","b":[390,1040,74,33],"clip":"9.6px 0px 72.1px 0px 63.9px 33px 1.4px 33px"},{"w":"Bobby","b":[452,1040,88,33],"clip":"10.1px 0px 86.6px 0px 78.4px 33px 1.9px 33px"},{"w":"and","b":[529,1040,59,33],"clip":"9.6px 0px 57.1px 0px 48.9px 33px 1.4px 33px"},{"w":"Elvis","b":[576,1040,74,33],"clip":"10.1px 0px 72.1px 0px 63.9px 33px 1.9px 33px"},{"w":"jam","b":[638,1040,60,33],"clip":"10.1px 0px 58.6px 0px 50.4px 33px 1.9px 33px"},{"w":"together.","b":[687,1040,111,33],"clip":"9.6px 0px 109.1px 0px 100.9px 33px 1.4px 33px"}]},{"text":"Stories follow, dirty or laundry-clean.","kind":"b","y0":1075,"y1":1108,"words":[{"w":"Stories","b":[286,1075,96,33],"clip":"14.2px 0px 94.7px 0px 82.3px 33px 1.8px 33px"},{"w":"follow,","b":[367,1075,98,33],"clip":"13.7px 0px 96.2px 0px 83.8px 33px 1.3px 33px"},{"w":"dirty","b":[449,1075,76,33],"clip":"14.2px 0px 74.7px 0px 62.3px 33px 1.8px 33px"},{"w":"or","b":[510,1075,43,33],"clip":"13.7px 0px 41.7px 0px 29.3px 33px 1.3px 33px"},{"w":"laundry-clean.","b":[538,1075,180,33],"clip":"13.7px 0px 178.2px 0px 165.8px 33px 1.3px 33px"}]},{"text":"Avant-garde B-grade pulp horror,","kind":"b","y0":1136,"y1":1170,"words":[{"w":"Avant-garde","b":[318,1136,157,34],"clip":"6.6px 0px 155.6px 0px 150.4px 34px 1.4px 34px"},{"w":"B-grade","b":[467,1136,104,34],"clip":"6.6px 0px 102.6px 0px 97.4px 34px 1.4px 34px"},{"w":"pulp","b":[563,1136,66,34],"clip":"6.6px 0px 64.6px 0px 59.4px 34px 1.4px 34px"},{"w":"horror,","b":[621,1136,87,34],"clip":"6.6px 0px 85.6px 0px 80.4px 34px 1.4px 34px"}]},{"text":"cheap fangs and all.","kind":"b","y0":1177,"y1":1211,"words":[{"w":"cheap","b":[392,1177,84,34],"clip":"13.0px 0px 82.4px 0px 70.6px 34px 1.0px 34px"},{"w":"fangs","b":[461,1177,84,34],"clip":"13.4px 0px 82.0px 0px 70.0px 34px 1.6px 34px"},{"w":"and","b":[530,1177,65,34],"clip":"13.0px 0px 63.4px 0px 51.6px 34px 1.0px 34px"},{"w":"all.","b":[580,1177,58,34],"clip":"13.4px 0px 56.0px 0px 44.0px 34px 1.6px 34px"}]},{"text":"Adults only.","kind":"adult","y0":1224,"y1":1260,"words":[{"w":"Adults","b":[426,1224,100,36],"clip":"1.6px 0px 96.2px 0px 98.8px 36px 4.4px 36px"},{"w":"only.","b":[521,1224,68,36],"clip":"1.2px 0px 63.6px 0px 66.4px 36px 3.8px 36px"}]},{"text":"Thursday 29 October","kind":"date","y0":1266,"y1":1308,"words":[{"w":"Thursday","b":[334,1266,176,42],"clip":"12.2px 0px 174.2px 0px 163.8px 42px 1.8px 42px"},{"w":"29","b":[496,1266,64,42],"clip":"12.2px 0px 62.2px 0px 51.8px 42px 1.8px 42px"},{"w":"October","b":[546,1266,149,42],"clip":"12.2px 0px 147.2px 0px 136.8px 42px 1.8px 42px"}]},{"text":"Halloween eve","kind":"date","y0":1308,"y1":1340,"words":[{"w":"Halloween","b":[421,1308,144,32],"clip":"8.6px 0px 142.1px 0px 134.9px 32px 1.4px 32px"},{"w":"eve","b":[554,1308,55,32],"clip":"9.1px 0px 53.6px 0px 46.4px 32px 1.9px 32px"}]},{"text":"Saltamontes, Anjuna","kind":"date","y0":1346,"y1":1400,"words":[{"w":"Saltamontes,","b":[328,1346,244,54],"clip":"24.5px 0px 242.5px 0px 219.5px 54px 1.5px 54px"},{"w":"Anjuna","b":[546,1346,160,54],"clip":"24.5px 0px 158.5px 0px 135.5px 54px 1.5px 54px"}]}];
+const LAYOUT = {"lines":[{"text":"presents","kind":"pre","y0":355,"y1":382,"words":[{"w":"presents","b":[441,355,141,27],"clip":"1.0px 0px 139.0px 0px 139.0px 27px 1.0px 27px"}]},{"text":"SIX-STRING","kind":"title","y0":458,"y1":522,"words":[{"w":"SIX-STRING","b":[232,458,559,64],"clip":"1.0px 0px 557.0px 0px 557.0px 64px 1.0px 64px"}]},{"text":"Séance","kind":"title","y0":528,"y1":668,"words":[{"w":"Séance","b":[300,528,437,140],"clip":"1.0px 0px 435.0px 0px 435.0px 140px 1.0px 140px"}]},{"text":"Tarot card readers, magicians, face painters,","kind":"b","y0":742,"y1":776,"words":[{"w":"Tarot","b":[255,742,87,34],"clip":"13.0px 0px 85.4px 0px 73.6px 34px 1.0px 34px"},{"w":"card","b":[327,742,69,34],"clip":"13.4px 0px 67.4px 0px 55.6px 34px 1.6px 34px"},{"w":"readers,","b":[381,742,107,34],"clip":"13.4px 0px 105.4px 0px 93.6px 34px 1.6px 34px"},{"w":"magicians,","b":[473,742,140,34],"clip":"13.4px 0px 138.0px 0px 126.0px 34px 1.6px 34px"},{"w":"face","b":[598,742,68,34],"clip":"13.0px 0px 66.0px 0px 54.0px 34px 1.0px 34px"},{"w":"painters,","b":[651,742,119,34],"clip":"13.0px 0px 117.0px 0px 105.0px 34px 1.0px 34px"}]},{"text":"mentalists, Bobby on vinyl, and the one and only","kind":"b","y0":776,"y1":809,"words":[{"w":"mentalists,","b":[231,776,138,33],"clip":"8.3px 0px 136.8px 0px 130.2px 33px 1.7px 33px"},{"w":"Bobby","b":[360,776,89,33],"clip":"7.8px 0px 87.8px 0px 81.2px 33px 1.2px 33px"},{"w":"on","b":[440,776,44,33],"clip":"7.8px 0px 42.3px 0px 35.7px 33px 1.2px 33px"},{"w":"vinyl,","b":[474,776,80,33],"clip":"8.3px 0px 78.8px 0px 72.2px 33px 1.7px 33px"},{"w":"and","b":[545,776,60,33],"clip":"7.8px 0px 58.3px 0px 51.7px 33px 1.2px 33px"},{"w":"the","b":[595,776,51,33],"clip":"8.3px 0px 49.8px 0px 43.2px 33px 1.7px 33px"},{"w":"one","b":[637,776,55,33],"clip":"7.8px 0px 53.3px 0px 46.7px 33px 1.2px 33px"},{"w":"and","b":[682,776,60,33],"clip":"8.3px 0px 58.3px 0px 51.7px 33px 1.7px 33px"},{"w":"only","b":[732,776,64,33],"clip":"8.3px 0px 62.3px 0px 55.7px 33px 1.7px 33px"}]},{"text":"Elvis Lobo on six strings.","kind":"b","y0":810,"y1":843,"words":[{"w":"Elvis","b":[364,810,72,33],"clip":"1.4px 0px 67.4px 0px 70.6px 33px 4.6px 33px"},{"w":"Lobo","b":[430,810,71,33],"clip":"1.4px 0px 66.4px 0px 69.6px 33px 4.6px 33px"},{"w":"on","b":[495,810,40,33],"clip":"1.4px 0px 34.8px 0px 38.2px 33px 4.6px 33px"},{"w":"six","b":[528,810,47,33],"clip":"1.8px 0px 41.8px 0px 45.2px 33px 5.2px 33px"},{"w":"strings.","b":[568,810,95,33],"clip":"1.8px 0px 90.4px 0px 93.6px 33px 5.2px 33px"}]},{"text":"The plan: a baithak, not a gig. No stage, no rows,","kind":"b","y0":871,"y1":905,"words":[{"w":"The","b":[219,871,70,34],"clip":"16.6px 0px 68.2px 0px 52.8px 34px 1.4px 34px"},{"w":"plan:","b":[270,871,84,34],"clip":"17.2px 0px 82.6px 0px 67.4px 34px 1.8px 34px"},{"w":"a","b":[336,871,40,34],"clip":"16.6px 0px 38.2px 0px 22.8px 34px 1.4px 34px"},{"w":"baithak,","b":[357,871,121,34],"clip":"17.2px 0px 119.2px 0px 103.8px 34px 1.8px 34px"},{"w":"not","b":[459,871,65,34],"clip":"17.2px 0px 63.6px 0px 48.4px 34px 1.8px 34px"},{"w":"a","b":[506,871,39,34],"clip":"16.6px 0px 37.2px 0px 21.8px 34px 1.4px 34px"},{"w":"gig.","b":[526,871,64,34],"clip":"17.2px 0px 62.6px 0px 47.4px 34px 1.8px 34px"},{"w":"No","b":[572,871,61,34],"clip":"16.6px 0px 59.2px 0px 43.8px 34px 1.4px 34px"},{"w":"stage,","b":[614,871,89,34],"clip":"17.2px 0px 87.2px 0px 71.8px 34px 1.8px 34px"},{"w":"no","b":[684,871,53,34],"clip":"17.2px 0px 51.6px 0px 36.4px 34px 1.8px 34px"},{"w":"rows,","b":[719,871,86,34],"clip":"16.6px 0px 84.6px 0px 69.4px 34px 1.4px 34px"}]},{"text":"just a circle. Count the chairs before you sit.","kind":"b","y0":906,"y1":940,"words":[{"w":"just","b":[258,906,62,34],"clip":"6.6px 0px 60.6px 0px 55.4px 34px 1.4px 34px"},{"w":"a","b":[312,906,29,34],"clip":"6.6px 0px 27.6px 0px 22.4px 34px 1.4px 34px"},{"w":"circle.","b":[333,906,79,34],"clip":"6.6px 0px 77.0px 0px 72.0px 34px 1.4px 34px"},{"w":"Count","b":[404,906,84,34],"clip":"6.0px 0px 82.0px 0px 77.0px 34px 1.0px 34px"},{"w":"the","b":[480,906,50,34],"clip":"6.0px 0px 48.0px 0px 43.0px 34px 1.0px 34px"},{"w":"chairs","b":[522,906,80,34],"clip":"6.0px 0px 78.0px 0px 73.0px 34px 1.0px 34px"},{"w":"before","b":[594,906,81,34],"clip":"6.0px 0px 79.6px 0px 74.4px 34px 1.0px 34px"},{"w":"you","b":[667,906,56,34],"clip":"6.6px 0px 54.6px 0px 49.4px 34px 1.4px 34px"},{"w":"sit.","b":[715,906,50,34],"clip":"6.6px 0px 48.6px 0px 43.4px 34px 1.4px 34px"}]},{"text":"Bobby spins as you arrive. Faces get painted, cards","kind":"b","y0":970,"y1":1003,"words":[{"w":"Bobby","b":[213,970,93,33],"clip":"12.8px 0px 91.8px 0px 80.2px 33px 1.2px 33px"},{"w":"spins","b":[292,970,76,33],"clip":"12.8px 0px 74.3px 0px 62.7px 33px 1.2px 33px"},{"w":"as","b":[353,970,44,33],"clip":"13.3px 0px 42.3px 0px 30.7px 33px 1.7px 33px"},{"w":"you","b":[382,970,62,33],"clip":"13.3px 0px 60.3px 0px 48.7px 33px 1.7px 33px"},{"w":"arrive.","b":[429,970,93,33],"clip":"13.3px 0px 91.3px 0px 79.7px 33px 1.7px 33px"},{"w":"Faces","b":[507,970,82,33],"clip":"13.3px 0px 80.8px 0px 69.2px 33px 1.7px 33px"},{"w":"get","b":[575,970,55,33],"clip":"12.8px 0px 53.3px 0px 41.7px 33px 1.2px 33px"},{"w":"painted,","b":[615,970,111,33],"clip":"13.3px 0px 109.3px 0px 97.7px 33px 1.7px 33px"},{"w":"cards","b":[711,970,77,33],"clip":"13.3px 0px 75.8px 0px 64.2px 33px 1.7px 33px"}]},{"text":"get read. Magicians and mentalists work the circle.","kind":"b","y0":1005,"y1":1038,"words":[{"w":"get","b":[217,1005,48,33],"clip":"2.8px 0px 46.8px 0px 45.2px 33px 1.2px 33px"},{"w":"read.","b":[261,1005,63,33],"clip":"2.8px 0px 61.8px 0px 60.2px 33px 1.2px 33px"},{"w":"Magicians","b":[320,1005,126,33],"clip":"2.8px 0px 124.3px 0px 122.7px 33px 1.2px 33px"},{"w":"and","b":[441,1005,54,33],"clip":"3.3px 0px 52.8px 0px 51.2px 33px 1.7px 33px"},{"w":"mentalists","b":[491,1005,121,33],"clip":"2.8px 0px 119.3px 0px 117.7px 33px 1.2px 33px"},{"w":"work","b":[607,1005,70,33],"clip":"3.3px 0px 68.3px 0px 66.7px 33px 1.7px 33px"},{"w":"the","b":[672,1005,42,33],"clip":"3.3px 0px 40.3px 0px 38.7px 33px 1.7px 33px"},{"w":"circle.","b":[709,1005,73,33],"clip":"3.3px 0px 71.8px 0px 70.2px 33px 1.7px 33px"}]},{"text":"Elvis takes over. Then Bobby and Elvis jam together.","kind":"b","y0":1040,"y1":1073,"words":[{"w":"Elvis","b":[204,1040,78,33],"clip":"10.1px 0px 76.1px 0px 67.9px 33px 1.9px 33px"},{"w":"takes","b":[270,1040,76,33],"clip":"10.1px 0px 74.1px 0px 65.9px 33px 1.9px 33px"},{"w":"over.","b":[334,1040,67,33],"clip":"10.1px 0px 65.6px 0px 57.4px 33px 1.9px 33px"},{"w":"Then","b":[390,1040,74,33],"clip":"9.6px 0px 72.1px 0px 63.9px 33px 1.4px 33px"},{"w":"Bobby","b":[452,1040,88,33],"clip":"10.1px 0px 86.6px 0px 78.4px 33px 1.9px 33px"},{"w":"and","b":[529,1040,59,33],"clip":"9.6px 0px 57.1px 0px 48.9px 33px 1.4px 33px"},{"w":"Elvis","b":[576,1040,74,33],"clip":"10.1px 0px 72.1px 0px 63.9px 33px 1.9px 33px"},{"w":"jam","b":[638,1040,60,33],"clip":"10.1px 0px 58.6px 0px 50.4px 33px 1.9px 33px"},{"w":"together.","b":[687,1040,111,33],"clip":"9.6px 0px 109.1px 0px 100.9px 33px 1.4px 33px"}]},{"text":"Stories follow, dirty or laundry-clean.","kind":"b","y0":1075,"y1":1108,"words":[{"w":"Stories","b":[286,1075,96,33],"clip":"14.2px 0px 94.7px 0px 82.3px 33px 1.8px 33px"},{"w":"follow,","b":[367,1075,98,33],"clip":"13.7px 0px 96.2px 0px 83.8px 33px 1.3px 33px"},{"w":"dirty","b":[449,1075,76,33],"clip":"14.2px 0px 74.7px 0px 62.3px 33px 1.8px 33px"},{"w":"or","b":[510,1075,43,33],"clip":"13.7px 0px 41.7px 0px 29.3px 33px 1.3px 33px"},{"w":"laundry-clean.","b":[538,1075,180,33],"clip":"13.7px 0px 178.2px 0px 165.8px 33px 1.3px 33px"}]},{"text":"Avant-garde B-grade pulp horror,","kind":"b","y0":1136,"y1":1170,"words":[{"w":"Avant-garde","b":[318,1136,157,34],"clip":"6.6px 0px 155.6px 0px 150.4px 34px 1.4px 34px"},{"w":"B-grade","b":[467,1136,104,34],"clip":"6.6px 0px 102.6px 0px 97.4px 34px 1.4px 34px"},{"w":"pulp","b":[563,1136,66,34],"clip":"6.6px 0px 64.6px 0px 59.4px 34px 1.4px 34px"},{"w":"horror,","b":[621,1136,87,34],"clip":"6.6px 0px 85.6px 0px 80.4px 34px 1.4px 34px"}]},{"text":"cheap fangs and all.","kind":"b","y0":1177,"y1":1211,"words":[{"w":"cheap","b":[392,1177,84,34],"clip":"13.0px 0px 82.4px 0px 70.6px 34px 1.0px 34px"},{"w":"fangs","b":[461,1177,84,34],"clip":"13.4px 0px 82.0px 0px 70.0px 34px 1.6px 34px"},{"w":"and","b":[530,1177,65,34],"clip":"13.0px 0px 63.4px 0px 51.6px 34px 1.0px 34px"},{"w":"all.","b":[580,1177,58,34],"clip":"13.4px 0px 56.0px 0px 44.0px 34px 1.6px 34px"}]},{"text":"Adults only.","kind":"adult","y0":1224,"y1":1260,"words":[{"w":"Adults","b":[426,1224,100,36],"clip":"1.6px 0px 96.2px 0px 98.8px 36px 4.4px 36px"},{"w":"only.","b":[521,1224,68,36],"clip":"1.2px 0px 63.6px 0px 66.4px 36px 3.8px 36px"}]},{"text":"Thursday 29 October","kind":"date","y0":1266,"y1":1308,"words":[{"w":"Thursday","b":[334,1266,176,42],"clip":"12.2px 0px 174.2px 0px 163.8px 42px 1.8px 42px"},{"w":"29","b":[496,1266,64,42],"clip":"12.2px 0px 62.2px 0px 51.8px 42px 1.8px 42px"},{"w":"October","b":[546,1266,149,42],"clip":"12.2px 0px 147.2px 0px 136.8px 42px 1.8px 42px"}]},{"text":"Halloween eve","kind":"date","y0":1308,"y1":1340,"words":[{"w":"Halloween","b":[421,1308,144,32],"clip":"8.6px 0px 142.1px 0px 134.9px 32px 1.4px 32px"},{"w":"eve","b":[554,1308,55,32],"clip":"9.1px 0px 53.6px 0px 46.4px 32px 1.9px 32px"}]},{"text":"Saltamontes, Anjuna","kind":"date","y0":1346,"y1":1400,"words":[{"w":"Saltamontes,","b":[328,1346,244,54],"clip":"24.5px 0px 242.5px 0px 219.5px 54px 1.5px 54px"},{"w":"Anjuna","b":[546,1346,160,54],"clip":"24.5px 0px 158.5px 0px 135.5px 54px 1.5px 54px"}]}],"orns":[{"b":[262,320,500,33],"after":-1},{"b":[254,394,520,36],"after":0},{"b":[254,684,520,36],"after":2},{"b":[290,841,441,28],"after":5},{"b":[332,938,361,28],"after":7},{"b":[312,1099,401,32],"after":11},{"b":[362,1223,75,24],"after":13},{"b":[591,1223,69,24],"after":13},{"b":[245,1348,67,29],"after":16},{"b":[713,1342,60,35],"after":16}]};
 
-const stage = document.getElementById('stage'), halo = document.getElementById('halo');
-function fit() {
-  const k = Math.min(innerWidth / 1024, innerHeight / 1536);
-  document.documentElement.style.setProperty('--k', k);
-}
+const stage = document.getElementById('stage'), halo = document.getElementById('halo'), caret = document.getElementById('caret');
+function fit() { document.documentElement.style.setProperty('--k', Math.min(innerWidth / 1024, innerHeight / 1536)); }
 addEventListener('resize', fit); fit();
 
-// build one element per word, cut out of the card's own lettering
-const words = [];
-for (const line of LINES) {
-  for (const w of line.words) {
+// one element per word, cut out of the card's own lettering
+const lines = LAYOUT.lines.map(line => ({
+  ...line,
+  els: line.words.map(w => {
     const [x, y, wd, ht] = w.b;
     const el = document.createElement('div');
     el.className = 'w' + (line.kind === 'title' ? ' title' : '');
@@ -50,86 +49,108 @@ for (const line of LINES) {
     const ink = document.createElement('div');
     ink.className = 'ink';
     ink.style.backgroundPosition = `${-x}px ${-y}px`;
-    ink.style.clipPath = `polygon(${w.clip.split(' ').reduce((a, v, i) => a + (i % 2 ? ' ' : (i ? ',' : '')) + v, '')})`;
+    const c = w.clip.split(' ');
+    ink.style.clipPath = 'polygon(' + [0, 2, 4, 6].map(i => c[i] + ' ' + c[i + 1]).join(',') + ')';
     el.appendChild(ink);
     stage.appendChild(el);
-    words.push({ el, line, ink });
-  }
-}
+    return { el, ink, b: w.b, c };
+  })
+}));
+// the divider ornaments
+const orns = LAYOUT.orns.map(o => {
+  const [x, y, wd, ht] = o.b, el = document.createElement('div');
+  el.className = 'o';
+  el.style.cssText = `left:${x}px;top:${y}px;width:${wd}px;height:${ht}px;background-position:${-x}px ${-y}px`;
+  stage.insertBefore(el, caret);
+  return { el, after: o.after };
+});
 
 const ease = 'cubic-bezier(.16,.84,.24,1)';
-const G = (a, b, c, d, e, f) => `drop-shadow(0 0 ${a}px rgba(255,226,150,${b})) drop-shadow(0 0 ${c}px rgba(255,190,80,${d})) drop-shadow(0 0 ${e}px rgba(255,160,50,${f}))`;
-const GLOW = [{ filter: G(2, .85, 9, .65, 22, .4) }, { filter: G(3, 1, 16, .9, 42, .7) }, { filter: G(2, .85, 9, .65, 22, .4) }];
-let anims = [], timers = [];
-function reset() {
-  anims.forEach(a => a.cancel()); timers.forEach(clearTimeout);
-  anims = []; timers = [];
-  words.forEach(w => { w.el.style.opacity = 0; });
-  halo.style.opacity = 0;
-}
-function zoomIn(el, at, opt) {
-  const { from = 3.2, dur = 900, blur = 8, roll = -55 } = opt || {};
-  const a = el.animate([
-    { opacity: 0, transform: `scale(${from}) rotateX(${roll}deg)`, filter: `blur(${blur}px)` },
-    { opacity: 1, offset: .45 },
-    { opacity: 1, transform: 'scale(1) rotateX(0deg)', filter: 'blur(0px)' }
-  ], { duration: dur, delay: at, easing: ease, fill: 'both' });
-  a.onfinish = () => { el.style.opacity = 1; };
-  anims.push(a);
-  return at + dur;
-}
-function play() {
-  reset();
-  document.body.classList.add('rec');
-  let t = 500;
-  let lastLine = null;
-  for (const w of words) {
-    const k = w.line.kind;
-    if (w.line !== lastLine) {             // a new line starts
-      if (lastLine) t += k === 'title' ? 500 : k === 'date' || k === 'adult' ? 420 : 220;
-      lastLine = w.line;
-    }
-    if (k === 'pre') { zoomIn(w.ink.parentNode, t, { from: 2.2, dur: 1100, blur: 4, roll: 0 }); t += 700; }
-    else if (k === 'title') {
-      const el = w.el;
-      // the inner .ink zooms, so the halo filter on .w stays steady while it lands
-      el.style.opacity = 1;
-      const a = w.ink.animate([
+const R = (a, b, c, d, e, f) => `drop-shadow(0 0 ${a}px rgba(255,60,60,${b})) drop-shadow(0 0 ${c}px rgba(200,0,16,${d})) drop-shadow(0 0 ${e}px rgba(140,0,8,${f}))`;
+const GLOW = [{ filter: R(2, .8, 10, .8, 26, .6) }, { filter: R(3, 1, 18, 1, 46, .85) }, { filter: R(2, .8, 10, .8, 26, .6) }];
+
+let anims = [];
+const add = (el, kf, o) => { const a = el.animate(kf, { fill: 'both', ...o }); anims.push(a); return a; };
+
+function build() {
+  anims.forEach(a => a.cancel()); anims = [];
+  const caretKF = [];               // caret jumps word to word, typewriter style
+  let t = 400;
+
+  const drawOrns = (after, at) => {
+    const os = orns.filter(o => o.after === after);
+    os.forEach(o => add(o.el, [
+      { opacity: 0, clipPath: 'inset(0 50% 0 50%)' },
+      { opacity: 1, clipPath: 'inset(0 0% 0 0%)' }
+    ], { duration: 650, delay: at, easing: 'cubic-bezier(.3,.7,.3,1)' }));
+    return os.length ? at + 650 : at;
+  };
+  t = drawOrns(-1, t) + 150;
+
+  lines.forEach((line, li) => {
+    const k = line.kind;
+    if (k === 'title') {
+      const { el, ink } = line.els[0];
+      caretKF.push({ at: t, hide: true });
+      add(el, [{ opacity: 0 }, { opacity: 1 }], { duration: 1, delay: t });
+      add(ink, [
         { opacity: 0, transform: 'scale(4) rotateX(-40deg)', filter: 'blur(14px)' },
         { opacity: 1, offset: .5 },
         { opacity: 1, transform: 'scale(1) rotateX(0)', filter: 'blur(0)' }
-      ], { duration: 1500, delay: t, easing: ease, fill: 'both' });
-      anims.push(a);
-      anims.push(el.animate(GLOW, { duration: 3200, delay: t + 900, iterations: Infinity, easing: 'ease-in-out' }));
-      t += 900;
+      ], { duration: 1400, delay: t, easing: ease });
+      add(el, GLOW, { duration: 3200, delay: t + 900, iterations: Infinity, easing: 'ease-in-out', fill: 'none' });
+      if (line.text === 'Séance') {
+        add(halo, [{ opacity: 0 }, { opacity: .8 }], { duration: 1200, delay: t + 600 });
+        add(halo, [{ opacity: .8, transform: 'scale(1)' }, { opacity: 1, transform: 'scale(1.07)' }, { opacity: .8, transform: 'scale(1)' }],
+          { duration: 3200, delay: t + 1800, iterations: Infinity, easing: 'ease-in-out', fill: 'none' });
+      }
+      t += 1400;
+    } else {
+      // typewriter: each word zooms down from big and lands before the next one starts
+      const big = k === 'date', dur = big ? 400 : 280, step = big ? 300 : 185;
+      line.els.forEach(({ el, b, c }, wi) => {
+        add(el, [
+          { opacity: 0, transform: 'scale(2.6)', filter: 'blur(5px)' },
+          { opacity: 1, offset: .55 },
+          { opacity: 1, transform: 'scale(.94)', filter: 'blur(0)', offset: .8 },
+          { opacity: 1, transform: 'scale(1)', filter: 'blur(0)' }
+        ], { duration: dur, delay: t, easing: 'cubic-bezier(.3,.6,.3,1)' });
+        // caret sits just after the word that has landed
+        const [x, y, , h] = b;
+        caretKF.push({ at: t + dur * .8, x: x + (parseFloat(c[2]) + parseFloat(c[4])) / 2 + 2, y: y + h * .15, h: h * .7 });
+        t += step;
+      });
+      t += dur - step;                 // the line is complete here
     }
-    else if (k === 'date') { zoomIn(w.el, t, { from: 3.6, dur: 1000, blur: 10 }); t += 260; }
-    else if (k === 'adult') { zoomIn(w.el, t, { from: 3, dur: 900 }); t += 220; }
-    else { zoomIn(w.el, t, { dur: 820 }); t += 100; }
-    if (k === 'title' && w.line.text === 'Séance') {
-      const at = t + 300;
-      anims.push(halo.animate([{ opacity: 0 }, { opacity: .75 }], { duration: 1200, delay: at - 400, fill: 'forwards' }));
-      anims.push(halo.animate([{ opacity: .75, transform: 'scale(1)' }, { opacity: 1, transform: 'scale(1.06)' }, { opacity: .75, transform: 'scale(1)' }],
-        { duration: 3200, delay: at + 800, iterations: Infinity, easing: 'ease-in-out' }));
-      t += 600;
-    }
-  }
+    t = drawOrns(li, t);
+    t += k === 'title' ? 100 : 160;
+  });
+  const end = t + 400;
+  // caret: one stepped animation over the whole timeline, plus a blink
+  let last = caretKF.find(p => !p.hide);
+  const kf = [{ offset: 0, opacity: 0, transform: `translate(${last.x}px,${last.y}px)`, height: last.h + 'px', easing: 'step-end' }];
+  caretKF.forEach(p => {
+    if (!p.hide) last = p;
+    kf.push({ offset: p.at / end, opacity: p.hide ? 0 : 1, transform: `translate(${last.x}px,${last.y}px)`, height: last.h + 'px', easing: 'step-end' });
+  });
+  kf.push({ offset: 1, opacity: 0, transform: `translate(${last.x}px,${last.y}px)`, height: last.h + 'px' });
+  add(caret, kf, { duration: end, easing: 'linear' });
+  add(caret, [{ filter: 'brightness(1)' }, { filter: 'brightness(.25)' }], { duration: 260, iterations: Infinity, direction: 'alternate', fill: 'none' });
+  return end;
 }
-// titles need the .w visible for their glow but the ink hidden until it zooms
-for (const w of words) if (w.line.kind === 'title') w.ink.style.opacity = 0;
-const _reset = reset;
-reset = function () { _reset(); for (const w of words) if (w.line.kind === 'title') w.ink.style.opacity = 0; };
 
-// frame-exact export: window.seek(ms) after window.prepare()
+let total = 0;
+function play() { total = build(); document.body.classList.add('rec'); }
+// frame-exact export
 window.prepare = () => { play(); anims.forEach(a => a.pause()); };
 window.seek = ms => anims.forEach(a => { a.currentTime = ms; });
-window.totalMs = () => Math.max(...anims.map(a => { const t = a.effect.getComputedTiming(); return t.endTime === Infinity ? 0 : t.endTime; }));
+window.totalMs = () => total;
 
 addEventListener('click', play);
 addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'r' || e.key === 'Enter') play(); });
+// before the first tap: blank card (text and dividers hidden)
 Promise.all([...document.images].map(i => i.decode().catch(() => {}))).then(() => {
-  const im = new Image(); im.src = 'card-text.png';
-  return im.decode();
+  const im = new Image(); im.src = 'card-text.png'; return im.decode();
 }).then(() => { if (new URLSearchParams(location.search).has('auto')) play(); });
 </script>
 </body>
