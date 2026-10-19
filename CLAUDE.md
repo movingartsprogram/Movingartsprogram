@@ -120,7 +120,8 @@ kicker and a pulsing glow while it's showing.
   shows it whole), canonical URL, og and twitter tags, and descriptive alt text.
 - Home JSON-LD: `WebSite` (site name), `Organization`, Grateful Dead `MusicEvent`
   (14 Feb), the series as `Service`s (including The Feni Trail), and Elvis Lobo as `MusicGroup`.
-- Feni Trail JSON-LD: `Event` (SoldOut / invitation only), `BreadcrumbList` and `FAQPage`.
+- Feni Trail JSON-LD: `BreadcrumbList` and `FAQPage`. The `Event` block (17–18 Oct 2026, Edition I) was removed after the weekend;
+  add a new `Event` only when the next edition has dates. The page now says "Edition I · 17–18 October 2026".
   Target keywords: offbeat Goa, hidden Goa, personalised Goa experience, Goa farm experience,
   cashew feni, Dudhsagar Plantation.
 - `sitemap.xml` lists `/`, `/gig-bookings/`, `/gigs/`, `/bombay-rock-xchange/`, `/the-feni-trail/`,
