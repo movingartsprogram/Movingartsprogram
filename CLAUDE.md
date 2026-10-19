@@ -23,7 +23,7 @@ API keys or private guest details in it.
 | `/gigs/` | **Live Music in Goa — Upcoming Gigs.** SEO page built from `/gigs.js`; injects `ItemList` of `MusicEvent`s for Google. In the sitemap. |
 | `/gigs.js` | **The one gig list for the site.** Feeds the home LCD billboard, the booking page's "Other gigs coming up" carousel and `/gigs/`. Past gigs drop off by themselves (India date). |
 | `/bombay-rock-xchange/` | Gig info & FAQ for the current gig (line-up, gates, parking, food, ages, refunds) + `bombay-rock-xchange.ics` calendar file. FAQPage JSON-LD. Keep it after the gig as an archive page. |
-| `/the-feni-trail/` | The Feni Trail: invite-only farm experience at Dudhsagar Plantation with Ouro feni. Animated, SEO-optimised. |
+| `/the-feni-trail/` | The Feni Trail: invite-only farm experience at Dudhsagar Plantation with Ouro feni. Animated, SEO-optimised. Evergreen: the hero is the film ("This is how it goes.", `video/feni-trail-reel.mp4`, poster `img/reel-poster.jpg`), the plan says Saturday/Sunday with no dates. Per edition, change only the closing line "See you in December." (and swap the film if there is a new one). |
 | `/elvis-lobo/` | Elvis Lobo ("The Boss") story and video archive. |
 | `/policies/` | Terms, privacy, refunds, pricing and contact (required by Razorpay). |
 | `/scan/` | Private ticket-scanning tool. `noindex`; leave it alone. |
@@ -120,7 +120,7 @@ kicker and a pulsing glow while it's showing.
   shows it whole), canonical URL, og and twitter tags, and descriptive alt text.
 - Home JSON-LD: `WebSite` (site name), `Organization`, Grateful Dead `MusicEvent`
   (14 Feb), the series as `Service`s (including The Feni Trail), and Elvis Lobo as `MusicGroup`.
-- Feni Trail JSON-LD: `Event` (SoldOut / invitation only), `BreadcrumbList` and `FAQPage`.
+- Feni Trail JSON-LD: `TouristTrip` (no dates, invitation only), `VideoObject` (the film), `BreadcrumbList` and `FAQPage`.
   Target keywords: offbeat Goa, hidden Goa, personalised Goa experience, Goa farm experience,
   cashew feni, Dudhsagar Plantation.
 - `sitemap.xml` lists `/`, `/gig-bookings/`, `/gigs/`, `/bombay-rock-xchange/`, `/the-feni-trail/`,
@@ -142,7 +142,7 @@ GA4 `G-JMXNSRJPDD` is on every public page. Custom events include `booking_page_
 (Ouro / Dudhsagar), `donate_click`, `social_click` and `page_view` per home section.
 Added Oct 2026: `billboard_book_click` (home LCD billboard), `booking_slow_note_shown` (the 🐢 slow
 -internet message on the booking page appeared), `add_to_calendar`, `more_gigs_all`, `gigs_book_click`,
-`gigs_home_click`, `gig_faq_book`, `gig_faq_map`, `gig_faq_home_click`, `email_click`.
+`gigs_home_click`, `gig_faq_book`, `gig_faq_map`, `gig_faq_home_click`, `email_click`, `feni_reel_play` (Feni Trail film started).
 
 ## Contacts and links used on the site
 - WhatsApp: +91 98496 90077 (`wa.me/919849690077`). Email: movingartsp@gmail.com.
