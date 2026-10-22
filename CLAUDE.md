@@ -88,7 +88,8 @@ the first two as they are.
 
 Current gig (at time of writing): **Bombay Rock Xchange**, Sun 22 Nov 2026, 8 PM,
 Domingos Gazebo, Pedda Road, Varca 403721. Luke Kenny (vocals), Ravi Iyer (guitar),
-Saket Rao (drums), Tejal (bass). Early Bird ₹499 (till 22 Oct), General ₹799, Gate ₹1000.
+Saket Rao (drums), Tejal Varadkar (bass), featuring Goan legend Elvis Lobo. ₹799 online, Gate ₹1000
+(Early Bird ₹499 ended 22 Oct and was removed from the site). Poster version 26.
 Also on the billboard: **Six String Séance**, Thu 29 Oct 2026, Saltamontes. Elvis Lobo
 (guitar), Bobby (vinyls). Halloween-eve "modern baithak" (music, vinyls, magic, stories),
 pulp/B-grade horror tribute. Adults only. Tickets at the gate only. Poster:
@@ -98,8 +99,8 @@ Picture `roll-heads-sm.jpg`.
 And: **Elvis Lobo × DJ Voyager**, electronic set, Fri 13 Nov 2026, Wise Fools. Tickets at the
 gate only. Photos `elvis-lobo-guitar-sm.jpg` and `dj-voyager-sm.jpg` take turns on its slide.
 And: **Bombay Rock Xchange at Saltamontes, Anjuna**, Sat 21 Nov 2026, featuring Ravi Iyer & Luke
-Kenny, first time in Goa. Tickets at the gate only (also on the FAQ page). 22 Nov adds a surprise
-artist from Goa. Towns: Saltamontes and Guru Bar are in Anjuna, Wise Fools is in Varca.
+Kenny, first time in Goa. Tickets at the gate only (also on the FAQ page). 22 Nov adds Elvis Lobo
+("Elvis Lobo joins them for South Goa"). Towns: Saltamontes and Guru Bar are in Anjuna, Wise Fools is in Varca.
 Only 22 Nov is booked online. Its slide has `.bb-star`: a pink "★ GIG OF THE YEAR ★"
 kicker and a pulsing glow while it's showing.
 
