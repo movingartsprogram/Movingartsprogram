@@ -87,8 +87,8 @@ window.MAP_GIGS = [
              {name: "Saket Rao", role: "drums"}, {name: "Tejal", role: "bass"}],
     blurb: "Classic rock and Bollywood on their first Goa tour, with a surprise artist from Goa. The biggest gig of the year.",
     tickets: "online",
-    price: "₹499 early bird (till 22 Oct) · ₹799 general · ₹1000 at the gate",
-    lowPrice: 499, highPrice: 1000,
+    price: "₹799 online · ₹1000 at the gate",
+    lowPrice: 799, highPrice: 1000,
     star: true,
     images: ["/gigs/img/bombay-rock-xchange.jpg"],
     info: "/bombay-rock-xchange/"
