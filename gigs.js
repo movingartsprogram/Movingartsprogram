@@ -54,17 +54,6 @@ window.MAP_GIGS = [
     images: ["/gigs/img/roll-heads.jpg"]
   },
   {
-    id: "elvis-lobo-dj-voyager",
-    name: "Elvis Lobo × DJ Voyager",
-    date: "2026-11-13", time: "",
-    venue: "Wise Fools", area: "Varca",
-    who: "Electronic set",
-    lineup: [{name: "Elvis Lobo", role: "guitar"}, {name: "DJ Voyager", role: "decks"}],
-    blurb: "An electronic set: Elvis Lobo's guitar meets DJ Voyager on the decks.",
-    tickets: "gate",
-    images: ["/gigs/img/elvis-lobo-guitar.jpg", "/gigs/img/dj-voyager.jpg"]
-  },
-  {
     id: "bombay-rock-xchange-anjuna",
     name: "Bombay Rock Xchange",
     date: "2026-11-21", time: "",
@@ -84,9 +73,8 @@ window.MAP_GIGS = [
     venue: "Domingos Gazebo", area: "Varca", board: "Varca",
     who: "Luke Kenny & band",
     lineup: [{name: "Luke Kenny", role: "vocals"}, {name: "Ravi Iyer", role: "guitar"},
-             {name: "Saket Rao", role: "drums"}, {name: "Tejal Varadkar", role: "bass"},
-             {name: "Elvis Lobo", role: "Goan legend"}],
-    blurb: "Classic rock and Bollywood on their first Goa tour, featuring Goan legend Elvis Lobo. The biggest gig of the year.",
+             {name: "Saket Rao", role: "drums"}, {name: "Tejal Varadkar", role: "bass"}],
+    blurb: "Classic rock and Bollywood on their first Goa tour. The biggest gig of the year.",
     tickets: "online",
     price: "₹799 online · ₹1000 at the gate",
     lowPrice: 799, highPrice: 1000,
