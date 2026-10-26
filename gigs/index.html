@@ -385,7 +385,7 @@ details p{margin:0 0 10px;}
       "isAccessibleForFree": false
     };
     if(g.adults) ev.typicalAgeRange = "18-";
-    if(g.tickets === "online") ev.offers = {"@type": "AggregateOffer", "url": SITE + "/gig-bookings/", "availability": "https://schema.org/InStock", "priceCurrency": "INR", "lowPrice": g.lowPrice || undefined, "highPrice": g.highPrice || undefined};
+    if(g.lowPrice) ev.offers = {"@type": "AggregateOffer", "url": g.tickets === "online" ? SITE + "/gig-bookings/" : SITE + "/gigs/#" + g.id, "availability": "https://schema.org/InStock", "priceCurrency": "INR", "lowPrice": g.lowPrice, "highPrice": g.highPrice || g.lowPrice, "validFrom": (g.onSale || g.date) + "T00:00:00+05:30"};
     events.push(ev);
   });
   var ld = document.createElement("script"); ld.type = "application/ld+json";
