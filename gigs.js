@@ -22,7 +22,8 @@
      adults    true if 18+ only
      tickets   "online" (booked on /gig-bookings/) or "gate" (pay at the gate)
      price     optional text, e.g. "₹499 early bird · ₹799 · ₹1000 at the gate"
-     lowPrice, highPrice   optional numbers in ₹, for Google (online gigs)
+     lowPrice, highPrice   numbers in ₹, for Google (online and gate gigs)
+     onSale    optional "YYYY-MM-DD" tickets went on sale, for Google (gate gigs default to the gig date)
      star      true for the headline gig (glow + "GIG OF THE YEAR")
      images    1 or 2 pictures in /gigs/img/, 240×300 (4:5), about 15–25 KB each.
                Two pictures take turns. (They show small, so bigger files only slow phones.)
@@ -40,6 +41,8 @@ window.MAP_GIGS = [
     blurb: "A modern-day baithak over music, vinyls, magic and stories (dirty or laundry-clean), all of us sitting in one big circle. It's Halloween eve, so expect horror: avant-garde, B-grade, a tribute to pulp horror. A pulp horror theme party.",
     adults: true,
     tickets: "gate",
+    price: "₹300 at the gate",
+    lowPrice: 300, highPrice: 300,
     images: ["/gigs/img/six-string-seance.jpg"]
   },
   {
@@ -51,6 +54,8 @@ window.MAP_GIGS = [
     lineup: [{name: "Roll Heads", role: "band from Gangtok, Sikkim"}],
     blurb: "All the way from Gangtok, Sikkim, live in Goa.",
     tickets: "gate",
+    price: "₹299 at the gate",
+    lowPrice: 299, highPrice: 299,
     images: ["/gigs/img/roll-heads.jpg"]
   },
   {
@@ -62,6 +67,8 @@ window.MAP_GIGS = [
     lineup: [{name: "Ravi Iyer", role: "guitar"}, {name: "Luke Kenny", role: "vocals"}],
     blurb: "Bombay Rock Xchange featuring Ravi Iyer and Luke Kenny, for the first time in Goa. Classic rock and Bollywood.",
     tickets: "gate",
+    price: "₹500 at the gate",
+    lowPrice: 500, highPrice: 500,
     star: true,
     images: ["/gigs/img/bombay-rock-xchange.jpg"],
     info: "/bombay-rock-xchange/"
@@ -77,7 +84,7 @@ window.MAP_GIGS = [
     blurb: "Classic rock and Bollywood on their first Goa tour. The biggest gig of the year.",
     tickets: "online",
     price: "₹799 online · ₹1000 at the gate",
-    lowPrice: 799, highPrice: 1000,
+    lowPrice: 799, highPrice: 1000, onSale: "2026-10-23",
     star: true,
     images: ["/gigs/img/bombay-rock-xchange.jpg"],
     info: "/bombay-rock-xchange/"
