@@ -12,6 +12,7 @@ on:
     branches: [main]
     paths-ignore:
       - 'CLAUDE.md'          # notes only, nothing for search engines
+      - 'README.md'          # GitHub repo page only
   workflow_dispatch: {}       # "Run workflow" button for a manual ping
 
 permissions:
