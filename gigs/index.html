@@ -350,7 +350,7 @@ details p{margin:0 0 10px;}
     var b = el("div", "");
     if(g.star) b.appendChild(el("p", "kick", "★ GIG OF THE YEAR ★"));
     b.appendChild(el("h2", "", g.name.toUpperCase()));
-    var w = el("p", "when", g.day + (g.time ? " · " + g.time.replace(/^(\d+):00$/, function(m, h){ h = +h; return (h % 12 || 12) + (h < 12 ? " AM" : " PM"); }) : "") + " · " + g.venue + (g.area ? ", " + g.area : "") + ", Goa ");
+    var w = el("p", "when", g.day + (g.time ? " · " + g.time.replace(/^(\d+):(\d\d)$/, function(m, h, mm){ h = +h; return (h % 12 || 12) + (mm === "00" ? "" : ":" + mm) + (h < 12 ? " AM" : " PM"); }) : "") + " · " + g.venue + (g.area ? ", " + g.area : "") + ", Goa ");
     w.appendChild(el("span", "cd", g.days > 1 ? g.days + " DAYS TO GO" : g.countdown));
     b.appendChild(w);
     if(g.lineup && g.lineup.length && !(g.lineup.length === 1 && g.lineup[0].name === g.name)) b.appendChild(el("p", "who", g.lineup.map(function(m){ return m.name + (m.role ? " (" + m.role + ")" : ""); }).join(" · ")));

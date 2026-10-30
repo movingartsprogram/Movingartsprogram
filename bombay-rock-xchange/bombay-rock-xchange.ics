@@ -5,12 +5,13 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:bombay-rock-xchange-2026@movingartsprogram.com
-DTSTAMP:20261008T000000Z
-DTSTART:20261122T143000Z
+DTSTAMP:20261030T000000Z
+SEQUENCE:1
+DTSTART:20261122T140000Z
 DTEND:20261122T173000Z
 SUMMARY:Bombay Rock Xchange — Moving Arts Program
 LOCATION:Domingos Gazebo\, Pedda Road\, Varca\, Goa 403721
-DESCRIPTION:Gates open 7 PM\, music from 8 PM. Bring your QR ticket — one per person. Gig info: https://movingartsprogram.com/bombay-rock-xchange/
+DESCRIPTION:Gates open 7 PM\, music from 7:30 PM. Bring your QR ticket — one per person. Gig info: https://movingartsprogram.com/bombay-rock-xchange/
 URL:https://movingartsprogram.com/bombay-rock-xchange/
 BEGIN:VALARM
 ACTION:DISPLAY
