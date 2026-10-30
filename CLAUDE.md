@@ -86,11 +86,14 @@ the first two as they are.
 4. Update `sitemap.xml` `lastmod` for `/gig-bookings/` and remind the owner to
    *Request indexing* for it in Search Console.
 
-Current gig (at time of writing): **Bombay Rock Xchange**, Sun 22 Nov 2026, 8 PM,
+Current gig (at time of writing): **Bombay Rock Xchange**, Sun 22 Nov 2026, gates 7 PM, music 7:30 PM,
 Domingos Gazebo, Pedda Road, Varca 403721. Luke Kenny (vocals), Ravi Iyer (guitar),
-Saket Rao (drums), Tejal Varadkar (bass). ₹799 online, Gate ₹1000 (Early Bird ₹499 ended
-22 Oct and was removed from the site). Poster version 27: the yellow light-bulb poster, its
-Early Bird box redrawn as "TICKETS ₹799 / ₹1000 AT THE GATE". Elvis Lobo was taken off the
+Saket Rao (drums), Tejal Varadkar (bass). Opening acts (added 30 Oct): Kamikaze (band of
+12-year-olds; on the site by first names only, owner's choice), Cream π and Zahaan (11-year-old
+drummer, solo on "In the Flesh"). ₹799 online, Gate ₹1000 (Early Bird ₹499 ended
+22 Oct and was removed from the site). Poster version 28 (30 Oct, final): the red/yellow/blue full line-up poster
+(Luke, Ravi, Kamikaze, Zahaan, Cream π; "7 PM onwards", ₹799 / ₹1000 at gate), 900×1125 at q70
+(~186 KB: its photos and small text don't compress further without blur). Elvis Lobo was taken off the
 22 Nov poster and text on 23 Oct because he may not make it; add him back only if the owner says.
 Also on the billboard: **Six String Séance**, Thu 29 Oct 2026, Saltamontes. Elvis Lobo
 (guitar), Bobby (vinyls). Halloween-eve "modern baithak" (music, vinyls, magic, stories),
