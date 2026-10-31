@@ -325,6 +325,12 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
   margin:12px 0 0;padding:9px 12px;border:1.5px dashed rgba(255,225,53,.5);border-radius:var(--r-md);
   text-shadow:0 0 8px rgba(255,225,53,.4);}
 .tier-note[hidden]{display:none;}
+.inapp-note{margin:4px 0 14px;padding:12px 14px;border-radius:var(--r-md);background:rgba(255,225,53,.08);
+  box-shadow:inset 0 0 0 1px rgba(255,225,53,.35);}
+.inapp-note[hidden]{display:none;}
+.inapp-note p{margin:0 0 10px;font-family:'VT323',monospace;font-size:17px;line-height:1.25;color:var(--vu);}
+.inapp-note .cta[hidden]{display:none;}
+.mobile-pass{color:var(--vu) !important;text-align:center;margin-top:10px;}
 /* safety net: shown only while the Sheet is slow to answer */
 /* add to calendar, on the ticket screen */
 .cal-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
@@ -664,6 +670,12 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
         <div id="formWrap">
           <h3>YOUR BOOKING</h3>
 
+          <!-- Shown only inside Instagram / Facebook / Snapchat's own browser (filled in by script) -->
+          <div class="inapp-note" id="inappNote" hidden>
+            <p id="inappText"></p>
+            <a class="cta cta-block cta-gold" id="inappBtn" hidden>OPEN THIS PAGE IN CHROME</a>
+          </div>
+
           <div class="form-field">
             <label for="fName">NAME</label>
             <input type="text" id="fName" autocomplete="name" placeholder="Your full name" maxlength="60">
@@ -848,6 +860,7 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
             <strong>ONE QR PER PERSON.</strong> Send each ticket below to the person who will use it. At the gate every QR is scanned once and you get a wristband — after that the wristband is your pass, so keep it on. A QR that has already been scanned will not work again.
           </div>
           <div id="ticketList"></div>
+          <p class="small mobile-pass">Lost your QR or phone on the day? Just tell the gate the mobile number you booked with — your tickets are saved with it.</p>
 
           <!-- ═══ 5c. TELL YOUR PEOPLE ═══ -->
           <div class="share-block" id="shareBlock">
@@ -888,7 +901,7 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
         <!-- ═══ 5e. FIND MY TICKET ═══ -->
         <div id="findWrap">
           <h3>LOST YOUR TICKETS? FIND THEM</h3>
-          <p class="small" style="margin-top:0">Enter the mobile number you booked with, plus ONE of these: your booking reference, the email you gave us, or the 12-digit UPI transaction ID of your payment (in GPay: open the payment, it's under "UPI transaction ID").</p>
+          <p class="small" style="margin-top:0">Enter the mobile number you booked with, plus ONE of these: your booking reference, the email you gave us, or the 12-digit UPI transaction ID of your payment (in GPay: open the payment, it's under "UPI transaction ID"). At the gate, your mobile number is enough.</p>
           <div class="form-field">
             <label for="fdMobile">MOBILE NUMBER</label>
             <input type="tel" id="fdMobile" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number" maxlength="15">
@@ -2013,6 +2026,37 @@ function showMyTickets_(){
     mapTrack("my_tickets_open", {count: keep.length});
   });
 }
+
+/* ---------- inside Instagram / Facebook / Snapchat's own browser ----------
+   These built-in browsers are the most likely to lose the page while
+   GPay is open, and they don't share what's saved with Chrome. Nudge
+   the guest to Chrome before they pay. Information only: booking still
+   works here exactly as before. */
+function inAppBrowser_(){
+  var ua = navigator.userAgent || "";
+  if(/Instagram/i.test(ua)) return "Instagram";
+  if(/FBAN|FBAV|FB_IAB|FBIOS|FB4A/i.test(ua)) return "Facebook";
+  if(/Snapchat/i.test(ua)) return "Snapchat";
+  if(/\bLine\//i.test(ua)) return "LINE";
+  return "";
+}
+(function(){
+  var app = inAppBrowser_();
+  if(!app || TICKET_MODE) return;
+  var android = /Android/i.test(navigator.userAgent || "");
+  document.getElementById("inappText").textContent = android
+    ? "You're in " + app + "'s browser. Paying with GPay works best in Chrome — tap the button below, then book there."
+    : "You're in " + app + "'s browser. Paying with GPay works best in Safari or Chrome — tap ··· at the top right, choose \"Open in external browser\", then book there.";
+  if(android){
+    var b = document.getElementById("inappBtn");
+    b.href = "intent://" + location.host + location.pathname + location.search +
+             "#Intent;scheme=https;package=com.android.chrome;end";
+    b.hidden = false;
+    b.addEventListener("click", function(){ mapTrack("inapp_open_chrome", {app: app}); });
+  }
+  document.getElementById("inappNote").hidden = false;
+  mapTrack("inapp_browser_seen", {app: app});
+})();
 
 if(!TICKET_MODE){
   showMyTickets_();
