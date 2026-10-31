@@ -19,7 +19,7 @@ API keys or private guest details in it.
 | Path | What it is |
 |---|---|
 | `/` (`index.html`) | Home: Winamp-style "player" UI. The series sections are in-page `#page-*` blocks switched by JS (`showPage`). |
-| `/gig-bookings/` | **Ticketing.** Google Apps Script backend (Google Sheet) + Razorpay. Event details come from the Sheet at runtime. |
+| `/gig-bookings/` | **Ticketing.** Google Apps Script backend (Google Sheet) + Razorpay. Event details come from the Sheet at runtime. Since Nov 2026 (script V4.2): the page keeps a booking on the phone (`localStorage` `map_pending_v1`) while Razorpay is open; if GPay drops the page, it asks the script's `recheck` on return and shows the tickets. Tickets seen on a phone are kept (`map_my_tickets_v1`) in a collapsed "Your tickets on this phone" box. Instagram/Facebook in-app browsers get an "open in Chrome" note. The script's 5-minute timer also asks Razorpay for missed payments, so the Razorpay webhook is deliberately left off. |
 | `/gigs/` | **Live Music in Goa — Upcoming Gigs.** SEO page built from `/gigs.js`; injects `ItemList` of `MusicEvent`s for Google. In the sitemap. |
 | `/gigs.js` | **The one gig list for the site.** Feeds the home LCD billboard, the booking page's "Other gigs coming up" carousel and `/gigs/`. Past gigs drop off by themselves (India date). |
 | `/bombay-rock-xchange/` | Gig info & FAQ for the current gig (line-up, gates, parking, food, ages, refunds) + `bombay-rock-xchange.ics` calendar file. FAQPage JSON-LD. Keep it after the gig as an archive page. |
@@ -149,6 +149,8 @@ GA4 `G-JMXNSRJPDD` is on every public page. Custom events include `booking_page_
 Added Oct 2026: `billboard_book_click` (home LCD billboard), `booking_slow_note_shown` (the 🐢 slow
 -internet message on the booking page appeared), `add_to_calendar`, `more_gigs_all`, `gigs_book_click`,
 `gigs_home_click`, `gig_faq_book`, `gig_faq_map`, `gig_faq_home_click`, `email_click`, `feni_reel_play` (Feni Trail film started).
+Added Nov 2026 (booking page): `booking_payment_wait` (checking a payment after GPay), `my_tickets_open`,
+`inapp_browser_seen`, `inapp_open_chrome`.
 
 ## Contacts and links used on the site
 - WhatsApp: +91 98496 90077 (`wa.me/919849690077`). Email: movingartsp@gmail.com.

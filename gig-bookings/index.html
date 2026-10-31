@@ -325,6 +325,12 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
   margin:12px 0 0;padding:9px 12px;border:1.5px dashed rgba(255,225,53,.5);border-radius:var(--r-md);
   text-shadow:0 0 8px rgba(255,225,53,.4);}
 .tier-note[hidden]{display:none;}
+.inapp-note{margin:4px 0 14px;padding:12px 14px;border-radius:var(--r-md);background:rgba(255,225,53,.08);
+  box-shadow:inset 0 0 0 1px rgba(255,225,53,.35);}
+.inapp-note[hidden]{display:none;}
+.inapp-note p{margin:0 0 10px;font-family:'VT323',monospace;font-size:17px;line-height:1.25;color:var(--vu);}
+.inapp-note .cta[hidden]{display:none;}
+.mobile-pass{color:var(--vu) !important;text-align:center;margin-top:10px;}
 /* safety net: shown only while the Sheet is slow to answer */
 /* add to calendar, on the ticket screen */
 .cal-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
@@ -356,6 +362,18 @@ input::placeholder,textarea::placeholder{color:#2c6a2c;}
 .find-book{margin-top:14px;padding-top:10px;box-shadow:inset 0 1px 0 rgba(124,252,0,.14);}
 .find-title{font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;color:#c8ffc8;letter-spacing:.5px;line-height:1.5;}
 .tier-none{display:none !important;}
+/* ---------- tickets saved on this phone ---------- */
+.my-tickets{margin:14px 0 4px;padding:12px 14px;border-radius:var(--r-md);
+  background:linear-gradient(180deg,#101c10 0%,#070d07 100%);
+  box-shadow:0 6px 12px rgba(0,0,0,.4), inset 0 2px 3px rgba(124,252,0,.16), inset 0 -4px 7px rgba(0,0,0,.6);}
+.my-tickets[hidden]{display:none;}
+.my-tickets summary{cursor:pointer;list-style:none;font-family:Tahoma,Arial,sans-serif;font-size:11px;font-weight:bold;
+  letter-spacing:.5px;color:var(--vu);line-height:1.5;}
+.my-tickets summary::-webkit-details-marker{display:none;}
+.my-tickets summary::after{content:" ▾";color:var(--phos);}
+.my-tickets[open] summary::after{content:" ▴";}
+.my-ev{margin-top:12px;font-family:Tahoma,Arial,sans-serif;font-size:10px;font-weight:bold;color:#c8ffc8;letter-spacing:.5px;}
+body.ticket-mode #myWrap,
 body.ticket-mode #formWrap,body.ticket-mode #findWrap,body.ticket-mode #venuePick,body.ticket-mode .wa-playlist,
 body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important;}
 
@@ -641,9 +659,22 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
         </div>
         <p class="tier-note" id="tierNote" hidden></p>
 
+        <!-- ═══ 3b. TICKETS SAVED ON THIS PHONE (filled in by script; hidden when there are none) ═══ -->
+        <details class="my-tickets" id="myWrap" hidden>
+          <summary id="mySum">🎟 YOUR TICKETS ON THIS PHONE</summary>
+          <p class="small">Saved on this phone when you booked or opened them. Show the QR at the gate.</p>
+          <div id="myList"></div>
+        </details>
+
         <!-- ═══ 4. THE FORM ═══ -->
         <div id="formWrap">
           <h3>YOUR BOOKING</h3>
+
+          <!-- Shown only inside Instagram / Facebook / Snapchat's own browser (filled in by script) -->
+          <div class="inapp-note" id="inappNote" hidden>
+            <p id="inappText"></p>
+            <a class="cta cta-block cta-gold" id="inappBtn" hidden>OPEN THIS PAGE IN CHROME</a>
+          </div>
 
           <div class="form-field">
             <label for="fName">NAME</label>
@@ -661,7 +692,7 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
           </div>
 
           <div class="form-field">
-            <label for="fEmail">EMAIL <span class="opt">(OPTIONAL — WE'LL EMAIL YOUR TICKETS)</span></label>
+            <label for="fEmail">EMAIL <span class="opt">(OPTIONAL — A BACKUP COPY OF YOUR TICKETS)</span></label>
             <input type="email" id="fEmail" inputmode="email" autocomplete="email" placeholder="you@example.com" maxlength="100">
           </div>
 
@@ -801,8 +832,9 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
         <!-- ═══ 5a-ii. CONFIRMING (a second or two, after Razorpay) ═══ -->
         <div class="confirm" id="verifyWrap">
           <h3>CONFIRMING YOUR PAYMENT</h3>
-          <p class="fb-lead" style="text-align:center">One moment — we're checking it with the bank.<br>
+          <p class="fb-lead" style="text-align:center" id="verifyNote">One moment — we're checking it with the bank.<br>
             Please don't close this page.</p>
+          <button type="button" class="cta cta-block cta-gold" id="verifyCancel" hidden>I DIDN'T PAY — START AGAIN</button>
         </div>
 
         <!-- ═══ 5b. THE TICKET ═══ -->
@@ -828,6 +860,7 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
             <strong>ONE QR PER PERSON.</strong> Send each ticket below to the person who will use it. At the gate every QR is scanned once and you get a wristband — after that the wristband is your pass, so keep it on. A QR that has already been scanned will not work again.
           </div>
           <div id="ticketList"></div>
+          <p class="small mobile-pass">Lost your QR or phone on the day? Just tell the gate the mobile number you booked with — your tickets are saved with it.</p>
 
           <!-- ═══ 5c. TELL YOUR PEOPLE ═══ -->
           <div class="share-block" id="shareBlock">
@@ -868,14 +901,14 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
         <!-- ═══ 5e. FIND MY TICKET ═══ -->
         <div id="findWrap">
           <h3>LOST YOUR TICKETS? FIND THEM</h3>
-          <p class="small" style="margin-top:0">Enter the mobile number you booked with, plus your booking reference (or the email you gave us).</p>
+          <p class="small" style="margin-top:0">Enter the mobile number you booked with, plus ONE of these: your booking reference, the email you gave us, or the 12-digit UPI transaction ID of your payment (in GPay: open the payment, it's under "UPI transaction ID"). At the gate, your mobile number is enough.</p>
           <div class="form-field">
             <label for="fdMobile">MOBILE NUMBER</label>
             <input type="tel" id="fdMobile" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number" maxlength="15">
           </div>
           <div class="form-field">
-            <label for="fdProof">BOOKING REFERENCE <span class="opt">(OR YOUR EMAIL)</span></label>
-            <input type="text" id="fdProof" autocomplete="off" autocapitalize="characters" placeholder="e.g. BRX-K7M2" maxlength="100">
+            <label for="fdProof">BOOKING REFERENCE <span class="opt">(OR EMAIL, OR UPI TRANSACTION ID)</span></label>
+            <input type="text" id="fdProof" autocomplete="off" autocapitalize="characters" placeholder="e.g. BRX-K7M2 or 412345678901" maxlength="100">
           </div>
           <p class="err" id="findErr"></p>
           <button type="button" class="cta cta-block cta-gold" id="findBtn">FIND MY TICKETS</button>
@@ -1348,18 +1381,18 @@ function checkThenBack(){
       if(data.tickets && data.tickets.length){ LAST.tickets = data.tickets; }
       trackConfirmed(true);
       showTicket(true);
+    } else if(data && data.ok && data.seen){
+      /* Razorpay has a payment for this booking that is still going
+         through (UPI can take a minute). Don't release the seats or
+         invite a second payment: wait for it on this screen. */
+      waitForPayment_(LAST.id, LAST.mobile, false);
     } else {
       backToForm(MSG);
     }
   }
-  var cb = "mapSt" + Date.now();
-  window[cb] = function(d){ window[cb] = function(){}; done(d); };
-  var s = document.createElement("script");
-  s.src = SCRIPT_URL + "?action=status&callback=" + cb + "&id=" + encodeURIComponent(LAST.id) +
-          "&mobile=" + encodeURIComponent(LAST.mobile || "");
-  s.onerror = function(){ done(null); };
-  document.head.appendChild(s);
-  setTimeout(function(){ done(null); }, 6000);
+  /* Asks Razorpay itself (via the Sheet's script), not just the Sheet. */
+  recheckCall_(LAST.id, LAST.mobile, done);
+  setTimeout(function(){ done(null); }, 12000);
 }
 
 /* A payment that didn't complete: release the tickets at once and put the
@@ -1374,6 +1407,7 @@ function releaseNow(id){
 }
 function backToForm(msg){
   BUSY = false;
+  clearPending_();
   if(LAST && LAST.id && !LAST.paid){ releaseNow(LAST.id); }
   document.getElementById("confirmWrap").classList.remove("show");
   document.getElementById("verifyWrap").classList.remove("show");
@@ -1517,6 +1551,8 @@ function showTicket(confirmed){
 
   document.getElementById("formWrap").style.display = "none";
   document.getElementById("findWrap").style.display = "none";
+  document.getElementById("myWrap").hidden = true;
+  clearPending_();
   document.getElementById("confirmWrap").classList.remove("show");
   document.getElementById("ticketWrap").classList.add("show");
   document.getElementById("ticketWrap").scrollIntoView({behavior:"smooth", block:"start"});
@@ -1568,6 +1604,7 @@ function openCheckout(){
     rzp.on("payment.failed", function(){
       mapTrack("booking_payment_failed", {event_name: EVENT.name, booking_id: LAST.id});
     });
+    savePending_();   /* if the phone drops this page while paying, we pick it up again on return */
     rzp.open();
   }catch(e){
     backToForm("We couldn't open the payment window just now. Nothing has been charged — please tap the button to try again.");
@@ -1747,6 +1784,7 @@ function ownWaLink(mobile, ev, tickets, ref){
 
 /* One card per person. Everything is written with textContent. */
 function renderTicketList(box, tickets, ev){
+  rememberTickets_(tickets, ev);
   box.textContent = "";
   function el(tag, cls, text){
     var n = document.createElement(tag);
@@ -1819,6 +1857,210 @@ function pollTickets(n){
           "&payment_id=" + encodeURIComponent(LAST.paymentId);
   s.onerror = function(){ delete window[cb]; setTimeout(function(){ pollTickets(n + 1); }, 3000); };
   document.head.appendChild(s);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   PAID BUT THE PAGE WAS LOST — pick the booking up again
+   ──────────────────────────────────────────────────────────────
+   Most guests pay with GPay. On many phones the browser drops this
+   page while GPay is open, so Razorpay's "paid" message never
+   reaches it. So the booking is kept on the phone the moment the
+   payment window opens. When the guest comes back, the page asks
+   the Sheet's script to check with Razorpay ("recheck") and shows
+   the tickets. The script's 5-minute safety net confirms the same
+   payment by itself anyway; this is what makes the guest SEE it.
+   Nothing here can mark anything paid: only the script can, and
+   only after Razorpay confirms it.
+   ══════════════════════════════════════════════════════════════ */
+var PENDING_KEY = "map_pending_v1", MINE_KEY = "map_my_tickets_v1";
+function store_(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function load_(k){ try{ return JSON.parse(localStorage.getItem(k) || "null"); }catch(e){ return null; } }
+
+function savePending_(){
+  if(!SCRIPT_URL || !LAST || !LAST.id || LAST.preview) return;
+  store_(PENDING_KEY, {id: LAST.id, mobile: LAST.mobile, name: LAST.name, seats: LAST.seats,
+    amount: LAST.amount, email: LAST.email || "", at: Date.now(),
+    ev: {name: EVENT.name, shareName: EVENT.shareName, code: EVENT.code, date: EVENT.date, time: EVENT.time, venue: EVENT.venue}});
+}
+function clearPending_(){ store_(PENDING_KEY, null); }
+
+/* Ask the script about one booking. Falls back to the older "status"
+   answer if the script hasn't been updated yet. */
+function recheckCall_(id, mobile, done){
+  var answered = false;
+  function finish(d){ if(answered) return; answered = true; done(d); }
+  function ask(action, next){
+    var cb = "mapRc" + Date.now() + Math.floor(Math.random() * 1000);
+    window[cb] = function(d){ window[cb] = function(){}; next(d); };
+    var s = document.createElement("script");
+    s.src = SCRIPT_URL + "?action=" + action + "&callback=" + cb + "&id=" + encodeURIComponent(id) +
+            "&mobile=" + encodeURIComponent(mobile || "") + "&_=" + Date.now();
+    s.onerror = function(){ next(null); };
+    document.head.appendChild(s);
+  }
+  ask("recheck", function(d){
+    if(d && d.ok === false && /unknown request/i.test(d.message || "")){
+      ask("status", function(d2){ if(d2 && d2.ok && !d2.paid) d2.seen = true; finish(d2); });
+    } else finish(d);
+  });
+  setTimeout(function(){ finish(null); }, 20000);   /* no answer counts as "try again later" */
+}
+
+/* Wait on the "checking" screen for up to ~5 minutes (the safety net
+   runs every 5), asking again now and then. fromReload: the page was
+   opened fresh with a booking still waiting on this phone. */
+var WAIT_TIMER = null;
+function waitForPayment_(id, mobile, fromReload){
+  BUSY = true;
+  var steps = [0, 10000, 15000, 20000, 30000, 30000, 45000, 60000, 60000];
+  var i = 0, stopped = false;
+  document.getElementById("formWrap").style.display = "none";
+  document.getElementById("confirmWrap").classList.remove("show");
+  document.getElementById("verifyNote").innerHTML =
+    "Checking your payment for booking <b>" + String(id).replace(/[^A-Z0-9\-]/gi, "") + "</b> with the bank.<br>" +
+    "This can take a few minutes with UPI. <b>Please don't pay again.</b>";
+  var cancel = document.getElementById("verifyCancel");
+  cancel.hidden = false;
+  cancel.onclick = function(){
+    if(!confirm("Only tap OK if no money left your account.\nIf you did pay, your tickets will appear here — paying again would charge you twice.")) return;
+    stopped = true; clearTimeout(WAIT_TIMER); cancel.hidden = true;
+    document.getElementById("verifyWrap").classList.remove("show");
+    backToForm("");
+    document.getElementById("formErr").classList.remove("show");
+  };
+  document.getElementById("verifyWrap").classList.add("show");
+  mapTrack("booking_payment_wait", {booking_id: id, reload: fromReload ? 1 : 0});
+
+  function giveUp(seen){
+    stopped = true; cancel.hidden = true;
+    document.getElementById("verifyWrap").classList.remove("show");
+    backToForm(seen
+      ? "We haven't received the payment for booking " + id + " yet. If money left your account, please DON'T pay again — your tickets will come through by themselves within a few minutes: open this page again, or use FIND MY TICKETS below with your mobile number and the 12-digit UPI transaction ID from GPay."
+      : "Booking " + id + " wasn't paid, so nothing was charged. You can book again below. (If money did leave your account, don't pay again — use FIND MY TICKETS below with the UPI transaction ID from GPay.)");
+  }
+  function tick(){
+    if(stopped) return;
+    recheckCall_(id, mobile, function(d){
+      if(stopped) return;
+      if(d && d.ok && d.paid){
+        stopped = true; cancel.hidden = true;
+        document.getElementById("verifyWrap").classList.remove("show");
+        LAST.paid = true;
+        if(d.tickets && d.tickets.length){ LAST.tickets = d.tickets; }
+        trackConfirmed(true);
+        showTicket(true);
+        return;
+      }
+      if(d && d.ok === false){ clearPending_(); giveUp(false); return; }   /* not this phone's booking */
+      if(d && d.ok && d.seen === false && i >= 2){ giveUp(false); return; } /* Razorpay never saw a payment */
+      i++;
+      if(i >= steps.length){ giveUp(true); return; }
+      WAIT_TIMER = setTimeout(tick, steps[i]);
+    });
+  }
+  tick();
+}
+
+/* On opening the page: a booking left waiting on this phone? */
+function resumePending_(){
+  var p = load_(PENDING_KEY);
+  if(!p || !p.id || !p.mobile) return;
+  if(Date.now() - (p.at || 0) > 6 * 3600000){ clearPending_(); return; }
+  LAST = {id: p.id, seats: p.seats, amount: p.amount, name: p.name, mobile: p.mobile, email: p.email,
+          preview: false, paid: false, tickets: null};
+  if(p.ev){ for(var k in p.ev){ if(p.ev[k] !== undefined) EVENT[k] = p.ev[k]; } }
+  waitForPayment_(p.id, p.mobile, true);
+}
+
+/* ---------- tickets kept on this phone ---------- */
+function gigDay_(dateText){
+  var m = String(dateText || "").match(/(\d{1,2})\s+([A-Za-z]{3})[A-Za-z]*\.?,?\s+(\d{4})/);
+  if(!m) return 0;
+  var mon = "JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC".indexOf(m[2].toUpperCase());
+  return mon < 0 ? 0 : Date.UTC(+m[3], mon / 3, +m[1]);
+}
+function rememberTickets_(tickets, ev){
+  if(!tickets || !tickets.length) return;
+  var list = load_(MINE_KEY) || [], now = Date.now();
+  for(var i = 0; i < tickets.length; i++){
+    var t = tickets[i]; if(!t || !t.t) continue;
+    list = list.filter(function(x){ return x.t !== t.t; });
+    list.push({t: t.t, no: t.no, of: t.of, name: t.name, s: t.s, at: now,
+               ev: {name: (ev && ev.name) || "", date: (ev && ev.date) || "", time: (ev && ev.time) || "", venue: (ev && ev.venue) || ""}});
+  }
+  store_(MINE_KEY, list.slice(-40));
+}
+function showMyTickets_(){
+  var list = load_(MINE_KEY) || [], now = Date.now(), keep = [];
+  for(var i = 0; i < list.length; i++){
+    var day = gigDay_(list[i].ev && list[i].ev.date);
+    var over = day ? now > day + 2 * 86400000 : now - (list[i].at || 0) > 75 * 86400000;
+    if(!over) keep.push(list[i]);
+  }
+  if(keep.length !== list.length) store_(MINE_KEY, keep);
+  var wrap = document.getElementById("myWrap");
+  if(!keep.length){ wrap.hidden = true; return; }
+  document.getElementById("mySum").textContent = "🎟 YOUR TICKETS ON THIS PHONE (" + keep.length + ") — TAP TO SHOW";
+  wrap.hidden = false;
+  var drawn = false;
+  wrap.addEventListener("toggle", function(){
+    if(!wrap.open || drawn) return;
+    drawn = true;
+    var box = document.getElementById("myList"); box.textContent = "";
+    var groups = {}, order = [];
+    for(var j = 0; j < keep.length; j++){
+      var key = keep[j].ev.name + "|" + keep[j].ev.date;
+      if(!groups[key]){ groups[key] = {ev: keep[j].ev, tickets: []}; order.push(key); }
+      groups[key].tickets.push(keep[j]);
+    }
+    for(var g = 0; g < order.length; g++){
+      var grp = groups[order[g]];
+      var head = document.createElement("div"); head.className = "my-ev";
+      head.textContent = [grp.ev.name, grp.ev.date, grp.ev.venue].filter(Boolean).join(" · ");
+      box.appendChild(head);
+      var holder = document.createElement("div"); box.appendChild(holder);
+      grp.tickets.sort(function(a, b){ return a.no - b.no; });
+      renderTicketList(holder, grp.tickets, grp.ev);
+    }
+    mapTrack("my_tickets_open", {count: keep.length});
+  });
+}
+
+/* ---------- inside Instagram / Facebook / Snapchat's own browser ----------
+   These built-in browsers are the most likely to lose the page while
+   GPay is open, and they don't share what's saved with Chrome. Nudge
+   the guest to Chrome before they pay. Information only: booking still
+   works here exactly as before. */
+function inAppBrowser_(){
+  var ua = navigator.userAgent || "";
+  if(/Instagram/i.test(ua)) return "Instagram";
+  if(/FBAN|FBAV|FB_IAB|FBIOS|FB4A/i.test(ua)) return "Facebook";
+  if(/Snapchat/i.test(ua)) return "Snapchat";
+  if(/\bLine\//i.test(ua)) return "LINE";
+  return "";
+}
+(function(){
+  var app = inAppBrowser_();
+  if(!app || TICKET_MODE) return;
+  var android = /Android/i.test(navigator.userAgent || "");
+  document.getElementById("inappText").textContent = android
+    ? "You're in " + app + "'s browser. Paying with GPay works best in Chrome — tap the button below, then book there."
+    : "You're in " + app + "'s browser. Paying with GPay works best in Safari or Chrome — tap ··· at the top right, choose \"Open in external browser\", then book there.";
+  if(android){
+    var b = document.getElementById("inappBtn");
+    b.href = "intent://" + location.host + location.pathname + location.search +
+             "#Intent;scheme=https;package=com.android.chrome;end";
+    b.hidden = false;
+    b.addEventListener("click", function(){ mapTrack("inapp_open_chrome", {app: app}); });
+  }
+  document.getElementById("inappNote").hidden = false;
+  mapTrack("inapp_browser_seen", {app: app});
+})();
+
+if(!TICKET_MODE){
+  showMyTickets_();
+  resumePending_();
 }
 
 
