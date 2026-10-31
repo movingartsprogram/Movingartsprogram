@@ -204,7 +204,7 @@ var locked = false, lastCode = "", lastAt = 0, stream = null, detector = null, c
 var resultTimer = null, wakeLock = null, audioCtx = null;
 var RECENT = {};            /* token -> time this phone admitted it (last 60 seconds) */
 var detecting = false;
-var BUILD = "scan-v2-offline";
+var BUILD = "scan-v3-recheck";
 var SYNCING = false;        /* one offline-sync request at a time */
 var APP_SAVED = false;      /* true once this phone has saved the page for offline use */
 
@@ -674,6 +674,22 @@ function bookingHit(b){
   line.appendChild(document.createTextNode("  " + b.bookingId));
   box.appendChild(line);
   box.appendChild(el("div", "small", (b.mobile ? b.mobile + " · " : "") + b.seats + " ticket(s) · " + (b.paid ? "PAID" : "NOT PAID (" + (b.paidText || "—") + ")")));
+  /* Guest says they paid (GPay) but the booking shows unpaid: ask Razorpay
+     right now. If the money is there, the booking is confirmed and tickets
+     are made on the spot — then the search runs again to show them. */
+  if(!b.paid && !/^CHECK/i.test(b.paidText || "")){
+    var ck = el("button", "block", "GUEST SAYS THEY PAID — CHECK PAYMENT NOW"); ck.type = "button";
+    ck.addEventListener("click", function(){
+      ck.disabled = true; ck.textContent = "CHECKING WITH RAZORPAY…";
+      api("deskrecheck", {booking: b.bookingId}, function(d){
+        if(d && d.ok && d.paid){ ck.textContent = "PAID ✓ — TICKETS MADE"; refreshStats(); setTimeout(findBookings, 600); }
+        else if(d && d.ok && d.seen){ ck.disabled = false; ck.textContent = "PAYMENT STILL GOING THROUGH — CHECK AGAIN IN A MINUTE"; }
+        else if(d && d.ok){ ck.disabled = false; ck.textContent = "NO PAYMENT FOUND — ASK FOR THEIR GPAY SCREEN, CALL PK"; }
+        else { ck.disabled = false; ck.textContent = (d && d.message) ? d.message.toUpperCase() : "COULDN'T CHECK — TRY AGAIN"; }
+      }, function(){ ck.disabled = false; ck.textContent = "NO SIGNAL — TRY AGAIN"; }, 25000);
+    });
+    box.appendChild(ck);
+  }
   for(var i = 0; i < b.tickets.length; i++){
     (function(t){
       var row = el("div", "tk");
