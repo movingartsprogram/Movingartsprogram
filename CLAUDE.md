@@ -23,7 +23,7 @@ API keys or private guest details in it.
 | `/gigs/` | **Live Music in Goa — Upcoming Gigs.** SEO page built from `/gigs.js`; injects `ItemList` of `MusicEvent`s for Google. In the sitemap. |
 | `/gigs.js` | **The one gig list for the site.** Feeds the home LCD billboard, the booking page's "Other gigs coming up" carousel and `/gigs/`. Past gigs drop off by themselves (India date). |
 | `/bombay-rock-xchange/` | Gig info & FAQ for the current gig (line-up, gates, parking, food, ages, refunds) + `bombay-rock-xchange.ics` calendar file. FAQPage JSON-LD. Keep it after the gig as an archive page. |
-| `/the-feni-trail/` | The Feni Trail: invite-only farm experience at Dudhsagar Plantation with Ouro feni. Animated, SEO-optimised. Evergreen: the hero is the film ("This is how it goes.", `video/feni-trail-reel.mp4`, poster `img/reel-poster.jpg`), the plan says Saturday/Sunday with no dates. Per edition, change only the closing line "See you in December." (and swap the film if there is a new one). |
+| `/the-feni-trail/` | The Feni Trail: invite-only farm experience at Dudhsagar Plantation with Ouro feni. Animated, SEO-optimised. Evergreen: the hero is the film ("This is how it goes.", `video/feni-trail-reel.mp4`, poster `img/reel-poster.jpg`), the plan says Saturday/Sunday with no dates. Per edition, change only the closing line, now "See you in the next one." (was "See you in December."; swap the film if there is a new one). |
 | `/elvis-lobo/` | Elvis Lobo ("The Boss") story and video archive. |
 | `/policies/` | Terms, privacy, refunds, pricing and contact (required by Razorpay). |
 | `/scan/` | Private ticket-scanning tool. `noindex`; leave it alone. |
