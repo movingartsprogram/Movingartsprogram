@@ -107,6 +107,13 @@ its pictures are kept on purpose.
 And: **Bombay Rock Xchange at Saltamontes, Anjuna**, Sat 21 Nov 2026, featuring Ravi Iyer & Luke
 Kenny, first time in Goa. Tickets at the gate only (also on the FAQ page).
 Towns: Saltamontes and Guru Bar are in Anjuna.
+And: **The Feni Trail, 2nd edition**, Sun 29 Nov 2026, Dudhsagar Plantation (in `/gigs.js` with
+`tickets:"invite"`, which shows "✉ BY INVITATION" everywhere and has no price; Google type `Event`).
+Thumbnail `gigs/img/the-feni-trail.jpg` is cut from the 1st-edition group photo until the owner sends the
+2nd-edition poster. The Feni Trail page closing line is now "See you on 29 November."
+And: **Space Odyssey**, Thu 3 Dec 2026, Saltamontes, Anjuna: space-themed party, Elvis Lobo (guitar)
+"for the first time with DJ Voyager", DJ Lorenz, powered by Ouro feni. Listed as tickets at the gate
+(not confirmed by the owner); no price or time yet. Pictures `space-odyssey.jpg` + `elvis-lobo-guitar.jpg`.
 Only 22 Nov is booked online. Its slide has `.bb-star`: a pink "★ GIG OF THE YEAR ★"
 kicker and a pulsing glow while it's showing.
 

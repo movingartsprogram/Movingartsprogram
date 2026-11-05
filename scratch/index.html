@@ -377,7 +377,7 @@ footer a{color:var(--dim)}
     var li = document.createElement("li"), a = document.createElement("a"), d = document.createElement("div");
     a.href = "/gigs/#" + g.id; if(g.star) a.className = "star";
     if(g.images && g.images[0]){ var im = document.createElement("img"); im.src = g.images[0]; im.width = 240; im.height = 300; im.loading = "lazy"; im.alt = g.name + ", live music in Goa"; a.appendChild(im); }
-    var em = document.createElement("em"); em.textContent = g.countdown + (g.tickets === "gate" ? " · TICKETS AT THE GATE" : " · BOOK ONLINE"); d.appendChild(em);
+    var em = document.createElement("em"); em.textContent = g.countdown + (g.tickets === "gate" ? " · TICKETS AT THE GATE" : g.tickets === "invite" ? " · BY INVITATION" : " · BOOK ONLINE"); d.appendChild(em);
     var b = document.createElement("b"); b.textContent = g.name; d.appendChild(b);
     var sp = document.createElement("span"); sp.textContent = g.day + " · " + g.venue + (g.area ? ", " + g.area : ""); d.appendChild(sp);
     a.appendChild(d); li.appendChild(a); ul.appendChild(li);

@@ -20,7 +20,9 @@
      lineup    [{name, role}] full line-up
      blurb     one or two sentences about the night
      adults    true if 18+ only
-     tickets   "online" (booked on /gig-bookings/) or "gate" (pay at the gate)
+     tickets   "online" (booked on /gig-bookings/), "gate" (pay at the gate)
+               or "invite" (by invitation only, e.g. The Feni Trail: no price shown)
+     type      optional Google event type, default "MusicEvent" (use "Event" for non-gigs)
      price     optional text, e.g. "₹499 early bird · ₹799 · ₹1000 at the gate"
      lowPrice, highPrice   numbers in ₹, for Google (online and gate gigs)
      onSale    optional "YYYY-MM-DD" tickets went on sale, for Google (gate gigs default to the gig date)
@@ -28,6 +30,7 @@
      images    1 or 2 pictures in /gigs/img/, 240×300 (4:5), about 15–25 KB each.
                Two pictures take turns. (They show small, so bigger files only slow phones.)
      info      optional link to a gig info / FAQ page
+     infoLabel optional button text for that link (default "GIG INFO & FAQ")
      board     optional short place for the home billboard (default: venue)
    ══════════════════════════════════════════════════════════════════════ */
 window.MAP_GIGS = [
@@ -90,6 +93,30 @@ window.MAP_GIGS = [
     star: true,
     images: ["/gigs/img/bombay-rock-xchange.jpg"],
     info: "/bombay-rock-xchange/"
+  },
+  {
+    id: "the-feni-trail",
+    name: "The Feni Trail",
+    date: "2026-11-29", time: "",
+    venue: "Dudhsagar Plantation", area: "South Goa", board: "Dudhsagar",
+    who: "2nd edition",
+    lineup: [],
+    blurb: "The second edition of our invite-only farm experience at Dudhsagar Plantation, with Ouro cashew feni. A selected few. One farm.",
+    tickets: "invite",
+    type: "Event",
+    images: ["/gigs/img/the-feni-trail.jpg"],
+    info: "/the-feni-trail/", infoLabel: "ABOUT THE FENI TRAIL"
+  },
+  {
+    id: "space-odyssey",
+    name: "Space Odyssey",
+    date: "2026-12-03", time: "",
+    venue: "Saltamontes", area: "Anjuna",
+    who: "Elvis Lobo & DJs",
+    lineup: [{name: "Elvis Lobo", role: "guitar"}, {name: "DJ Voyager", role: "decks"}, {name: "DJ Lorenz", role: "decks"}],
+    blurb: "A space-themed party. For the first time ever, Elvis Lobo joins forces with DJ Voyager to take you beyond the stars, with DJ Lorenz on the decks. Fuelled by Ouro, premium spiced cashew feni.",
+    tickets: "gate",
+    images: ["/gigs/img/space-odyssey.jpg", "/gigs/img/elvis-lobo-guitar.jpg"]
   }
 ];
 
