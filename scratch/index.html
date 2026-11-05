@@ -105,6 +105,10 @@ body{font:17px/1.45 Oswald,system-ui,sans-serif;letter-spacing:.2px;overflow-x:h
 .wrap{max-width:440px;margin:0 auto;padding:14px 16px 40px}
 .kicker{font:10px/1.6 "Press Start 2P",monospace;color:var(--phos);text-align:center;letter-spacing:1px;margin:0}
 .kicker b{color:var(--cider);font-weight:400}
+.topnav{display:flex;justify-content:space-between;gap:8px;margin:0 0 14px}
+.topnav a{font:9px/1 "Press Start 2P",monospace;color:var(--phos);text-decoration:none;padding:9px 12px;
+  border:1px solid rgba(124,252,0,.35);border-radius:999px;background:#10160c;white-space:nowrap}
+.topnav a:hover{background:#17240f}
 h1{font:19px/1.35 "Press Start 2P",monospace;text-align:center;margin:10px 0 6px;color:var(--vu);
    text-shadow:0 0 12px rgba(255,225,53,.35)}
 h1 span{display:block;font-size:12px;color:var(--cider);margin-top:6px}
@@ -230,6 +234,10 @@ footer a{color:var(--dim)}
 </head>
 <body>
 <main class="wrap">
+  <nav class="topnav" aria-label="Moving Arts Program">
+    <a href="/" onclick="mapTrack('scratch_nav',{to:'home'})">← MAP HOME</a>
+    <a href="/gigs/" onclick="mapTrack('scratch_nav',{to:'gigs'})">🎸 UPCOMING GIGS</a>
+  </nav>
   <p class="kicker">MOVING ARTS PROGRAM <b>×</b> L74 CRAFT CIDER</p>
   <h1>SCRATCH &amp; WIN<span>AN L74 CIDER COCKTAIL</span></h1>
   <p class="sub"><strong>Bombay Rock Xchange</strong> · Sun 22 Nov · Domingos Gazebo, Varca</p>
