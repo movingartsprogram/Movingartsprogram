@@ -110,12 +110,14 @@ window.MAP_GIGS = [
   {
     id: "space-odyssey",
     name: "Space Odyssey",
-    date: "2026-12-03", time: "",
+    date: "2026-12-03", time: "20:00",
     venue: "Saltamontes", area: "Anjuna",
     who: "Elvis Lobo & DJs",
     lineup: [{name: "Elvis Lobo", role: "guitar"}, {name: "DJ Voyager", role: "decks"}, {name: "DJ Lorenz", role: "decks"}],
     blurb: "A space-themed party. For the first time ever, Elvis Lobo joins forces with DJ Voyager to take you beyond the stars, with DJ Lorenz on the decks. Fuelled by Ouro, premium spiced cashew feni.",
     tickets: "gate",
+    price: "₹300 at the gate",
+    lowPrice: 300, highPrice: 300,
     images: ["/gigs/img/space-odyssey.jpg", "/gigs/img/elvis-lobo-guitar.jpg"]
   }
 ];
