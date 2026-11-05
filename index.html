@@ -1962,6 +1962,8 @@ showPage('home');
       var bk = el("a", "bb-book", "🎫 BOOK NOW"); bk.href = "/gig-bookings/";
       bk.addEventListener("click", function(){ mapTrack("billboard_book_click", {gig: g.id}); });
       tx.appendChild(bk);
+    } else if(g.tickets === "invite"){
+      tx.appendChild(el("div", "bb-tag", "✉ BY INVITATION"));
     } else {
       tx.appendChild(el("div", "bb-tag" + (g.adults ? " bb-pink" : ""), g.adults ? "🔞 18+ · AT THE GATE" : "🎟 AT THE GATE"));
     }

@@ -762,7 +762,7 @@ body.ticket-mode #tierNote,body.ticket-mode .poster-wrap{display:none !important
               }
               if(g.blurb) b.appendChild(el("p", "mg-blurb", g.blurb));
               if(g.adults) b.appendChild(el("p", "mg-pink", "🔞 Adults only. Leave the kids behind."));
-              b.appendChild(el("p", "mg-gate", "🎟 TICKETS AT THE GATE"));
+              b.appendChild(el("p", "mg-gate", g.tickets === "invite" ? "✉ BY INVITATION" : "🎟 TICKETS AT THE GATE"));
               c.appendChild(pic); c.appendChild(b); stage.appendChild(c);
               var d = el("button", "mg-dot"); d.type = "button"; d.setAttribute("aria-label", g.name);
               dots.appendChild(d);

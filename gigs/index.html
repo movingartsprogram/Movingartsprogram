@@ -361,15 +361,17 @@ details p{margin:0 0 10px;}
       var bk = el("a", "btn", "🎫 BOOK TICKETS"); bk.href = "/gig-bookings/";
       bk.addEventListener("click", function(){ mapTrack("gigs_book_click", {gig: g.id}); });
       b.appendChild(bk);
+    } else if(g.tickets === "invite"){
+      b.appendChild(el("p", "gate", "✉ BY INVITATION"));
     } else {
       b.appendChild(el("p", "gate", "🎟 TICKETS AT THE GATE"));
     }
-    if(g.info){ var inf = el("a", "btn ghost", "GIG INFO & FAQ"); inf.href = g.info; b.appendChild(inf); }
+    if(g.info){ var inf = el("a", "btn ghost", g.infoLabel || "GIG INFO & FAQ"); inf.href = g.info; b.appendChild(inf); }
     a.appendChild(pic); a.appendChild(b); list.appendChild(a);
 
     /* event data for Google */
     var ev = {
-      "@type": "MusicEvent",
+      "@type": g.type || "MusicEvent",
       "@id": SITE + "/gigs/#" + g.id,
       "name": g.name,
       "startDate": g.date + (g.time ? "T" + g.time + ":00+05:30" : ""),
@@ -380,7 +382,7 @@ details p{margin:0 0 10px;}
       "url": SITE + "/gigs/#" + g.id,
       "location": {"@type": "Place", "name": g.venue,
         "address": {"@type": "PostalAddress", "addressLocality": g.area || undefined, "addressRegion": "Goa", "addressCountry": "IN"}},
-      "performer": (g.lineup || []).map(function(m){ return {"@type": "PerformingGroup", "name": m.name}; }),
+      "performer": (g.lineup && g.lineup.length) ? g.lineup.map(function(m){ return {"@type": "PerformingGroup", "name": m.name}; }) : undefined,
       "organizer": {"@type": "Organization", "name": "Moving Arts Program", "url": SITE + "/"},
       "isAccessibleForFree": false
     };
