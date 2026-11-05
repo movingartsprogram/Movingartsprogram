@@ -27,15 +27,15 @@
 
 var TOTAL_CARDS   = 200;  // must be a multiple of 5
 var BLOCK         = 5;    // one drink win in every 5 cards
-var TWO_CIDER_WINS = 8;   // of the 40 drink wins, how many are "2 ciders"
+var TWO_CIDER_WINS = 8;   // of the 40 drink wins, how many are "2 cider cocktails"
 var FREE_ENTRY_WINS = 5;  // "next gig entry free" cards (spread over the deck)
 
 var PRIZES = {
   ONE_MORE:   "Scratch one more",
   BAD_LUCK:   "Bad luck, try one more",
   FREE_ENTRY: "Next gig entry free",
-  CIDER:      "You have won an L74 Cider",
-  CIDER2:     "You have won 2 L74 Ciders"
+  CIDER:      "You have won an L74 Cider Cocktail",
+  CIDER2:     "You have won 2 L74 Cider Cocktails"
 };
 var WINS = { FREE_ENTRY: 1, CIDER: 1, CIDER2: 1 };
 
