@@ -24,6 +24,7 @@ API keys or private guest details in it.
 | `/gigs.js` | **The one gig list for the site.** Feeds the home LCD billboard, the booking page's "Other gigs coming up" carousel and `/gigs/`. Past gigs drop off by themselves (India date). |
 | `/bombay-rock-xchange/` | Gig info & FAQ for the current gig (line-up, gates, parking, food, ages, refunds) + `bombay-rock-xchange.ics` calendar file. FAQPage JSON-LD. Keep it after the gig as an archive page. |
 | `/the-feni-trail/` | The Feni Trail: invite-only farm experience at Dudhsagar Plantation with Ouro feni. Animated, SEO-optimised. Evergreen: the hero is the film ("This is how it goes.", `video/feni-trail-reel.mp4`, poster `img/reel-poster.jpg`), the plan says Saturday/Sunday with no dates. Per edition, change only the closing line, now "See you in the next one." (was "See you in December."; swap the film if there is a new one). |
+| `/scratch/` | **Scratch & Win with L74 Cider** (sponsor) for Bombay Rock Xchange. Flow: poster (locked) → "I'm 18 or older" → 2-question quiz (Q1 Luke Kenny first male VJ on Channel [V], True/False; Q2 Ravi Iyer's band, Witch Hammer / Indus Creed). 1 of 2 right = the poster becomes the scratch card; both wrong = "Oops", no card. One quiz try per phone. Then up to 4 cards per phone (device id). Backend: its OWN Google Sheet + Apps Script (`scratch/apps-script.gs`, not the booking script). Quiz answers are in the Sheet's Settings tab ("Answer Q1/Q2"), NOT in the public files. 200 cards in blocks of 5, one cider win per block at a random spot; cards handed out in order. Winners give name + WhatsApp number to get a code + QR; "send me the code" opens WhatsApp to MAP with the code. One win per WhatsApp number. Staff check codes at `/scratch/?check=CODE` with the PIN in Settings. `SCRIPT_URL` empty = PREVIEW mode (`?lose=1` / `?win=1` for testing). Linked from `/bombay-rock-xchange/`. In the sitemap. After the gig: set Settings → Open to No; decide whether to keep the page. |
 | `/elvis-lobo/` | Elvis Lobo ("The Boss") story and video archive. |
 | `/policies/` | Terms, privacy, refunds, pricing and contact (required by Razorpay). |
 | `/scan/` | Private ticket-scanning tool. `noindex`; leave it alone. |
@@ -129,7 +130,7 @@ kicker and a pulsing glow while it's showing.
 - Feni Trail JSON-LD: `TouristTrip` (no dates, invitation only), `VideoObject` (the film), `BreadcrumbList` and `FAQPage`.
   Target keywords: offbeat Goa, hidden Goa, personalised Goa experience, Goa farm experience,
   cashew feni, Dudhsagar Plantation.
-- `sitemap.xml` lists `/`, `/gig-bookings/`, `/gigs/`, `/bombay-rock-xchange/`, `/the-feni-trail/`,
+- `sitemap.xml` lists `/`, `/gig-bookings/`, `/gigs/`, `/bombay-rock-xchange/`, `/scratch/`, `/the-feni-trail/`,
   `/elvis-lobo/` and `/policies/`. `/gigs/` targets "live music in Goa" and injects MusicEvent data
   from `/gigs.js`; `/bombay-rock-xchange/` has FAQPage data.
   Update `lastmod` whenever a page changes, and add new public pages.
@@ -151,6 +152,8 @@ Added Oct 2026: `billboard_book_click` (home LCD billboard), `booking_slow_note_
 `gigs_home_click`, `gig_faq_book`, `gig_faq_map`, `gig_faq_home_click`, `email_click`, `feni_reel_play` (Feni Trail film started).
 Added Nov 2026 (booking page): `booking_payment_wait` (checking a payment after GPay), `my_tickets_open`,
 `inapp_browser_seen`, `inapp_open_chrome`.
+Added Nov 2026 (`/scratch/`): `scratch_start`, `scratch_quiz` (right: 0–2), `scratch_quiz_fail`, `scratch_reveal`, `scratch_claim`,
+`scratch_whatsapp`, `scratch_redeem`, `scratch_book_click`, `scratch_link` (from the gig FAQ page).
 
 ## Contacts and links used on the site
 - WhatsApp: +91 98496 90077 (`wa.me/919849690077`). Email: movingartsp@gmail.com.
