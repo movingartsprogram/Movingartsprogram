@@ -19,7 +19,7 @@
 
    Settings tab (change any time, no redeploy needed):
      Open          Yes / No   (No = nobody can scratch)
-     Staff PIN     the PIN your gate staff type to check winning codes
+     Staff PIN     6 digits; the PIN bar staff type to check winning codes
      Max per person 4   (cards per phone)
      Answer Q1     True          (right answer to question 1)
      Answer Q2     Indus Creed   (right answer to question 2)
@@ -71,7 +71,7 @@ function setupDeck() {
   st.getRange(1, 1, 6, 2).setValues([
     ["Setting", "Value"],
     ["Open", "Yes"],
-    ["Staff PIN", String(1000 + Math.floor(Math.random() * 9000))],
+    ["Staff PIN", String(100000 + Math.floor(Math.random() * 900000))],
     ["Max per person", 4],
     ["Answer Q1", "True"],
     ["Answer Q2", "Indus Creed"]
@@ -221,7 +221,10 @@ function status_(p) {
 
 function check_(p, redeem) {
   var ss = SpreadsheetApp.getActiveSpreadsheet(), set = settings_(ss);
-  if (!set.pin || String(p.pin || "") !== set.pin) return { ok: false, reason: "pin" };
+  if (!set.pin || String(p.pin || "") !== set.pin) {
+    Utilities.sleep(1500);   // slows down anyone guessing the PIN
+    return { ok: false, reason: "pin" };
+  }
   var code = String(p.code || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
   if (!code) return { ok: false, reason: "nocode" };
   var lock = LockService.getScriptLock();
