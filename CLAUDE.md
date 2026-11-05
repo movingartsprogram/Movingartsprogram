@@ -112,8 +112,8 @@ And: **The Feni Trail, 2nd edition**, Sun 29 Nov 2026, Dudhsagar Plantation (in 
 Thumbnail `gigs/img/the-feni-trail.jpg` is cut from the 1st-edition group photo until the owner sends the
 2nd-edition poster. The Feni Trail page closing line is now "See you on 29 November."
 And: **Space Odyssey**, Thu 3 Dec 2026, Saltamontes, Anjuna: space-themed party, Elvis Lobo (guitar)
-"for the first time with DJ Voyager", DJ Lorenz, powered by Ouro feni. Listed as tickets at the gate
-(not confirmed by the owner); no price or time yet. Pictures `space-odyssey.jpg` + `elvis-lobo-guitar.jpg`.
+"for the first time with DJ Voyager", DJ Lorenz, powered by Ouro feni. Tickets at the gate, ₹300, 8 PM
+(confirmed by the owner 5 Nov). Pictures `space-odyssey.jpg` + `elvis-lobo-guitar.jpg`.
 Only 22 Nov is booked online. Its slide has `.bb-star`: a pink "★ GIG OF THE YEAR ★"
 kicker and a pulsing glow while it's showing.
 
