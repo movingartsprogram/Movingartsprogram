@@ -33,7 +33,7 @@ var TOTAL_CARDS   = 300;  // deck size (a multiple of 10)
 var BLOCK         = 10;   // prizes are spread evenly in blocks of 10 cards:
 var CIDER_PER_BLOCK = 2;  //   2 cider cocktails in every 10  (1 in 5)
 var NEXT_GIG_PER_BLOCK = 1; // 1 free entry to our next gig in every 10 (1 in 10)
-var TWO_CIDER_SHARE = 0.2; // share of cider wins that are "2 cider cocktails"
+var TWO_CIDER_SHARE = 0;   // no "2 cocktails" cards any more (owner, 7 Nov 2026)
 var TICKETS       = 5;    // GRAND PRIZE: only 5 in the whole deck, placed at random
 
 var PRIZES = {
