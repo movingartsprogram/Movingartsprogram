@@ -14,6 +14,10 @@
       Execute as: Me.  Who has access: Anyone.  Deploy, copy the /exec address.
    5. Send that address to Claude (or paste it into SCRIPT_URL in scratch/index.html).
 
+   DIWALI UPDATE (Nov 2026): paste this file over the old one, Save, pick
+   "diwaliDeck" next to Debug, press Run (once), then Deploy > Manage
+   deployments > pencil > Version: New version > Deploy (the URL stays).
+
    Who won: the Cards tab shows each winner's name, WhatsApp number and
    whether the prize was given ("Redeemed at").
 
@@ -25,19 +29,22 @@
      Answer Q2     Indus Creed   (right answer to question 2)
    ===================================================================== */
 
-var TOTAL_CARDS   = 200;  // must be a multiple of 5
-var BLOCK         = 5;    // one drink win in every 5 cards
-var TWO_CIDER_WINS = 8;   // of the 40 drink wins, how many are "2 cider cocktails"
-var FREE_ENTRY_WINS = 5;  // "next gig entry free" cards (spread over the deck)
+var TOTAL_CARDS   = 300;  // deck size (a multiple of 10)
+var BLOCK         = 10;   // prizes are spread evenly in blocks of 10 cards:
+var CIDER_PER_BLOCK = 2;  //   2 cider cocktails in every 10  (1 in 5)
+var NEXT_GIG_PER_BLOCK = 1; // 1 free entry to our next gig in every 10 (1 in 10)
+var TWO_CIDER_SHARE = 0.2; // share of cider wins that are "2 cider cocktails"
+var TICKETS       = 5;    // GRAND PRIZE: only 5 in the whole deck, placed at random
 
 var PRIZES = {
   ONE_MORE:   "Scratch one more",
   BAD_LUCK:   "Bad luck, try one more",
-  FREE_ENTRY: "Next gig entry free",
+  TICKET:     "GRAND PRIZE: free entry ticket, Bombay Rock Xchange, Sun 22 Nov",
+  FREE_ENTRY: "Free entry to our next gig: Space Odyssey, Thu 3 Dec",
   CIDER:      "You have won an L74 Cider Cocktail",
   CIDER2:     "You have won 2 L74 Cider Cocktails"
 };
-var WINS = { FREE_ENTRY: 1, CIDER: 1, CIDER2: 1 };
+var WINS = { TICKET: 1, FREE_ENTRY: 1, CIDER: 1, CIDER2: 1 };
 
 /* Entry quiz: two questions on the page. The right answers are typed in the
    Settings tab (not here, because this file is public). One right answer out
@@ -79,33 +86,73 @@ function setupDeck() {
   st.setColumnWidth(1, 160);
 }
 
-/* Run this if all cards are used and you want 200 more (same rules). */
+/* Run this if all cards are used and you want 300 more (same rules). */
 function addMoreCards() {
   var cards = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Cards");
   addCards_(cards, TOTAL_CARDS, cards.getLastRow() - 1);
 }
 
-function addCards_(sheet, total, startNo) {
-  var blocks = total / BLOCK, drink = [], other = [], i;
-  for (i = 0; i < blocks; i++) drink.push(i < TWO_CIDER_WINS ? "CIDER2" : "CIDER");
-  shuffle_(drink);
-  var nOther = total - blocks;
-  for (i = 0; i < nOther; i++) {
-    if (i < FREE_ENTRY_WINS) other.push("FREE_ENTRY");
-    else other.push(i % 2 ? "ONE_MORE" : "BAD_LUCK");
+/* A list of n prizes: in every block of 10, 2 cider cocktails and 1 free
+   next-gig entry at random spots; then `tickets` grand-prize tickets replace
+   random losing cards anywhere in the list. */
+function dealPrizes_(n, tickets) {
+  var out = [], i;
+  for (var b = 0; b < n; b += BLOCK) {
+    var size = Math.min(BLOCK, n - b), blk = [];
+    var nc = Math.round(CIDER_PER_BLOCK * size / BLOCK), ng = Math.round(NEXT_GIG_PER_BLOCK * size / BLOCK);
+    for (i = 0; i < nc; i++) blk.push(Math.random() < TWO_CIDER_SHARE ? "CIDER2" : "CIDER");
+    for (i = 0; i < ng; i++) blk.push("FREE_ENTRY");
+    while (blk.length < size) blk.push(blk.length % 2 ? "ONE_MORE" : "BAD_LUCK");
+    out = out.concat(shuffle_(blk));
   }
-  shuffle_(other);
+  var losers = [];
+  for (i = 0; i < out.length; i++) if (!WINS[out[i]]) losers.push(i);
+  shuffle_(losers);
+  for (i = 0; i < Math.min(tickets, losers.length); i++) out[losers[i]] = "TICKET";
+  return out;
+}
 
-  var used = {}, rows = [], o = 0;
-  for (var b = 0; b < blocks; b++) {
-    var winAt = Math.floor(Math.random() * BLOCK);   // where in these 5 the drink sits
-    for (var k = 0; k < BLOCK; k++) {
-      var p = (k === winAt) ? drink[b] : other[o++];
-      var no = startNo + b * BLOCK + k + 1;
-      rows.push([no, Math.floor((no - 1) / BLOCK) + 1, p, newCode_(used), "", "", "", "", "", ""]);
-    }
+function addCards_(sheet, total, startNo) {
+  var prizes = dealPrizes_(total, TICKETS), used = {}, rows = [];
+  var have = sheet.getLastRow() > 1 ? sheet.getRange(2, 4, sheet.getLastRow() - 1, 1).getValues() : [];
+  for (var h = 0; h < have.length; h++) used[have[h][0]] = 1;
+  for (var k = 0; k < total; k++) {
+    var no = startNo + k + 1;
+    rows.push([no, Math.floor((no - 1) / BLOCK) + 1, prizes[k], newCode_(used), "", "", "", "", "", ""]);
   }
   sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, rows[0].length).setValues(rows);
+}
+
+/* DIWALI RESHUFFLE: run ONCE from the Apps Script editor.
+   Cards already scratched (and every prize already won) stay exactly as
+   they are. Every card nobody has scratched yet gets a new prize from the
+   new rules, and the deck is topped up to TOTAL_CARDS. */
+function diwaliDeck() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), st = ss.getSheetByName("Settings");
+  var flags = st.getRange(1, 1, st.getLastRow(), 2).getValues();
+  for (var f = 0; f < flags.length; f++) {
+    if (flags[f][0] === "Deck" && flags[f][1] === "Diwali") {
+      throw new Error("The Diwali reshuffle has already been done. Nothing changed.");
+    }
+  }
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    var cards = ss.getSheetByName("Cards");
+    var n = cards.getLastRow() - 1;
+    if (n < TOTAL_CARDS) addCards_(cards, TOTAL_CARDS - n, n);
+    n = cards.getLastRow() - 1;
+    var data = cards.getRange(2, 1, n, 10).getValues(), free = [];
+    for (var i = 0; i < data.length; i++) if (data[i][4] === "") free.push(i);
+    var prizes = dealPrizes_(free.length, TICKETS);
+    for (var j = 0; j < free.length; j++) data[free[j]][2] = prizes[j];
+    cards.getRange(2, 1, n, 10).setValues(data);
+    st.appendRow(["Deck", "Diwali"]);
+    var c = {}; for (var p = 0; p < prizes.length; p++) c[prizes[p]] = (c[prizes[p]] || 0) + 1;
+    Logger.log("Re-dealt " + free.length + " unscratched cards: " + JSON.stringify(c));
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 /* ---------- web app ----------
