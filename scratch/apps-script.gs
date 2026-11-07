@@ -1,5 +1,5 @@
 /* =====================================================================
-   L74 Cider × Moving Arts Program — Scratch & Win (Google Apps Script)
+   Diwali × Moving Arts Program — Scratch & Win (Google Apps Script)
 
    This is the "brain" behind movingartsprogram.com/scratch/.
    It lives in its OWN Google Sheet (not the ticket booking Sheet), so it
