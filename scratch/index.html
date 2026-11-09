@@ -154,7 +154,10 @@ input:focus{outline:2px solid var(--phos);outline-offset:1px}
 .face.more .big{color:var(--phos)}
 .face.bad{background:radial-gradient(circle at 50% 40%,#2a2a2a,#0e0e0e)}
 .face.bad .big{color:var(--vu)}
-.face.over{background:radial-gradient(circle at 50% 40%,#3b0c2a,#0d0510)}
+.face.over{background:#0d0510;padding:0;justify-content:flex-end}
+.face.over > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.face.over .band{position:relative;width:100%;padding:12px 10px 14px;background:linear-gradient(to top,rgba(13,5,16,.96) 70%,rgba(13,5,16,.75));border-top:2px solid var(--mag)}
+.face.over .band .big{margin:0 0 4px}
 .face.over .big{color:var(--mag);text-shadow:0 0 14px rgba(255,47,176,.6);font-size:20px}
 .face.over .big b{display:block;color:var(--phos);font-weight:400;font-size:14px;margin-top:10px;text-shadow:0 0 12px rgba(124,252,0,.5)}
 .emoji{font-size:56px;line-height:1}
@@ -722,7 +725,8 @@ function presentCard(){
   GIFT = true; revealed = false; moves = 0;
   var face = $("face");
   face.className = "face over";
-  face.innerHTML = '<div class="emoji">🪔</div><div class="big">COME EARLY!<b>DIWALI IS OVER</b></div><div class="small">See you at the next one 🤘</div>';
+  face.innerHTML = '<img src="' + POSTER + '" alt="Bombay Rock Xchange poster, Sun 22 Nov, Varca">' +
+    '<div class="band"><div class="big">🪔 COME EARLY!<b>DIWALI IS OVER</b></div><div class="small">See you at the next one 🤘</div></div>';
   ["startBox","quizBox","oops","after","countRow"].forEach(function(id){ $(id).classList.add("hidden"); });
   coat.classList.remove("locked", "gone");
   $("card").classList.add("live");
