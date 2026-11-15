@@ -211,7 +211,7 @@ var BUILD = "scan-v4-tables";
 /* TABLE NUMBERS (group bookings). A separate little script ("MAP Tables",
    scan/tables-apps-script.gs) keeps the list; this page only reads it.
    Empty address = no table numbers, and nothing else on this page changes. */
-var TABLES_URL = "";
+var TABLES_URL = "https://script.google.com/macros/s/AKfycbwyqxDuseJuyZbEmze6UN4W11iuZ5OcGPET9OsB_FAUw0t7q29HinmDYgvT0MLVhUzq/exec";
 var TABLES = {t: {}, b: {}};  /* t: ticket code -> table, b: booking ID -> table */
 var SYNCING = false;        /* one offline-sync request at a time */
 var APP_SAVED = false;      /* true once this phone has saved the page for offline use */
