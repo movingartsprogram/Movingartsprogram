@@ -77,6 +77,9 @@ button.block{display:block;width:100%;margin-top:10px;}
 #result .name{font-size:40px;line-height:1.05;margin-bottom:8px;word-break:break-word;}
 #result .sub{font-size:26px;line-height:1.15;}
 #result .tag{margin-top:16px;font-family:Tahoma,Arial,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.35);}
+#result .table{margin-top:18px;font-family:'Press Start 2P',monospace;font-size:26px;line-height:1.4;color:#1a1300;background:var(--vu);
+  border-radius:16px;padding:14px 20px;max-width:100%;word-break:break-word;box-shadow:0 6px 12px rgba(0,0,0,.35);}
+.tbl{display:inline-block;margin-top:6px;font-family:Tahoma,Arial,sans-serif;font-weight:bold;font-size:13px;letter-spacing:.5px;color:#1a1300;background:var(--vu);border-radius:999px;padding:4px 12px;}
 #result .tap{position:absolute;bottom:26px;font-size:20px;opacity:.85;}
 
 /* lists */
@@ -204,7 +207,12 @@ var locked = false, lastCode = "", lastAt = 0, stream = null, detector = null, c
 var resultTimer = null, wakeLock = null, audioCtx = null;
 var RECENT = {};            /* token -> time this phone admitted it (last 60 seconds) */
 var detecting = false;
-var BUILD = "scan-v3-recheck";
+var BUILD = "scan-v4-tables";
+/* TABLE NUMBERS (group bookings). A separate little script ("MAP Tables",
+   scan/tables-apps-script.gs) keeps the list; this page only reads it.
+   Empty address = no table numbers, and nothing else on this page changes. */
+var TABLES_URL = "";
+var TABLES = {t: {}, b: {}};  /* t: ticket code -> table, b: booking ID -> table */
 var SYNCING = false;        /* one offline-sync request at a time */
 var APP_SAVED = false;      /* true once this phone has saved the page for offline use */
 
@@ -314,9 +322,10 @@ function showMain(){
   if(saved && evs.some(function(e){ return e.code === saved; })) sel.value = saved;
   EV = sel.value;
   if(evs.length < 2) $("evCard").classList.add("hide");
-  sel.addEventListener("change", function(){ EV = sel.value; try{ localStorage.setItem("mapgate_ev", EV); }catch(e){} loadRoster(); refreshStats(); loadGatePrice(); });
+  sel.addEventListener("change", function(){ EV = sel.value; try{ localStorage.setItem("mapgate_ev", EV); }catch(e){} loadRoster(); refreshStats(); loadGatePrice(); readTables(); loadTables(); });
 
-  loadRoster(); refreshStats(); loadGatePrice();
+  loadRoster(); refreshStats(); loadGatePrice(); readTables(); loadTables();
+  setInterval(loadTables, 120000);
   setInterval(refreshStats, 15000);
   setInterval(loadRoster, 60000);
   setInterval(syncQueue, 8000);
@@ -384,6 +393,36 @@ function syncQueue(){
     if(!QUEUE.length){ loadRoster(); refreshStats(); }
     else syncQueue();
   }, function(){ SYNCING = false; /* still offline — try again next tick */ });
+}
+
+/* ---------- table numbers ---------- */
+function readTables(){
+  TABLES = {t: {}, b: {}};
+  try{ var s = JSON.parse(localStorage.getItem("mapgate_tables_" + EV) || "null"); if(s && s.t && s.b) TABLES = s; }catch(e){}
+}
+function loadTables(){
+  if(!TABLES_URL || !PIN) return;
+  var ev = EV, cb = "mgt" + Date.now() + Math.floor(Math.random() * 1000);
+  var s = document.createElement("script");
+  var timer = setTimeout(function(){ window[cb] = function(){}; }, 20000);
+  window[cb] = function(d){
+    clearTimeout(timer); window[cb] = function(){};
+    if(!d || !d.ok || !d.t || !d.b || ev !== EV) return;      /* any problem: keep the list this phone already has */
+    TABLES = {t: d.t, b: d.b};
+    try{ localStorage.setItem("mapgate_tables_" + ev, JSON.stringify(TABLES)); }catch(e){}
+  };
+  s.src = TABLES_URL + "?action=tables&callback=" + cb + "&pin=" + encodeURIComponent(PIN) + "&ev=" + encodeURIComponent(ev) + "&_=" + Date.now();
+  s.onerror = function(){ clearTimeout(timer); };
+  document.head.appendChild(s);
+}
+function tableOf(tok){ var t = TABLES.t[tok]; return t ? String(t) : ""; }
+/* Adds a big yellow "TABLE 7" to the green ENTRY OK screen and keeps it up a little longer. */
+function showTable(tok){
+  var tb = tableOf(tok); if(!tb) return "";
+  var r = $("result"), box = el("div", "table", "TABLE " + tb);
+  r.insertBefore(box, r.querySelector(".tag"));
+  clearTimeout(resultTimer); resultTimer = setTimeout(closeResult, 3500);
+  return tb;
 }
 
 /* ---------- result screen ---------- */
@@ -464,7 +503,8 @@ function handleCode(raw){
       RECENT[tok] = Date.now();
       beep(880, 140); buzz(60);
       showResult("ok", "ENTRY OK", who, num, "PUT A WRISTBAND ON", 1300);
-      addLog("g", who + " · " + d.no + "/" + d.of);
+      var tb = showTable(tok);
+      addLog("g", who + " · " + d.no + "/" + d.of + (tb ? " · T" + tb : ""));
       refreshStatsSoon();
     } else if(d.result === "USED"){
       beep(180, 450); buzz([150, 90, 150, 90, 150]);
@@ -516,7 +556,8 @@ function offlineCheck(tok){
   offlineAdmit(tok);
   beep(880, 140); buzz(60);
   showResult("ok", "ENTRY OK", t.n, "Ticket " + t.no + " of " + t.of, "OFFLINE — WILL SYNC · WRISTBAND ON", 1500);
-  addLog("g", t.n + " · " + t.no + "/" + t.of + " (offline)");
+  var tb = showTable(tok);
+  addLog("g", t.n + " · " + t.no + "/" + t.of + (tb ? " · T" + tb : "") + " (offline)");
 }
 
 var statsTimer = null;
@@ -648,6 +689,7 @@ function offlineFind(q){
     (function(grp){
       var box = el("div", "hit");
       var line = el("div"); line.appendChild(el("b", "", grp.name)); box.appendChild(line);
+      if(grp.tickets.length && tableOf(grp.tickets[0].t)) box.appendChild(el("div", "tbl", "TABLE " + tableOf(grp.tickets[0].t)));
       grp.tickets.sort(function(a, b){ return a.no - b.no; });
       for(var i = 0; i < grp.tickets.length; i++){
         (function(t){
@@ -674,6 +716,7 @@ function bookingHit(b){
   line.appendChild(document.createTextNode("  " + b.bookingId));
   box.appendChild(line);
   box.appendChild(el("div", "small", (b.mobile ? b.mobile + " · " : "") + b.seats + " ticket(s) · " + (b.paid ? "PAID" : "NOT PAID (" + (b.paidText || "—") + ")")));
+  if(TABLES.b[b.bookingId]) box.appendChild(el("div", "tbl", "TABLE " + TABLES.b[b.bookingId]));
   /* Guest says they paid (GPay) but the booking shows unpaid: ask Razorpay
      right now. If the money is there, the booking is confirmed and tickets
      are made on the spot — then the search runs again to show them. */
@@ -780,7 +823,7 @@ $("gsBtn").addEventListener("click", function(){
 });
 
 /* ---------- coming back online / going offline ---------- */
-window.addEventListener("online", function(){ setNet(true); if(STAFF){ syncQueue(); loadRoster(); refreshStats(); loadGatePrice(); } });
+window.addEventListener("online", function(){ setNet(true); if(STAFF){ syncQueue(); loadRoster(); refreshStats(); loadGatePrice(); loadTables(); } });
 window.addEventListener("offline", function(){ setNet(false); });
 
 /* ---------- save this page on the phone so it opens with no signal ---------- */
