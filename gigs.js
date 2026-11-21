@@ -88,7 +88,7 @@ window.MAP_GIGS = [
              {name: "Zahaan", role: "drum solo"}],
     blurb: "Classic rock and Bollywood on their first Goa tour. The biggest gig of the year. Kamikaze, Cream π and Zahaan open the night.",
     tickets: "online",
-    price: "₹799 online · ₹1000 at the gate",
+    price: "₹799 online till 21 Nov · ₹1000 from 22 Nov (online & gate)",
     lowPrice: 799, highPrice: 1000, onSale: "2026-10-23",
     star: true,
     images: ["/gigs/img/bombay-rock-xchange.jpg"],
