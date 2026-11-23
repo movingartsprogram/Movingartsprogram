@@ -1980,6 +1980,8 @@ showPage('home');
       tx.appendChild(bk);
     } else if(g.tickets === "invite"){
       tx.appendChild(el("div", "bb-tag", "✉ BY INVITATION"));
+    } else if(g.tickets === "free"){
+      tx.appendChild(el("div", "bb-tag", "🤘 FREE ENTRY"));
     } else {
       tx.appendChild(el("div", "bb-tag" + (g.adults ? " bb-pink" : ""), g.adults ? "🔞 18+ · AT THE GATE" : "🎟 AT THE GATE"));
     }

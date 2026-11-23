@@ -111,6 +111,10 @@ And: **The Feni Trail, 2nd edition**, Sun 29 Nov 2026, Dudhsagar Plantation (in 
 `tickets:"invite"`, which shows "✉ BY INVITATION" everywhere and has no price; Google type `Event`).
 Thumbnail `gigs/img/the-feni-trail.jpg` is cut from the 1st-edition group photo until the owner sends the
 2nd-edition poster. The Feni Trail page closing line is now "See you on 29 November."
+And: **Bikers Night 2026: Let There Be Guitar**, Fri 27 Nov 2026, 8 PM to 11 PM, Guru Bar, Anjuna. Elvis Lobo &
+Ravi Iyer (guitars), Darin (bass), Cliffy (drums); presented with Guru Bar's Musica Live. **Free entry**, all ages:
+in `/gigs.js` with `tickets:"free"` (shows "🤘 FREE ENTRY" everywhere; Google gets a ₹0 offer, `isAccessibleForFree`
+and `endDate` from the `end` field). Thumbnail `gigs/img/bikers-night.jpg` from the owner's 4:5 poster.
 And: **Space Odyssey**, Thu 3 Dec 2026, Saltamontes, Anjuna: space-themed party, Elvis Lobo (guitar)
 "for the first time with DJ Voyager", DJ Lorenz, powered by Ouro feni. Tickets at the gate, ₹300, 8 PM
 (confirmed by the owner 5 Nov). Pictures `space-odyssey.jpg` + `elvis-lobo-guitar.jpg`.
