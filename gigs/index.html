@@ -363,6 +363,8 @@ details p{margin:0 0 10px;}
       b.appendChild(bk);
     } else if(g.tickets === "invite"){
       b.appendChild(el("p", "gate", "✉ BY INVITATION"));
+    } else if(g.tickets === "free"){
+      b.appendChild(el("p", "gate", "🤘 FREE ENTRY"));
     } else {
       b.appendChild(el("p", "gate", "🎟 TICKETS AT THE GATE"));
     }
@@ -384,8 +386,10 @@ details p{margin:0 0 10px;}
         "address": {"@type": "PostalAddress", "addressLocality": g.area || undefined, "addressRegion": "Goa", "addressCountry": "IN"}},
       "performer": (g.lineup && g.lineup.length) ? g.lineup.map(function(m){ return {"@type": "PerformingGroup", "name": m.name}; }) : undefined,
       "organizer": {"@type": "Organization", "name": "Moving Arts Program", "url": SITE + "/"},
-      "isAccessibleForFree": false
+      "isAccessibleForFree": g.tickets === "free"
     };
+    if(g.end && g.time) ev.endDate = g.date + "T" + g.end + ":00+05:30";
+    if(g.tickets === "free") ev.offers = {"@type": "Offer", "url": SITE + "/gigs/#" + g.id, "availability": "https://schema.org/InStock", "price": 0, "priceCurrency": "INR", "validFrom": g.date + "T00:00:00+05:30"};
     if(g.adults) ev.typicalAgeRange = "18-";
     if(g.lowPrice) ev.offers = {"@type": "AggregateOffer", "url": g.tickets === "online" ? SITE + "/gig-bookings/" : SITE + "/gigs/#" + g.id, "availability": "https://schema.org/InStock", "priceCurrency": "INR", "lowPrice": g.lowPrice, "highPrice": g.highPrice || g.lowPrice, "validFrom": (g.onSale || g.date) + "T00:00:00+05:30"};
     events.push(ev);

@@ -15,6 +15,7 @@
      name      gig title
      date      "YYYY-MM-DD" (India date)
      time      "HH:MM" 24h start time, or "" if not announced
+     end       optional "HH:MM" 24h end time (same night), for Google
      venue     venue name;  area: town/village if known, else ""
      who       short line-up for the billboard (keep it under ~20 letters)
      lineup    [{name, role}] full line-up
@@ -22,6 +23,7 @@
      adults    true if 18+ only
      tickets   "online" (booked on /gig-bookings/), "gate" (pay at the gate)
                or "invite" (by invitation only, e.g. The Feni Trail: no price shown)
+               or "free" (free entry, no ticket needed: shows "FREE ENTRY" everywhere)
      type      optional Google event type, default "MusicEvent" (use "Event" for non-gigs)
      price     optional text, e.g. "₹499 early bird · ₹799 · ₹1000 at the gate"
      lowPrice, highPrice   numbers in ₹, for Google (online and gate gigs)
@@ -93,6 +95,19 @@ window.MAP_GIGS = [
     star: true,
     images: ["/gigs/img/bombay-rock-xchange.jpg"],
     info: "/bombay-rock-xchange/"
+  },
+  {
+    id: "bikers-night",
+    name: "Bikers Night 2026: Let There Be Guitar",
+    date: "2026-11-27", time: "20:00", end: "23:00",
+    venue: "Guru Bar", area: "Anjuna",
+    who: "Elvis Lobo & Ravi Iyer",
+    lineup: [{name: "Elvis Lobo", role: "guitar"}, {name: "Ravi Iyer", role: "guitar"},
+             {name: "Darin", role: "bass"}, {name: "Cliffy", role: "drums"}],
+    blurb: "One love. Guitar love. Bike love. The most iconic guitar jam of the year: Goa's own THE BOSS, Elvis Lobo, trades licks with Mumbai guitar icon Ravi Iyer, with Darin on bass and Cliffy on drums. Leather, chrome and six strings. Ride in. Turn it up. Let there be guitar.",
+    tickets: "free",
+    price: "Free entry · 8 PM to 11 PM",
+    images: ["/gigs/img/bikers-night.jpg"]
   },
   {
     id: "the-feni-trail",
