@@ -134,6 +134,18 @@ window.MAP_GIGS = [
     price: "₹300 at the gate",
     lowPrice: 300, highPrice: 300,
     images: ["/gigs/img/space-odyssey.jpg", "/gigs/img/elvis-lobo-guitar.jpg"]
+  },
+  {
+    id: "solos-and-sundowners",
+    name: "Solos & Sundowners",
+    date: "2026-12-15", time: "17:30",
+    venue: "People's Beach Shack", area: "Benaulim", board: "People's",
+    who: "Elvis Lobo solo",
+    lineup: [{name: "Elvis Lobo", role: "guitar & loopers"}],
+    blurb: "The Boss goes solo at sunset, for the first time at People's: Elvis Lobo with his loopers and a little magic, layering sound as the sun slips into the sea. Not the same ol' rock, a sunset to meditate on. Waadi / Trinity Beach, Benaulim, with Ouro, premium spiced cashew feni.",
+    tickets: "free",
+    price: "Free entry · 5.30 PM onwards",
+    images: ["/gigs/img/solos-and-sundowners.jpg"]
   }
 ];
 
