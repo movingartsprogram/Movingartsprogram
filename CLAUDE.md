@@ -118,6 +118,10 @@ and `endDate` from the `end` field). Thumbnail `gigs/img/bikers-night.jpg` from 
 And: **Space Odyssey**, Thu 3 Dec 2026, Saltamontes, Anjuna: space-themed party, Elvis Lobo (guitar)
 "for the first time with DJ Voyager", DJ Lorenz, powered by Ouro feni. Tickets at the gate, ₹300, 8 PM
 (confirmed by the owner 5 Nov). Pictures `space-odyssey.jpg` + `elvis-lobo-guitar.jpg`.
+And: **Solos & Sundowners**, Tue 15 Dec 2026, 5.30 PM onwards, People's Beach Shack, Waadi / Trinity Beach,
+Benaulim: Elvis Lobo solo (guitar, loopers), a meditative sunset gig, his first at People's, supported by Ouro
+premium spiced cashew feni. In `/gigs.js` as `tickets:"free"` (added 26 Nov; owner to confirm entry). Thumbnail
+`gigs/img/solos-and-sundowners.jpg` from the owner's 4:5 poster.
 Only 22 Nov is booked online. Its slide has `.bb-star`: a pink "★ GIG OF THE YEAR ★"
 kicker and a pulsing glow while it's showing.
 
